@@ -1,0 +1,285 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { fadeUpVariant, staggerContainer, initScrollAnimations } from "@/lib/animations";
+
+const values = [
+  {
+    title: "Immersive Design",
+    text: "We craft multi-sensory digital worlds that blur the line between physical and virtual.",
+  },
+  {
+    title: "Human-Centered",
+    text: "Every experience is built to feel intuitive, inclusive, and emotionally resonant.",
+  },
+  {
+    title: "Future-Ready",
+    text: "We prototype and deploy VR systems that scale with evolving tech and audiences.",
+  },
+];
+
+const team = [
+  {
+    name: "Avery Morgan",
+    role: "Creative Director",
+    image: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67e25130f161daff25d19636_Team-1.webp",
+  },
+  {
+    name: "Jordan Lee",
+    role: "Lead Technologist",
+    image: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67e251362ceb42725e7218d2_Team-5.webp",
+  },
+  {
+    name: "Maya Patel",
+    role: "Experience Producer",
+    image: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67e25137094645914fd15b54_Team-2.webp",
+  },
+  {
+    name: "Noah Carter",
+    role: "VR Strategist",
+    image: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67e25137b93f637b96941d4b_Team-3.webp",
+  },
+];
+
+export default function AboutPage() {
+  const rootRef = useRef(null);
+
+  useEffect(() => {
+    const cleanup = initScrollAnimations(rootRef.current);
+    return () => cleanup();
+  }, []);
+
+  return (
+    <div ref={rootRef} className="main-wrapper bg-black text-white">
+      <Header />
+      <main>
+        <section className="relative overflow-hidden">
+          <div className="absolute inset-0">
+            <img
+              data-parallax
+              src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bdc5f950c0d1d312713_6.webp"
+              alt="About"
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black/70" />
+          </div>
+          <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-28 text-center">
+            <p className="text-xs uppercase tracking-[0.35em] text-white/70">About Vear</p>
+            <h1 className="font-display text-5xl uppercase tracking-[0.18em] sm:text-6xl">
+              We Build the Future of Immersion
+            </h1>
+            <p className="mx-auto max-w-3xl text-lg text-white/70">
+              Vear fuses storytelling, technology, and emotion to create VR experiences that transcend
+              screens and reshape how humans connect.
+            </p>
+          </div>
+        </section>
+
+        <section className="py-16 sm:py-20">
+          <div className="mx-auto w-full max-w-6xl px-6">
+            <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+              <div className="space-y-6">
+                <p className="text-xs uppercase tracking-[0.35em] text-white/60">Our Mission</p>
+                <h2 className="text-3xl font-display uppercase tracking-[0.12em] sm:text-4xl">
+                  Explore, connect, and experience reality beyond limits.
+                </h2>
+                <p className="text-sm text-white/70">
+                  From breathtaking virtual landscapes to hyper-realistic simulations, we design every
+                  interaction to feel effortless and unforgettable.
+                </p>
+                <div className="grid gap-4 sm:grid-cols-3">
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5 text-center">
+                    <div className="text-2xl font-display uppercase tracking-[0.12em]">12</div>
+                    <p className="mt-2 text-xs uppercase tracking-[0.25em] text-white/60">Studios</p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5 text-center">
+                    <div className="text-2xl font-display uppercase tracking-[0.12em]">98%</div>
+                    <p className="mt-2 text-xs uppercase tracking-[0.25em] text-white/60">Client Love</p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5 text-center">
+                    <div className="text-2xl font-display uppercase tracking-[0.12em]">24/7</div>
+                    <p className="mt-2 text-xs uppercase tracking-[0.25em] text-white/60">Support</p>
+                  </div>
+                </div>
+              </div>
+              <div className="relative overflow-hidden rounded-3xl border border-white/10">
+                <img
+                  data-parallax
+                  src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bdf2e4a11e6d9a282f2_11.webp"
+                  alt="Mission"
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/40" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16">
+          <div className="mx-auto w-full max-w-6xl px-6">
+            <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
+              <div className="space-y-6">
+                <p className="text-xs uppercase tracking-[0.35em] text-white/60">Experience Flow</p>
+                <h2 className="text-3xl font-display uppercase tracking-[0.12em] sm:text-4xl">
+                  Designed for motion, built for wonder.
+                </h2>
+                <p className="text-sm text-white/70">
+                  We choreograph every interaction to feel fluid and cinematic. Scroll-driven moments
+                  create depth, while layered imagery reinforces the sense of scale.
+                </p>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5" data-reveal>
+                    <p className="text-xs uppercase tracking-[0.25em] text-white/60">01</p>
+                    <h3 className="mt-3 text-lg font-display uppercase tracking-[0.12em]">
+                      Spatial Storytelling
+                    </h3>
+                    <p className="mt-2 text-sm text-white/70">
+                      Layered environments guide users through immersive narratives.
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5" data-reveal>
+                    <p className="text-xs uppercase tracking-[0.25em] text-white/60">02</p>
+                    <h3 className="mt-3 text-lg font-display uppercase tracking-[0.12em]">
+                      Cinematic Motion
+                    </h3>
+                    <p className="mt-2 text-sm text-white/70">
+                      Parallax and depth cues make every scroll feel alive.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="grid gap-6 sm:grid-cols-2">
+                <div className="relative overflow-hidden rounded-3xl border border-white/10">
+                  <img
+                    data-parallax
+                    src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bd845bd43980da09622_3.webp"
+                    alt="Experience"
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/30" />
+                </div>
+                <div className="relative overflow-hidden rounded-3xl border border-white/10">
+                  <img
+                    data-parallax
+                    src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bdf2e4a11e6d9a282f2_11.webp"
+                    alt="Experience"
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/30" />
+                </div>
+                <div className="relative overflow-hidden rounded-3xl border border-white/10 sm:col-span-2">
+                  <img
+                    data-parallax
+                    src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67e27eaed8ecdca4a1a67252_6.webp"
+                    alt="Experience"
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/35" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16">
+          <div className="mx-auto w-full max-w-6xl px-6">
+            <div className="mb-10 flex items-center gap-3">
+              <p className="text-xs uppercase tracking-[0.35em] text-white/60">Core Values</p>
+              <img
+                src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d9606476c7cb7cb2c4489c_sonna-arrow-down-right%201.svg"
+                alt=""
+                className="h-4 w-4"
+              />
+            </div>
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              className="grid gap-6 md:grid-cols-3"
+            >
+              {values.map((value) => (
+                <motion.article
+                  key={value.title}
+                  variants={fadeUpVariant}
+                  className="rounded-3xl border border-white/10 bg-white/5 p-6"
+                >
+                  <h3 className="text-xl font-display uppercase tracking-[0.12em]">
+                    {value.title}
+                  </h3>
+                  <p className="mt-3 text-sm text-white/70">{value.text}</p>
+                </motion.article>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        <section id="team" className="py-16">
+          <div className="mx-auto w-full max-w-6xl px-6">
+            <div className="mb-10 flex items-center gap-3">
+              <p className="text-xs uppercase tracking-[0.35em] text-white/60">Our Team</p>
+              <img
+                src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d9606476c7cb7cb2c4489c_sonna-arrow-down-right%201.svg"
+                alt=""
+                className="h-4 w-4"
+              />
+            </div>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {team.map((member) => (
+                <div key={member.name} className="rounded-3xl border border-white/10 bg-white/5">
+                  <div className="h-56 overflow-hidden rounded-3xl">
+                    <img src={member.image} alt={member.name} className="h-full w-full object-cover" />
+                  </div>
+                  <div className="space-y-2 p-5">
+                    <h4 className="text-lg font-display uppercase tracking-[0.12em]">
+                      {member.name}
+                    </h4>
+                    <p className="text-xs uppercase tracking-[0.25em] text-white/60">{member.role}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="pb-20">
+          <div className="mx-auto w-full max-w-6xl px-6">
+            <div className="relative overflow-hidden rounded-3xl border border-white/10">
+              <img
+                data-parallax
+                src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67e27eaed8ecdca4a1a67252_6.webp"
+                alt="CTA"
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-black/70" />
+              <div className="relative flex flex-col gap-6 p-10 sm:p-14">
+                <p className="text-xs uppercase tracking-[0.35em] text-white/60">Join Us</p>
+                <h2 className="text-3xl font-display uppercase tracking-[0.12em] sm:text-4xl">
+                  Ready to build your next immersive world?
+                </h2>
+                <div className="flex flex-wrap gap-4">
+                  <a
+                    href="/contact"
+                    className="rounded-full bg-white px-6 py-3 text-xs uppercase tracking-[0.25em] text-black"
+                  >
+                    Contact Vear
+                  </a>
+                  <a
+                    href="/services"
+                    className="rounded-full border border-white/20 px-6 py-3 text-xs uppercase tracking-[0.25em] text-white"
+                  >
+                    Explore Services
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  );
+}
