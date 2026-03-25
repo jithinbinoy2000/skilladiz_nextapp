@@ -1,5 +1,6 @@
 import { Orbitron, Rajdhani } from "next/font/google";
 import "./globals.css";
+import AuthSessionProvider from "@/components/auth/SessionProvider";
 
 const orbitron = Orbitron({
   variable: "--font-orbitron",
@@ -22,7 +23,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${orbitron.variable} ${rajdhani.variable} antialiased`}>
-        {children}
+        <AuthSessionProvider>{children}</AuthSessionProvider>
       </body>
     </html>
   );

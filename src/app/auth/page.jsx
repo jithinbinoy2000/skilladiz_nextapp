@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { fadeUpVariant, staggerContainer, initScrollAnimations } from "@/lib/animations";
+import LoginForm from "@/components/auth/LoginForm";
+import RegisterForm from "@/components/auth/RegisterForm";
 
 export default function AuthPage() {
   const rootRef = useRef(null);
@@ -45,56 +47,12 @@ export default function AuthPage() {
               viewport={{ once: true, amount: 0.2 }}
               className="grid gap-8 lg:grid-cols-2"
             >
-              <motion.form
-                variants={fadeUpVariant}
-                className="space-y-6 rounded-3xl border border-white/10 bg-white/5 p-8"
-              >
-                <h2 className="font-display text-2xl uppercase tracking-[0.12em]">Login</h2>
-                <input
-                  type="email"
-                  placeholder="Email"
-                  className="w-full rounded-full border border-white/20 bg-transparent px-4 py-3 text-sm text-white placeholder:text-white/40"
-                />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  className="w-full rounded-full border border-white/20 bg-transparent px-4 py-3 text-sm text-white placeholder:text-white/40"
-                />
-                <button
-                  type="submit"
-                  className="rounded-full bg-pink px-6 py-3 text-xs uppercase tracking-[0.2em] text-black"
-                >
-                  Sign In
-                </button>
-              </motion.form>
-
-              <motion.form
-                variants={fadeUpVariant}
-                className="space-y-6 rounded-3xl border border-white/10 bg-white/5 p-8"
-              >
-                <h2 className="font-display text-2xl uppercase tracking-[0.12em]">Register</h2>
-                <input
-                  type="text"
-                  placeholder="Full name"
-                  className="w-full rounded-full border border-white/20 bg-transparent px-4 py-3 text-sm text-white placeholder:text-white/40"
-                />
-                <input
-                  type="email"
-                  placeholder="Email"
-                  className="w-full rounded-full border border-white/20 bg-transparent px-4 py-3 text-sm text-white placeholder:text-white/40"
-                />
-                <input
-                  type="password"
-                  placeholder="Create password"
-                  className="w-full rounded-full border border-white/20 bg-transparent px-4 py-3 text-sm text-white placeholder:text-white/40"
-                />
-                <button
-                  type="submit"
-                  className="rounded-full border border-white/20 px-6 py-3 text-xs uppercase tracking-[0.2em] text-white"
-                >
-                  Create Account
-                </button>
-              </motion.form>
+              <motion.div variants={fadeUpVariant}>
+                <LoginForm />
+              </motion.div>
+              <motion.div variants={fadeUpVariant}>
+                <RegisterForm />
+              </motion.div>
             </motion.div>
           </div>
         </section>
