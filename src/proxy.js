@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { ADMIN_ROLES, ROLES } from "./lib/auth/roles";
-// import { ADMIN_ROLES, ROLES } from "@/lib/auth/roles";
 
 const isAdminPath = (pathname) => pathname.startsWith("/admin");
 const isSuperadminPath = (pathname) => pathname.startsWith("/superadmin");
 
-export async function middleware(req) {
+export async function proxy(req) {
   const { pathname } = req.nextUrl;
 
   if (!isAdminPath(pathname) && !isSuperadminPath(pathname)) {
