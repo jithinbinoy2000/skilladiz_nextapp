@@ -1,30 +1,39 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { hoverLift } from "@/lib/animations";
 
 const navLinks = [
   { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
+  { label: "Book Now", href: "/booking" },
   { label: "Pricing", href: "/pricing" },
   { label: "Contact", href: "/contact" },
-  { label: "Terms", href: "/terms-and-conditions" },
-  { label: "Refund", href: "/refund-policy" },
+  { label: "Membership", href: "/membership" },
   { label: "Login", href: "/auth" },
 ];
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [cmsIdentity, setCmsIdentity] = useState(null);
+
+  useEffect(() => {
+    fetch("/api/cms/site_identity")
+      .then((r) => r.json())
+      .then((d) => { if (d.data) setCmsIdentity(d.data.content); })
+      .catch(() => {});
+  }, []);
+
+  const logoSrc = cmsIdentity?.logo_url || "/logo.jpg";
+  const siteName = cmsIdentity?.site_name || "Skilladiz";
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur">
-      <div className="flex items-center justify-between w-full px-6 py-4 mx-auto max-w-7xl">
+      <div className="flex items-center justify-between w-full px-6 py-4 mx-auto max-w-375">
         <a href="/" className="flex items-center gap-3">
           <img
-            // src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d3d1926f9cc6575b8f4ee4_Logo_2.svg"
-            src="/logo.jpg"
-            alt="Vear"
+            src={logoSrc}
+            alt={siteName}
             className="w-auto h-15"
           />
         </a>

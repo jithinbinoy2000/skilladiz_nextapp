@@ -1,0 +1,104 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { CheckCircle2, CalendarDays, Clock } from "lucide-react";
+import { Suspense } from "react";
+
+function SuccessContent() {
+  const searchParams = useSearchParams();
+  const sessionId = searchParams.get("session_id");
+  const [booking, setBooking] = useState(null);
+
+  useEffect(() => {
+    // Fetch the gamer's most recent confirmed booking for display
+    fetch("/api/bookings/my")
+      .then((r) => r.json())
+      .then((d) => {
+        const list = d.data || [];
+        const confirmed = list.find((b) => b.status === "confirmed");
+        if (confirmed) setBooking(confirmed);
+      });
+  }, []);
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center bg-black px-4 py-24 text-white">
+      <div className="w-full max-w-md text-center">
+        <div className="mb-6 flex items-center justify-center">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-green-500/20 ring-4 ring-green-500/30">
+            <CheckCircle2 className="h-10 w-10 text-green-400" />
+          </div>
+        </div>
+
+        <p className="mb-2 text-xs uppercase tracking-[0.35em] text-white/50">
+          Payment Confirmed
+        </p>
+        <h1 className="mb-4 font-display text-3xl uppercase tracking-[0.15em]">
+          You're All Set!
+        </h1>
+        <p className="mb-8 text-white/60">
+          Your slot is confirmed. A confirmation email has been sent to your
+          inbox. See you at the arena!
+        </p>
+
+        {booking && (
+          <div className="mb-8 divide-y divide-white/10 rounded-2xl border border-white/10 text-left">
+            <div className="flex items-center justify-between px-5 py-3">
+              <span className="text-xs uppercase tracking-[0.15em] text-white/50">
+                Game
+              </span>
+              <span className="text-sm font-medium text-white">
+                {booking.game_title}
+              </span>
+            </div>
+            <div className="flex items-center justify-between px-5 py-3">
+              <span className="flex items-center gap-2 text-xs uppercase tracking-[0.15em] text-white/50">
+                <CalendarDays className="h-3.5 w-3.5" /> Date
+              </span>
+              <span className="text-sm text-white">{booking.date_booked}</span>
+            </div>
+            <div className="flex items-center justify-between px-5 py-3">
+              <span className="flex items-center gap-2 text-xs uppercase tracking-[0.15em] text-white/50">
+                <Clock className="h-3.5 w-3.5" /> Slot
+              </span>
+              <span className="text-sm text-white">
+                {booking.start_time} – {booking.end_time}
+              </span>
+            </div>
+          </div>
+        )}
+
+        <div className="flex flex-col gap-3">
+          <a
+            href="/booking"
+            className="rounded-full bg-white px-6 py-3 text-xs uppercase tracking-[0.2em] text-black font-semibold hover:bg-white/90 transition-colors"
+          >
+            Book Another Slot
+          </a>
+          <a
+            href="/"
+            className="rounded-full border border-white/20 px-6 py-3 text-xs uppercase tracking-[0.2em] text-white hover:bg-white/5 transition-colors"
+          >
+            Return Home
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function BookingSuccessPage() {
+  return (
+    <div className="main-wrapper bg-black">
+      <Header />
+      <main>
+        <Suspense fallback={<div className="min-h-screen" />}>
+          <SuccessContent />
+        </Suspense>
+      </main>
+      <Footer />
+    </div>
+  );
+}

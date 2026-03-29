@@ -1,10 +1,11 @@
 ﻿"use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { fadeUpVariant } from "@/lib/animations";
 import FillButton from "./ui/FillButton";
 
-const socialLinks = [
+const DEFAULT_SOCIAL = [
   { label: "Instagram", href: "https://www.instagram.com/" },
   { label: "TikTok", href: "https://www.tiktok.com/" },
   { label: "X", href: "https://x.com/" },
@@ -13,14 +14,52 @@ const socialLinks = [
 
 const quickLinks = [
   { label: "Who We Are", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Experts", href: "/about#team" },
+  { label: "Book a Slot", href: "/booking" },
   { label: "Pricing", href: "/pricing" },
   { label: "Terms & Conditions", href: "/terms-and-conditions" },
   { label: "Refund Policy", href: "/refund-policy" },
 ];
 
 export default function Footer() {
+  const [socialLinks, setSocialLinks] = useState(DEFAULT_SOCIAL);
+  const [siteName, setSiteName] = useState("Skilladiz");
+  const [copyright, setCopyright] = useState("© Skilladiz. All Rights Reserved.");
+
+  useEffect(() => {
+    // Fetch social links from CMS
+    fetch("/api/cms/social_links")
+      .then((r) => r.json())
+      .then((d) => {
+        const content = d.data?.content;
+        if (!content) return;
+        const links = [];
+        const map = { instagram: "Instagram", twitter: "X (Twitter)", youtube: "YouTube", discord: "Discord", facebook: "Facebook" };
+        for (const [key, label] of Object.entries(map)) {
+          if (content[key]) links.push({ label, href: content[key] });
+        }
+        if (links.length > 0) setSocialLinks(links);
+      })
+      .catch(() => {});
+
+    // Fetch site identity
+    fetch("/api/cms/site_identity")
+      .then((r) => r.json())
+      .then((d) => {
+        const content = d.data?.content;
+        if (content?.site_name) setSiteName(content.site_name);
+      })
+      .catch(() => {});
+
+    // Fetch footer CMS
+    fetch("/api/cms/footer")
+      .then((r) => r.json())
+      .then((d) => {
+        const content = d.data?.content;
+        if (content?.copyright_text) setCopyright(content.copyright_text);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <footer className="bg-black border-t border-white/10">
       <div className="w-full px-6 py-16 mx-auto max-w-375">
@@ -33,7 +72,7 @@ export default function Footer() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.4 }}
             >
-              vear
+              {siteName}
             </motion.h2>
             <p className="max-w-lg text-white/70 tracking-[0.05em] font-display">
               Explore, connect, and experience immersive worlds built for the next generation of
@@ -76,7 +115,7 @@ export default function Footer() {
               </div>
             </div>
         <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-6 text-xs uppercase tracking-[0.2em] text-white/50 md:flex-row">
-          <span>© Vear. All Rights Reserved.</span>
+          <span>{copyright}</span>
           <span>Powered by Webflow Template</span>
         </div>
       </div>

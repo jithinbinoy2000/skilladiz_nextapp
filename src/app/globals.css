@@ -1,5 +1,6 @@
 ﻿@import "flatpickr/dist/flatpickr.css";
 @import "tailwindcss";
+@config "../../tailwind.config.js";
 
 :root {
   --background: #000000;
@@ -52,8 +53,9 @@ canvas {
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-*: initial;
   --font-outfit: Outfit, sans-serif;
+  --font-body: Rajdhani, sans-serif;
+  --font-accent: "Bebas Neue", sans-serif;
 
   --breakpoint-*: initial;
   --breakpoint-2xsm: 375px;
