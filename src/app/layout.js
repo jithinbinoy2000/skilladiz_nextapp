@@ -15,8 +15,11 @@ const rajdhani = Rajdhani({
 });
 
 export const metadata = {
-  title: "Vear - Webflow Ecommerce website template",
-  description: "Vear immersive virtual reality experience",
+  title: "Skilladiz",
+  description: "Skilladiz - The ultimate gaming arena experience",
+  icons: {
+    icon: "/logo.jpg",
+  },
 };
 
 export default function RootLayout({ children }) {
