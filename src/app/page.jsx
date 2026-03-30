@@ -192,7 +192,7 @@ function parseGameCards(games) {
     .slice(0, 8)
     .map((g) => {
       let imgs = [];
-      try { imgs = typeof g.image_urls === "string" ? JSON.parse(g.image_urls) : (g.image_urls || []); } catch {}
+      try { imgs = typeof g.image_urls === "string" ? JSON.parse(g.image_urls) : (g.image_urls || []); } catch { }
       return {
         id: g.id,
         title: g.title,
@@ -230,10 +230,7 @@ function GamingZonesCarousel({ services }) {
         {/* Cards — horizontal scroll on mobile, grid on larger screens */}
         <div
           ref={trackRef}
-          className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4
-                     md:grid md:grid-cols-2 md:overflow-x-visible md:snap-none md:pb-0
-                     lg:grid-cols-3
-                     xl:grid-cols-4"
+          className="flex gap-5 pb-4 overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 md:overflow-x-visible md:snap-none md:pb-0 lg:grid-cols-3 xl:grid-cols-4"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {services.map((service, i) => (
@@ -258,7 +255,7 @@ function GamingZonesCarousel({ services }) {
                 {service.duration && (
                   <div className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1 backdrop-blur-sm">
                     <svg className="w-3 h-3 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                      <circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" />
                     </svg>
                     <span className="text-[10px] text-white/70">{service.duration}m</span>
                   </div>
@@ -322,7 +319,7 @@ export default function HomePage() {
         const rows = d.data || [];
         if (rows.length > 0) setServiceRows(parseTournamentRows(rows));
       })
-      .catch(() => {});
+      .catch(() => { });
 
     // Fetch live games → replace Gaming Zones section
     fetch("/api/games")
@@ -331,7 +328,7 @@ export default function HomePage() {
         const rows = d.data || [];
         if (rows.length > 0) setFeaturedServices(parseGameCards(rows));
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   useEffect(() => {
@@ -340,7 +337,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div ref={rootRef} className="text-white bg-black main-wrapper">
+    <div ref={rootRef} className="text-white bg-black main-wrapper overflow-x-clip">
       <Header />
       <main>
         <section className="relative overflow-hidden bg-black">
@@ -364,7 +361,7 @@ export default function HomePage() {
               >
                 Experience the Future of Gaming
               </motion.h1>
-               <div className="relative w-full border rounded-full min-h-[calc(100vw-30px)] border-white/20 sm:hidden">
+              <div className="relative w-full border rounded-full min-h-[calc(100vw-80px)] 2xl:min-h-[calc(100vw-30px)] border-white/20 sm:hidden">
                 <div className="absolute inset-6 rounded-full bg-[radial-gradient(circle_at_top,_rgba(248,51,225,0.35),_transparent_70%)]" />
                 <img
                   src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d2f467d74a011f856f847d_Png-2.webp"
@@ -386,13 +383,13 @@ export default function HomePage() {
                   href="/booking"
                   className="rounded-full bg-white px-6 py-3 text-xs uppercase tracking-[0.12em] text-black "
                 >
-                 Reserve Your Arena
+                  Reserve Your Arena
                 </a>
                 <a
                   href="/about"
                   className="rounded-full border border-white/20 px-6 py-3 text-xs uppercase tracking-[0.12em] text-white"
                 >
-                 Inside Skilladiz
+                  Inside Skilladiz
                 </a>
               </motion.div>
             </motion.div>
@@ -404,46 +401,22 @@ export default function HomePage() {
               animate="visible"
             >
               <Magnet padding={200} disabled={false} magnetStrength={5}>
-                  <div className="relative h-[300px] w-[300px] sm:h-[560px] sm:w-[560px] rounded-full border border-white/20">
-                <div className="absolute inset-6 rounded-full bg-[radial-gradient(circle_at_top,_rgba(248,51,225,0.35),_transparent_70%)]" />
-                <img
-                  src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d2f467d74a011f856f847d_Png-2.webp"
-                  alt="VR headset"
-                  className="absolute inset-0 object-contain w-full h-full"
-                />
-              </div>
+                <div className="relative h-[300px] w-[300px] sm:h-[560px] sm:w-[560px] rounded-full border border-white/20">
+                  <div className="absolute inset-6 rounded-full bg-[radial-gradient(circle_at_top,_rgba(248,51,225,0.35),_transparent_70%)]" />
+                  <img
+                    src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d2f467d74a011f856f847d_Png-2.webp"
+                    alt="VR headset"
+                    className="absolute inset-0 object-contain w-full h-full"
+                  />
+                </div>
               </Magnet>
-            
-            </motion.div>
-          </div>
-        </section>
 
-        {/* ── Stats Row — home-4 inspired ─────────────────────── */}
-        <section className="py-10 bg-black">
-          <div className="w-full px-4 mx-auto max-w-7xl sm:px-6">
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              className="grid grid-cols-1 gap-4 sm:grid-cols-3"
-            >
-              {heroStats.map((stat) => (
-                <motion.div
-                  key={stat.label}
-                  variants={fadeUpVariant}
-                  className="flex flex-col gap-2 p-6 border rounded-2xl border-white/10 bg-white/5"
-                >
-                  <div className="text-5xl font-display uppercase tracking-[0.08em]">{stat.value}</div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-white/50">{stat.label}</p>
-                </motion.div>
-              ))}
             </motion.div>
           </div>
         </section>
 
         <GamingZonesCarousel services={featuredServices} />
-     
+
         <section className="py-10 mx-auto border-y border-white/10 max-w-7xl">
           <div className="w-full px-6 ">
             <div className="overflow-hidden">
@@ -458,7 +431,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── Featured Games Grid — home-1 inspired ───────────── */}
         <section className="relative py-16 overflow-hidden bg-black">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(120,80,255,0.08),_transparent_60%)]" />
           <div className="w-full px-4 mx-auto max-w-7xl sm:px-6">
@@ -490,7 +462,7 @@ export default function HomePage() {
                   <img
                     src={game.image}
                     alt={game.title}
-                    className="object-cover w-full h-64 transition duration-500 group-hover:scale-105"
+                    className="object-cover w-full transition duration-500 min-h-64 aspect-video group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   <div className="absolute space-y-1 bottom-6 left-6">
@@ -514,12 +486,35 @@ export default function HomePage() {
           </div>
         </section>
 
+        <section className="py-10 bg-black">
+          <div className="w-full px-4 mx-auto max-w-7xl sm:px-6">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              className="grid grid-cols-1 gap-4 sm:grid-cols-3"
+            >
+              {heroStats.map((stat) => (
+                <motion.div
+                  key={stat.label}
+                  variants={fadeUpVariant}
+                  className="flex flex-col gap-2 p-6 border rounded-2xl border-white/10 bg-white/5"
+                >
+                  <div className="text-5xl font-display uppercase tracking-[0.08em]">{stat.value}</div>
+                  <p className="text-xs uppercase tracking-[0.3em] text-white/50">{stat.label}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
         <section className="relative py-16 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top-right,_rgba(120,80,255,0.10),_transparent_55%)]" />
           <div className="w-full px-6 mx-auto max-w-7xl">
             <div className="flex items-center gap-3 mb-10">
               <p className="text-xs uppercase tracking-[0.35em] text-white/60">
-                Service List
+                Tournaments
               </p>
               <img
                 src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d9606476c7cb7cb2c4489c_sonna-arrow-down-right%201.svg"
@@ -565,7 +560,7 @@ export default function HomePage() {
                   </div>
 
                   <div className="flex items-center justify-between gap-4 lg:flex-col lg:items-end">
-                    <div className="rounded-full border border-white/20 px-4 py-2 text-xs uppercase tracking-[0.25em]">
+                    <div className="rounded-full border border-white/20 px-4 py-2 text-xs uppercase tracking-[0.25em] text-nowrap">
                       {service.price}
                     </div>
                     <a
@@ -584,13 +579,14 @@ export default function HomePage() {
             </motion.div>
           </div>
         </section>
-        
-<section className="relative py-20 overflow-hidden bg-black">
-  <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom-left,_rgba(248,51,225,0.10),_transparent_55%)]" />
-  <div className="w-full px-4 mx-auto max-w-7xl sm:px-6">
-    <div className="flex items-center gap-3 mb-10">
+
+        <section className="relative py-20 overflow-hidden bg-black">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,_rgba(248,51,225,0.10),_transparent_55%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,_rgba(248,51,225,0.10),_transparent_55%)]" />
+          <div className="w-full px-4 mx-auto max-w-7xl sm:px-6">
+            <div className="flex items-center gap-3 mb-10">
               <p className="text-xs uppercase tracking-[0.35em] text-white/60">
-               Our Philosophy
+                Our Philosophy
               </p>
               <img
                 src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d9606476c7cb7cb2c4489c_sonna-arrow-down-right%201.svg"
@@ -598,280 +594,283 @@ export default function HomePage() {
                 className="w-4 h-4"
               />
             </div>
-    <div className="grid grid-cols-1 gap-2 py-10 sm:grid-cols-2 lg:grid-cols-4 border-y border-white/10">
-      {[
-  {
-    step: "01",
-    title: "IMMERSION",
-    desc: "Designing spaces where players stay fully engaged, focused, and energized while experiencing games in a truly authentic atmosphere.",
-    button: "Inside Skilladiz",
-    url: "/about"
-  },
-  {
-    step: "02",
-    title: "EXPLORATION",
-    desc: "Bringing together diverse gaming experiences, from classic cue sports to modern consoles and virtual reality adventures.",
-    button: "Explore Games",
-    url: "/games"
-  },
-  {
-    step: "03",
-    title: "INTERACTION",
-    desc: "Creating a community where gamers connect, compete, and share meaningful moments that extend beyond individual play.",
-    button: "Our Community",
-    url: "/community"
-  },
-  {
-    step: "04",
-    title: "SIMULATION",
-    desc: "Adopting advanced gaming technologies that deliver realism, creativity, and innovation to elevate everyday play experiences.",
-    button: "VR Experience",
-    url: "/vr-zone"
-  }
-]
+            <div className="grid grid-cols-1 gap-2 py-10 sm:grid-cols-2 lg:grid-cols-4 border-y border-white/10">
+              {[
+                {
+                  step: "01",
+                  title: "IMMERSION",
+                  desc: "Designing spaces where players stay fully engaged, focused, and energized while experiencing games in a truly authentic atmosphere.",
+                  button: "Inside Skilladiz",
+                  url: "/about"
+                },
+                {
+                  step: "02",
+                  title: "EXPLORATION",
+                  desc: "Bringing together diverse gaming experiences, from classic cue sports to modern consoles and virtual reality adventures.",
+                  button: "Explore Games",
+                  url: "/games"
+                },
+                {
+                  step: "03",
+                  title: "INTERACTION",
+                  desc: "Creating a community where gamers connect, compete, and share meaningful moments that extend beyond individual play.",
+                  button: "Our Community",
+                  url: "/community"
+                },
+                {
+                  step: "04",
+                  title: "SIMULATION",
+                  desc: "Adopting advanced gaming technologies that deliver realism, creativity, and innovation to elevate everyday play experiences.",
+                  button: "VR Experience",
+                  url: "/vr-zone"
+                }
+              ]
 
 
-.map((item, idx) => (
-        <div key={idx} className="grid grid-rows-[auto_auto_1fr_auto] gap-4
+                .map((item, idx) => (
+                  <div key={idx} className="grid grid-rows-[auto_auto_1fr_auto] gap-4
  border-l ps-6 first:ps-0 first:border-l-0 border-white/10">
-          <h2 className="text-2xl font-display uppercase tracking-[0.12em]">
-            {item.title}
-          </h2>
-          <p className="text-xs uppercase text-white/90">{item.step}</p>
-          <p className="text-base  tracking-[.05em] text-white/70 font-sans">{item.desc}</p>
-          <a
-            href="/contact"
-            className="flex items-center gap-2 mt-2 text-xs uppercase tracking-[0.25em] text-white"
-          >
-           <div className="flex items-center justify-center w-10 h-10 border rounded-full border-white/20">
+                    <h2 className="text-2xl font-display uppercase tracking-[0.12em]">
+                      {item.title}
+                    </h2>
+                    <p className="text-xs uppercase text-white/90">{item.step}</p>
+                    <p className="text-base  tracking-[.05em] text-white/70 font-sans">{item.desc}</p>
+                    <div className="w-full h-auto aspect-[16/8]">
+
+                    </div>
+                    <a
+                      href="/contact"
+                      className="flex items-center gap-2 mt-2 text-xs uppercase tracking-[0.25em] text-white"
+                    >
+                      <div className="flex items-center justify-center w-10 h-10 border rounded-full border-white/20">
                         <img
                           src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d3d739571201bc625f4937_Vector%20101.svg"
                           alt=""
                           className="w-3 h-3"
                         />
                       </div>
-       {item.button}
-          </a>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
-
-<section className="relative min-h-screen sm:min-h-[850px] overflow-hidden">
-
-  {/* GridDistortion — full background */}
-  <div className="absolute inset-0 z-0 w-full h-full pb-20">
-    <GridDistortion
-      imageSrc="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67e27eaed8ecdca4a1a67252_6.webp"
-      grid={10}
-      mouse={0.1}
-      strength={0.15}
-      relaxation={0.9}
-      className="object-contain w-full h-full mx-auto opacity-50"
-    />
-  </div>
-
-  {/* Dark overlay */}
-  {/* <div className="absolute inset-0 z-10 bg-black/70 backdrop-blur-lg" /> */}
-  {/* Dark overlay — pointer-events-none lets mouse through to GridDistortion */}
-<div className="absolute inset-0 z-10 pointer-events-none bg-black/20 backdrop-blur-sm" />
-
-  {/* Content */}
-  <div className="relative z-20 w-full px-4 py-1 mx-auto pointer-events-none sm:py-40 sm:px-6 max-w-7xl">
-    <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-
-      {/* Left column */}
-      <div className="space-y-6">
-        <p className="text-xs uppercase tracking-[0.35em] text-white/60">
-          Elevate Your Game
-        </p>
-        <h2 className="text-3xl font-display uppercase tracking-[0.12em] sm:text-4xl">
-          Step Into the Ultimate Gaming Lifestyle.
-        </h2>
-        <p className="max-w-xl font-sans text-xl text-white/70">
-          Skilladiz was designed for those who demand more than just a gaming session. With a futuristic interior, premium equipment at every station, and a community-driven atmosphere that welcomes everyone — from casual players to hardcore competitors — Skilladiz is the gaming lifestyle upgrade you've been waiting for.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          {showcases.map((image) => (
-            <div
-              key={image}
-              className="h-20 overflow-hidden border w-30 rounded-xl border-white/10"
-            >
-              <img
-                src={image}
-                alt="Showcase"
-                className="object-cover w-full h-full"
-              />
+                      {item.button}
+                    </a>
+                  </div>
+                ))}
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Right column */}
-      <div className="relative overflow-hidden border rounded-3xl border-white/10 h-full min-h-[240px] aspect-video">
-        <img
-          data-parallax
-          src="https://res.cloudinary.com/jerrick/image/upload/v1764906826/6932574a991b82001d403a51.jpg"
-          alt="Immersion"
-          className="absolute inset-0 object-cover w-full h-full"
-        />
-        <div className="absolute bottom-0 left-0 p-4 bg-black">
-        <p className="text-xs uppercase tracking-[0.35em] text-white/60">
-          Elevate Your Game
-        </p>
-        <h2 className="text-3xl font-display uppercase tracking-[0.12em] sm:text-4xl">
-          Step Into the Ultimate Gaming Lifestyle.
-        </h2>
-          
-        </div>
-        <div className="absolute inset-0 bg-black/40" />
-      </div>
-
-    </div>
-  </div>
-
-</section>
-
-        <section className="relative py-20 overflow-hidden bg-black">
-  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(248,51,225,0.12),_transparent_50%)]" />
-  <div className="w-full px-6 mx-auto max-w-7xl">
-
-    {/* Section label */}
-    <div className="flex items-center gap-3 mb-10">
-      <p className="text-xs uppercase tracking-[0.35em] text-white/60">
-        Membership Plans
-      </p>
-      <img
-        src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d9606476c7cb7cb2c4489c_sonna-arrow-down-right%201.svg"
-        alt=""
-        className="w-4 h-4"
-      />
-    </div>
-
-    {/* Cards grid — Philosophy style */}
-    <motion.div
-      variants={staggerContainer}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
-      className="grid grid-cols-1 gap-2 py-10 sm:grid-cols-2 lg:grid-cols-3 border-y border-white/10"
-    >
-      {plans.map((plan, idx) => (
-        <motion.div
-          key={plan.name}
-          variants={fadeUpVariant}
-          className="grid grid-rows-[auto_auto_1fr_auto] gap-4 border-l ps-6 first:ps-0 first:border-l-0 border-white/10 relative group aspect-[2/2.5]"
-        >
-          {/* Title */}
-          <h2 className="text-2xl font-display uppercase tracking-[0.12em]">
-            {plan.name}
-          </h2>
-
-          {/* Icon + price */}
-          <div className="flex items-center gap-3">
-            <img src={plan.icon} alt="" className="w-10 h-10" />
-            <p className="text-sm text-white/70">{plan.price} {plan.duration}</p>
           </div>
+        </section>
 
-          {/* Description */}
-          <p className="text-base tracking-[.05em] text-white z-50">
-            {plan.planDescription}
-          </p>
+        <section className="relative py-24 mb-20 overflow-hidden bg-black">
 
-          {/* Features */}
-          <ul className="grid gap-3 mb-2 text-white/70">
-            {plan.features.map((feature) => (
-              <li key={feature} className="flex items-center gap-4">
-                <span className="h-1.5 w-1.5 rounded-full bg-white/70 shrink-0 font-sans text-sm" />
-                {feature}
-              </li>
-            ))}
-          </ul>
+          {/* Background gradient waves */}
+          <div className="absolute inset-0 z-0 opacity-70">
+            <div className="absolute top-[-200px] right-[-200px] w-[700px] h-[700px] rounded-full bg-purple-600/20 blur-[140px]" />
+            <div className="absolute bottom-[-200px] left-[-200px] w-[700px] h-[700px] rounded-full bg-pink-600/20 blur-[140px]" />
 
-          {/* CTA */}
-          <a
-            href="/membership"
-            className="flex items-center gap-2 mt-2 text-xs uppercase tracking-[0.25em] text-white"
-          >
-            <div className="flex items-center justify-center w-10 h-10 border rounded-full border-white/20 shrink-0">
-              <img
-                src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d3d739571201bc625f4937_Vector%20101.svg"
-                alt=""
-                className="w-3 h-3"
-              />
-            </div>
-            View {plan.name}
-          </a>
-        </motion.div>
-      ))}
-    </motion.div>
-
-  </div>
-</section>
-
-
-<section className="relative py-24 mb-20 overflow-hidden bg-black">
-
-  {/* Background gradient waves */}
-  <div className="absolute inset-0 z-0 opacity-70">
-    <div className="absolute top-[-200px] right-[-200px] w-[700px] h-[700px] rounded-full bg-purple-600/20 blur-[140px]" />
-    <div className="absolute bottom-[-200px] left-[-200px] w-[700px] h-[700px] rounded-full bg-pink-600/20 blur-[140px]" />
-    
-      <img
-        src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d447af45bd43980dba892c_Png-02.webp"
-        alt="VR Players"
-        className="absolute right-0 z-0 object-contain w-full max-w-7xl -bottom-40"
-      />
-  </div>
-  <div className="absolute inset-0 z-10 pointer-events-none bg-black/10 backdrop-blur-xs" />
-   {/* <div className="absolute right-0 z-0 -bottom-40">
+            <img
+              src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d447af45bd43980dba892c_Png-02.webp"
+              alt="VR Players"
+              className="absolute right-0 z-0 object-contain w-full max-w-7xl -bottom-40"
+            />
+          </div>
+          <div className="absolute inset-0 z-10 pointer-events-none bg-black/10 backdrop-blur-xs" />
+          {/* <div className="absolute right-0 z-0 -bottom-40">
 
 
     </div> */}
 
-  <div className="relative z-10 w-full px-6 mx-auto  my-auto max-w-7xl flex justify-center items-center min-h-[calc(100vh-300px)]">
+          <div className="relative z-10 w-full px-6 mx-auto  my-auto max-w-7xl flex justify-center items-center min-h-[calc(100vh-300px)]">
 
-    <div className="grid gap-16 lg:grid-cols-2">
+            <div className="grid gap-16 lg:grid-cols-2">
 
-      {/* LEFT CONTENT */}
-      <div className="max-w-xl space-y-6">
+              {/* LEFT CONTENT */}
+              <div className="max-w-xl space-y-6">
 
-        <p className="text-xs uppercase tracking-[0.25em] text-white/60">
-          Where Imagination Lives
-        </p>
+                <p className="text-xs uppercase tracking-[0.25em] text-white/60">
+                  Where Imagination Lives
+                </p>
 
-        <h2 className="text-3xl leading-tight font-display sm:text-3xl lg:text-3xl">
-          Skilladiz is a gateway to a limitless gaming universe where
-          <span className="text-white/90"> immersive experiences </span>
-          blur the line between play and reality.
-        </h2>
+                <h2 className="text-3xl leading-tight font-display sm:text-3xl lg:text-3xl">
+                  Skilladiz is a gateway to a limitless gaming universe where
+                  <span className="text-white/90"> immersive experiences </span>
+                  blur the line between play and reality.
+                </h2>
 
-      </div>
+              </div>
 
-      {/* RIGHT SIDE */}
-      <div className="relative flex flex-col items-end justify-end gap-6 lg:items-end">
+              {/* RIGHT SIDE */}
+              <div className="relative flex flex-col items-end justify-end gap-6 lg:items-end">
 
-        {/* BIG STAT */}
-        <div className="text-6xl font-display tracking-[0.12em] sm:text-7xl lg:text-8xl">
-          30K+
-        </div>
+                {/* BIG STAT */}
+                <div className="text-6xl font-display tracking-[0.12em] sm:text-7xl lg:text-8xl">
+                  30K+
+                </div>
 
-        <p className="max-w-sm font-sans text-base text-white/60 lg:text-right">
-          Gamers have already stepped into the Skilladiz world,
-          experiencing competitive play, immersive VR adventures,
-          and next-level gaming moments.
-        </p>
+                <p className="max-w-sm font-sans text-base text-white/60 lg:text-right">
+                  Gamers have already stepped into the Skilladiz world,
+                  experiencing competitive play, immersive VR adventures,
+                  and next-level gaming moments.
+                </p>
 
-      </div>
+              </div>
 
-    </div>
+            </div>
 
-    {/* IMAGE */}
-   
+            {/* IMAGE */}
 
-  </div>
-</section>
+
+          </div>
+        </section>
+
+        <section className="relative py-20 overflow-hidden bg-black">
+
+          <div className="w-full px-6 mx-auto max-w-7xl">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,_rgba(248,51,225,0.10),_transparent_55%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,_rgba(248,51,225,0.10),_transparent_55%)]" />
+            {/* Section label */}
+            <div className="flex items-center gap-3 mb-10">
+              <p className="text-xs uppercase tracking-[0.35em] text-white/60">
+                Membership Plans
+              </p>
+              <img
+                src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d9606476c7cb7cb2c4489c_sonna-arrow-down-right%201.svg"
+                alt=""
+                className="w-4 h-4"
+              />
+            </div>
+
+            {/* Cards grid — Philosophy style */}
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              className="grid grid-cols-1 gap-2 py-10 sm:grid-cols-2 lg:grid-cols-3 border-y border-white/10"
+            >
+              {plans.map((plan, idx) => (
+                <motion.div
+                  key={plan.name}
+                  variants={fadeUpVariant}
+                  className="grid grid-rows-[auto_auto_1fr_auto] gap-4 border-l ps-6 first:ps-0 first:border-l-0 border-white/10 relative group aspect-[2/2.5]"
+                >
+                  {/* Title */}
+                  <h2 className="text-2xl font-display uppercase tracking-[0.12em]">
+                    {plan.name}
+                  </h2>
+
+                  {/* Icon + price */}
+                  <div className="flex items-center gap-3">
+                    <img src={plan.icon} alt="" className="w-10 h-10" />
+                    <p className="text-sm text-white/70">{plan.price} {plan.duration}</p>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-base tracking-[.05em] text-white z-50">
+                    {plan.planDescription}
+                  </p>
+
+                  {/* Features */}
+                  <ul className="grid gap-3 mb-2 text-white/70">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-center gap-4">
+                        <span className="h-1.5 w-1.5 rounded-full bg-white/70 shrink-0 font-sans text-sm" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* CTA */}
+                  <a
+                    href="/membership"
+                    className="flex items-center gap-2 mt-2 text-xs uppercase tracking-[0.25em] text-white"
+                  >
+                    <div className="flex items-center justify-center w-10 h-10 border rounded-full border-white/20 shrink-0">
+                      <img
+                        src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d3d739571201bc625f4937_Vector%20101.svg"
+                        alt=""
+                        className="w-3 h-3"
+                      />
+                    </div>
+                    View {plan.name}
+                  </a>
+                </motion.div>
+              ))}
+            </motion.div>
+
+          </div>
+        </section>
+
+        <section className="relative min-h-screen sm:min-h-[850px] overflow-hidden">
+
+          {/* GridDistortion — full background */}
+          <div className="absolute inset-0 z-0 w-full h-full pb-20">
+            <GridDistortion
+              imageSrc="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67e27eaed8ecdca4a1a67252_6.webp"
+              grid={10}
+              mouse={0.1}
+              strength={0.15}
+              relaxation={0.9}
+              className="object-contain w-full h-full mx-auto opacity-50"
+            />
+          </div>
+
+          {/* Dark overlay */}
+          {/* <div className="absolute inset-0 z-10 bg-black/70 backdrop-blur-lg" /> */}
+          {/* Dark overlay — pointer-events-none lets mouse through to GridDistortion */}
+          <div className="absolute inset-0 z-10 pointer-events-none bg-black/20 backdrop-blur-sm" />
+
+          {/* Content */}
+          <div className="relative z-20 w-full px-4 py-1 mx-auto pointer-events-none sm:py-40 sm:px-6 max-w-7xl">
+            <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+
+              {/* Left column */}
+              <div className="space-y-6">
+                <p className="text-xs uppercase tracking-[0.35em] text-white/60">
+                  Elevate Your Game
+                </p>
+                <h2 className="text-3xl font-display uppercase tracking-[0.12em] sm:text-4xl">
+                  Step Into the Ultimate Gaming Lifestyle.
+                </h2>
+                <p className="max-w-xl font-sans text-xl text-white/70">
+                  Skilladiz was designed for those who demand more than just a gaming session. With a futuristic interior, premium equipment at every station, and a community-driven atmosphere that welcomes everyone — from casual players to hardcore competitors — Skilladiz is the gaming lifestyle upgrade you've been waiting for.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  {showcases.map((image) => (
+                    <div
+                      key={image}
+                      className="h-20 overflow-hidden border w-30 rounded-xl border-white/10"
+                    >
+                      <img
+                        src={image}
+                        alt="Showcase"
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right column */}
+              <div className="relative overflow-hidden border rounded-3xl border-white/10 h-full min-h-[240px] aspect-video">
+                <img
+                  data-parallax
+                  src="https://res.cloudinary.com/jerrick/image/upload/v1764906826/6932574a991b82001d403a51.jpg"
+                  alt="Immersion"
+                  className="absolute inset-0 object-cover w-full h-full"
+                />
+                <div className="absolute bottom-0 left-0 p-4 bg-black">
+                  <p className="text-xs uppercase tracking-[0.35em] text-white/60">
+                    Elevate Your Game
+                  </p>
+                  <h2 className="text-3xl font-display uppercase tracking-[0.12em] sm:text-4xl">
+                    Step Into the Ultimate Gaming Lifestyle.
+                  </h2>
+
+                </div>
+                <div className="absolute inset-0 bg-black/40" />
+              </div>
+
+            </div>
+          </div>
+
+        </section>
 
         <section className="pb-20">
           <div className="w-full px-6 mx-auto max-w-7xl">
@@ -903,16 +902,16 @@ export default function HomePage() {
                   >
                     Explore More
                   </a> */}
-                  <FillButton 
-                  href="/contact"
-  variant="solid"
+                  <FillButton
+                    href="/contact"
+                    variant="solid"
                   >
-    Contact Us
-  </FillButton>
+                    Contact Us
+                  </FillButton>
 
-  <FillButton href="/services" variant="ghost">
-    Explore More
-  </FillButton>
+                  <FillButton href="/services" variant="ghost">
+                    Explore More
+                  </FillButton>
                 </div>
               </div>
             </div>

@@ -1,8 +1,9 @@
 ﻿"use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { hoverLift } from "@/lib/animations";
+import { Menu } from "lucide-react";
 
 const navLinks = [
   { label: "About", href: "/about" },
@@ -28,13 +29,13 @@ export default function Header() {
   const siteName = cmsIdentity?.site_name || "Skilladiz";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur">
+    <header className="sticky top-0 z-50 bg-black/90 backdrop-blur-2xl">
       <div className="flex items-center justify-between w-full px-6 py-4 mx-auto max-w-375">
         <a href="/" className="flex items-center gap-3">
           <img
             src={logoSrc}
             alt={siteName}
-            className="w-auto h-15"
+            className="w-auto h-10 sm:h-15"
           />
         </a>
 
@@ -61,24 +62,53 @@ export default function Header() {
 
         <button
           type="button"
-          className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-white md:hidden"
+          className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-white/80 md:hidden font-display"
           onClick={() => setOpen((prev) => !prev)}
         >
-          Menu
+          <Menu className="w-6 h-6"/>
         </button>
       </div>
 
-      {open && (
-        <div className="absolute top-0 left-0 w-full h-screen px-6 py-6 border-t max-w-[calc(100vw-100px)] border-white/10 bg-black/80 md:hidden backdrop-blur-xl">
+      {/* {open && (
+        <motion.div
+          initial={{ x: "-100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "-100%" }}
+          transition={{ type: "tween", duration: 0.3 }}
+        className="absolute top-0 left-0 w-full h-screen px-6 py-6 border-t max-w-[calc(100vw-100px)] border-white/10 bg-black md:hidden backdrop-blur-xl">
           <div className="flex flex-col gap-6 font-light uppercase tracking-[0.12em] px-5 py-10">
             {navLinks.map((link) => (
-              <a key={link.label} href={link.href} className="text-lg border border-white text-white/80">
+              <a key={link.label} href={link.href} className="text-base text-white/80 font-display">
                 {link.label}
               </a>
             ))}
           </div>
-        </div>
-      )}
+        </motion.div>
+      )} */}
+      <AnimatePresence>
+  {open && (
+    <motion.div
+      initial={{ clipPath: "circle(0% at 0% 0%)" }}
+      animate={{ clipPath: "circle(150% at 0% 0%)" }}
+      exit={{ clipPath: "circle(0% at 0% 0%)" }}
+      transition={{
+          type: "spring",
+          stiffness: 120,
+          damping: 20,
+          mass: 1,
+        }}
+      className="absolute top-0 left-0 w-full h-screen px-6 py-6 border-t max-w-[calc(100vw-100px)] border-white/10 bg-black md:hidden backdrop-blur-xl"
+    >
+      <div className="flex flex-col gap-6 font-light uppercase tracking-[0.12em] px-5 py-15">
+        {navLinks.map((link) => (
+          <a key={link.label} href={link.href} className="text-base text-white/80 font-display">
+            {link.label}
+          </a>
+        ))}
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
     </header>
   );
 }

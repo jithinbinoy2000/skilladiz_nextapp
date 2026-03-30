@@ -7,7 +7,8 @@ export const runtime = "nodejs";
 // GET /api/cms/:section — public: get one section by name
 export async function GET(_, { params }) {
   try {
-    const section = await getSectionByName(params.section);
+    const resolvedParams = await params
+    const section = await getSectionByName(resolvedParams.section);
     if (!section) return notFound("Section not found");
 
     return ok({

@@ -107,7 +107,7 @@ export default function Footer() {
                   <a
                     key={item.label}
                     href={item.href}
-                    className="px-4 text-white/80 hover:text-pink py-1.5 text-nowrap font-display"
+                    className="px-4 text-white/80 hover:text-white py-1.5 text-nowrap font-display"
                   >
                     {item.label}
                   </a>
@@ -116,7 +116,7 @@ export default function Footer() {
             </div>
         <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-6 text-xs uppercase tracking-[0.2em] text-white/50 md:flex-row">
           <span>{copyright}</span>
-          <span>Powered by Webflow Template</span>
+          <span>Desiged for pasionated gammers</span>
         </div>
       </div>
     </footer>
