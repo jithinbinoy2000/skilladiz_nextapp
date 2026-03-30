@@ -1,6 +1,8 @@
 import { ok, forbidden, notFound, badRequest, serverError } from "@/lib/api/response";
 import { requireGamer } from "@/lib/api/auth-guard";
 import { getBookingById, updateBookingStatus } from "@/lib/db/bookings-repo";
+import { awardPoints } from "@/lib/db/transactions-repo";
+import db from "@/lib/db/knex.cjs";
 
 export const runtime = "nodejs";
 
@@ -52,6 +54,20 @@ export async function PATCH(request, { params }) {
 
     const extra = payment_intent_id ? { payment_intent_id } : {};
     const updated = await updateBookingStatus(params.id, status, extra);
+
+    // Award 5 points when admin marks a game as completed
+    if (status === "completed" && isAdmin) {
+      const gameRow = await db("games")
+        .select("title")
+        .where("id", booking.game_id)
+        .first();
+      awardPoints(
+        booking.user_id,
+        params.id,
+        `Points for completing: ${gameRow?.title ?? "game"}`
+      ).catch(() => {});
+    }
+
     return ok(updated);
   } catch (err) {
     return serverError(err);

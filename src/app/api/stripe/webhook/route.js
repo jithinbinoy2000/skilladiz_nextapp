@@ -19,6 +19,7 @@ import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import db from "@/lib/db/knex.cjs";
 import { incrementCouponUse } from "@/lib/db/coupons-repo";
+import { recordPurchase, awardPoints } from "@/lib/db/transactions-repo";
 import { sendBookingConfirmation } from "@/lib/email";
 
 export const runtime = "nodejs";
@@ -64,7 +65,30 @@ export async function POST(request) {
         await incrementCouponUse(applied_coupon_id).catch(() => {});
       }
 
-      // 3. Send confirmation email
+      // 3. Record purchase transaction + award points
+      const bookingRow = await db("bookings")
+        .select("bookings.user_id", "games.title as game_title")
+        .join("games", "games.id", "bookings.game_id")
+        .where("bookings.id", booking_id)
+        .first();
+
+      if (bookingRow) {
+        const amountCents = checkoutSession.amount_total ?? 0;
+        await recordPurchase(
+          bookingRow.user_id,
+          amountCents,
+          booking_id,
+          `Booking: ${bookingRow.game_title}`
+        ).catch(() => {});
+
+        await awardPoints(
+          bookingRow.user_id,
+          booking_id,
+          `Points for booking: ${bookingRow.game_title}`
+        ).catch(() => {});
+      }
+
+      // 4. Send confirmation email
       const booking = await db("bookings")
         .select(
           "bookings.*",

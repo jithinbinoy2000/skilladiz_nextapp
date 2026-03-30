@@ -1,6 +1,7 @@
 import { ok, serverError } from "@/lib/api/response";
 import { requireAdmin } from "@/lib/api/auth-guard";
 import db from "@/lib/db/knex.cjs";
+import { getUserTotalPoints } from "@/lib/db/transactions-repo";
 
 export const runtime = "nodejs";
 
@@ -67,12 +68,23 @@ export async function GET() {
     const lastBookingMap = {};
     for (const r of lastBookings) lastBookingMap[r.user_id] = r.last_booking_date;
 
+    // Points per user (single aggregation query)
+    const pointsRows = await db("transactions")
+      .whereIn("user_id", ids)
+      .where({ type: "points_earned" })
+      .groupBy("user_id")
+      .select("user_id", db.raw("coalesce(sum(points), 0) as total_points"));
+
+    const pointsMap = {};
+    for (const r of pointsRows) pointsMap[r.user_id] = Number(r.total_points);
+
     const enriched = gamers.map((g) => ({
       ...g,
       booking_count: countMap[g.id] || 0,
       total_spent: spentMap[g.id] || 0,
       membership: membershipMap[g.id] || null,
       last_booking_date: lastBookingMap[g.id] || null,
+      points: pointsMap[g.id] || 0,
     }));
 
     return ok(enriched);

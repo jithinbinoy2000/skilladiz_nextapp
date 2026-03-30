@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Download, RefreshCw, Users, UserCheck, UserX } from "lucide-react";
+import { Download, RefreshCw, Users, UserCheck, Eye } from "lucide-react";
 
 const STATUS_CLASSES = {
   active: "bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400",
@@ -87,11 +87,12 @@ function RenewModal({ gamer, onClose, onRenewed }) {
 }
 
 function exportCSV(gamers) {
-  const headers = ["Name", "Email", "Role", "Bookings", "Total Spent ($)", "Membership", "Due Date", "Last Booking", "Joined"];
+  const headers = ["Name", "Email", "Role", "Points", "Bookings", "Total Spent ($)", "Membership", "Due Date", "Last Booking", "Joined"];
   const rows = gamers.map((g) => [
     g.name,
     g.email,
     g.role,
+    g.points ?? 0,
     g.booking_count,
     Number(g.total_spent).toFixed(2),
     g.membership?.status ?? "None",
@@ -171,7 +172,7 @@ export default function GamersDirectory() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-100 dark:border-gray-800">
-                {["Gamer", "Bookings", "Total Spent", "Membership", "Due Date", "Last Booking", "Actions"].map((h) => (
+                {["Gamer", "Points", "Bookings", "Total Spent", "Membership", "Due Date", "Last Booking", "Actions"].map((h) => (
                   <th key={h} className="px-5 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-400">
                     {h}
                   </th>
@@ -181,7 +182,7 @@ export default function GamersDirectory() {
             <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
               {loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
-                  <tr key={i}>{Array.from({ length: 7 }).map((_, j) => (
+                  <tr key={i}>{Array.from({ length: 8 }).map((_, j) => (
                     <td key={j} className="px-5 py-4">
                       <div className="h-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                     </td>
@@ -189,7 +190,7 @@ export default function GamersDirectory() {
                 ))
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-5 py-12 text-center">
+                  <td colSpan={8} className="px-5 py-12 text-center">
                     <Users className="mx-auto mb-2 h-8 w-8 text-gray-300" />
                     <p className="text-sm text-gray-400">No gamers found</p>
                   </td>
@@ -207,6 +208,11 @@ export default function GamersDirectory() {
                           <p className="text-xs text-gray-400">{g.email}</p>
                         </div>
                       </div>
+                    </td>
+                    <td className="px-5 py-4">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-semibold text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                        ★ {g.points ?? 0}
+                      </span>
                     </td>
                     <td className="px-5 py-4 text-gray-700 dark:text-gray-200">{g.booking_count}</td>
                     <td className="px-5 py-4 font-medium text-gray-800 dark:text-white/90">
@@ -228,12 +234,20 @@ export default function GamersDirectory() {
                       {g.last_booking_date ?? "—"}
                     </td>
                     <td className="px-5 py-4">
-                      <button
-                        onClick={() => setRenewGamer(g)}
-                        className="flex items-center gap-1.5 rounded-lg bg-brand-50 px-3 py-1.5 text-xs font-medium text-brand-600 hover:bg-brand-100 dark:bg-brand-500/10 dark:text-brand-400"
-                      >
-                        <UserCheck className="h-3.5 w-3.5" /> Renew
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setRenewGamer(g)}
+                          className="flex items-center gap-1.5 rounded-lg bg-brand-50 px-3 py-1.5 text-xs font-medium text-brand-600 hover:bg-brand-100 dark:bg-brand-500/10 dark:text-brand-400"
+                        >
+                          <UserCheck className="h-3.5 w-3.5" /> Renew
+                        </button>
+                        <a
+                          href={`/admin/gamers/${g.id}`}
+                          className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                        >
+                          <Eye className="h-3.5 w-3.5" /> View
+                        </a>
+                      </div>
                     </td>
                   </tr>
                 ))

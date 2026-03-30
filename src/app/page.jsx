@@ -356,7 +356,7 @@ export default function HomePage() {
                 Skilladiz Gaming
               </motion.p>
               <motion.h1
-                className="font-display text-3xl uppercase tracking-[.15em] leading-12 sm:leading-20 text-white sm:text-6xl lg:text-6xl"
+                className="font-display  text-3xl uppercase tracking-[0.05em] leading-12 sm:leading-20 text-white sm:text-6xl lg:text-6xl"
                 variants={fadeUpVariant}
               >
                 Experience the Future of Gaming
