@@ -111,7 +111,7 @@ export default function Home2Main() {
                 what is possible.
               </p>
               <a
-                href="tel:+1555-123-4567"
+                href="tel:9778241440"
                 className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.25em] text-pink"
               >
                 Call for a Virtual Adventure

@@ -107,7 +107,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-xs uppercase tracking-[0.25em] text-white/50">Phone</p>
-                    <p className="mt-2">+1 (555) 123-4567</p>
+                    <p className="mt-2">9778241440</p>
                   </div>
                   <div>
                     <p className="text-xs uppercase tracking-[0.25em] text-white/50">Studio</p>
@@ -146,7 +146,7 @@ export default function ContactPage() {
                 />
                 <input
                   type="tel"
-                  placeholder="(555) 555-5555"
+                  placeholder="9778241440"
                   className="w-full rounded-full border border-white/20 bg-transparent px-4 py-3 text-sm text-white placeholder:text-white/40"
                 />
                 <textarea

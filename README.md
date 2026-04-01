@@ -159,3 +159,9 @@ Open [http://localhost:3000](http://localhost:3000)
 ## Key Keywords
 
 `Next.js` `React` `PostgreSQL` `Knex` `NextAuth` `RBAC` `Stripe` `Booking System` `Gaming Center` `Admin Dashboard` `CMS` `Tournaments` `Memberships` `Coupons` `Time Slots` `Tailwind CSS` `Framer Motion` `ApexCharts` `FullCalendar` `Nodemailer` `Google OAuth`
+
+
+
+
+where this file is used how it works give me the details
+C:\Users\user\OneDrive\Desktop\Project\nextjs_app\src\proxy.js

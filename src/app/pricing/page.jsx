@@ -167,7 +167,7 @@ export default function PricingPage() {
                     </p>
                   </div>
                   <a
-                    href="tel:+1555-123-4567"
+                    href="tel:9778241440"
                     className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-white"
                   >
                     Call for a Virtual Adventure
@@ -189,4 +189,3 @@ export default function PricingPage() {
     </div>
   );
 }
-
