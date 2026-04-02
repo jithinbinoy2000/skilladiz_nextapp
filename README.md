@@ -1,47 +1,58 @@
-# SkillAdiz Project Documentation
+# Skilladiz Next App
 
-## Project Structure
+## Description
+Skilladiz Next App is a web application built using Next.js, designed to streamline skill-based learning and resource management.
 
-- **src/**: Contains all the source code for the application  
-  - **components/**: Reusable UI components  
-  - **pages/**: Application pages  
-  - **services/**: API services and helper functions  
-- **public/**: Static assets  
-- **tests/**: Unit and integration tests  
+## Table of Contents
+- [Installation Prerequisites](#installation-prerequisites)
+- [API Documentation](#api-documentation)
+- [Deployment Information](#deployment-information)
 
-## Features
+## Installation Prerequisites
+Before you start, ensure you have the following installed on your machine:
+- Node.js (v14 or later)  
+- npm (Node package manager)  
+- MongoDB (if required for your application)
 
-- User authentication and authorization  
-- Role-Based Access Control (RBAC)  
-- Responsive and modular design  
-- Dynamic routing  
+## Installation
+To install the application, follow these steps:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/jithinbinoy2000/skilladiz_nextapp.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd skilladiz_nextapp
+   ```
+3. Install the dependencies:
+   ```bash
+   npm install
+   ```
 
-## RBAC Implementation
+## API Documentation
+The application exposes several endpoints:
+- `GET /api/v1/skills` - Retrieve a list of skills
+- `POST /api/v1/skills` - Create a new skill
+- `GET /api/v1/skills/:id` - Retrieve a specific skill by ID
 
-The Role-Based Access Control (RBAC) system is implemented using role-permission mapping. The roles are defined as follows:
+For detailed API documentation, refer to the [API Documentation](https://github.com/jithinbinoy2000/skilladiz_nextapp/wiki/API-Documentation).
 
-- **Admin**: Full access to all features
-- **User**: Limited access based on assigned permissions
-- **Guest**: Read-only access
+## Deployment Information
+To deploy the application, follow these instructions:
+1. Prepare your production environment.
+2. Ensure environment variables are set properly.
+3. Run:
+   ```bash
+   npm run build
+   npm start
+   ```
 
-You can customize roles and permissions in the `config/rbac.js` file, where you can define new roles and attach or detach permissions as needed.
+## Contributing
+We welcome contributions! Please read the [CONTRIBUTING.md](https://github.com/jithinbinoy2000/skilladiz_nextapp/blob/main/CONTRIBUTING.md) for contribution guidelines.
 
-## How to Work with the Codebase
+## License
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/jithinbinoy2000/skilladiz_nextapp/blob/main/LICENSE) file for details.
 
-1. **Clone the Repository**:  
-   `git clone https://github.com/jithinbinoy2000/skilladiz_nextapp.git`
+---
 
-2. **Install Dependencies**:  
-   `npm install`
-
-3. **Run the Development Server**:  
-   `npm start`
-
-4. **Run Tests**:  
-   `npm test`
-
-Make sure to review the contribution guidelines before making changes to the codebase.
-
-## Conclusion
-
-This documentation provides an overview of SkillAdiz, its structure, features, RBAC implementation, and how to interact with the codebase. For further queries, please refer to the issues section of the repository.
+### Last Updated: 2026-04-02 21:23:54 UTC
