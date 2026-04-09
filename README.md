@@ -45,6 +45,7 @@ To deploy the application, follow these instructions:
    ```bash
    npm run build
    npm start
+   npx knex --knexfile knexfile.js migrate:make create_users_table
    ```
 
 ## Contributing
@@ -54,5 +55,6 @@ We welcome contributions! Please read the [CONTRIBUTING.md](https://github.com/j
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/jithinbinoy2000/skilladiz_nextapp/blob/main/LICENSE) file for details.
 
 ---
+
 
 ### Last Updated: 2026-04-02 21:23:54 UTC

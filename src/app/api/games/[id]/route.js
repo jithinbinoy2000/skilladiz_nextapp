@@ -24,7 +24,7 @@ export async function PATCH(request, { params }) {
     if (response) return response;
 
     const body = await request.json();
-    const allowed = ["title", "description", "image_urls", "duration_minutes", "active_status"];
+    const allowed = ["title", "description", "image_urls", "duration_minutes", "active_status", "redirect_url"];
     const updates = {};
     for (const key of allowed) {
       if (key in body) {

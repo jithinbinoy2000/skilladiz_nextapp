@@ -1,81 +1,79 @@
 "use client";
-import Image from "next/image";
-import { useRef, useState } from "react";
+import { useState, useCallback } from "react";
+import { FileUploadCard } from "./file-upload-card";
 
 export const FileUpload = ({
-  accept = "image/*",     
-  multiple = true,
-  onUploadComplete,    
+  accept = "image/*",
+  onUploadComplete,
 }) => {
-  const fileInputRef = useRef(null);
-  const [previews, setPreviews] = useState([]);
+  const [files, setFiles] = useState([]);
 
-  const handleFileChange = async (event) => {
-    const files = event.target.files;
-    if (!files || files.length === 0) return;
+  const handleFilesChange = useCallback(
+    async (newFiles) => {
+      const filtered = accept === "image/*"
+        ? newFiles.filter((f) => f.type.startsWith("image/"))
+        : newFiles;
 
-    const body = new FormData();
-    const previewUrls = [];
+      const entries = filtered.map((f) => ({
+        id: `${f.name}-${Date.now()}-${Math.random()}`,
+        file: f,
+        status: "uploading",
+        progress: 0,
+      }));
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+      setFiles((prev) => [...prev, ...entries]);
 
-      if (!file.type.startsWith("image/")) {
-        console.warn("Not an image:", file.name);
-        continue;
+      for (const entry of entries) {
+        const tick = setInterval(() => {
+          setFiles((prev) =>
+            prev.map((f) =>
+              f.id === entry.id && f.status === "uploading"
+                ? { ...f, progress: Math.min(f.progress + 20, 90) }
+                : f
+            )
+          );
+        }, 200);
+
+        try {
+          const body = new FormData();
+          body.append("file", entry.file);
+          const res = await fetch("/api/upload", { method: "POST", body });
+          const data = await res.json();
+          clearInterval(tick);
+
+          setFiles((prev) =>
+            prev.map((f) =>
+              f.id === entry.id
+                ? { ...f, status: "completed", progress: 100, asset: data.asset }
+                : f
+            )
+          );
+
+          if (onUploadComplete) onUploadComplete(data.asset);
+
+          // Remove completed entry after a short delay — parent already has the URL
+          setTimeout(() => {
+            setFiles((prev) => prev.filter((f) => f.id !== entry.id));
+          }, 1500);
+        } catch (err) {
+          clearInterval(tick);
+          console.error("Upload failed:", err);
+          setFiles((prev) => prev.filter((f) => f.id !== entry.id));
+        }
       }
+    },
+    [accept, onUploadComplete]
+  );
 
-      body.append("file", file);
-
-      const url = URL.createObjectURL(file);
-      previewUrls.push(url);
-    }
-
-    setPreviews(previewUrls);
-
-    // try {
-    //   const res = await fetch("/api/upload", {
-    //     method: "POST",
-    //     body,
-    //   });
-
-    //   const data = await res.json();
-
-    //   if (onUploadComplete) {
-    //     onUploadComplete(data); // no state lifting needed
-    //   }
-
-    //   console.log("Upload success:", data);
-    // } catch (err) {
-    //   console.error("Upload failed:", err);
-    // }
-  };
+  const handleFileRemove = useCallback((id) => {
+    setFiles((prev) => prev.filter((f) => f.id !== id));
+  }, []);
 
   return (
-    <div className="space-y-3">
-      {/* File input */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept={accept} 
-        multiple={multiple}
-        onChange={handleFileChange}
-        className="w-full py-2 border rounded-lg"
-      />
-
-      {/* Preview */}
-      <div className="flex flex-wrap gap-3">
-        {previews.map((url, index) => (
-          <Image
-            key={index}
-            src={url}
-            width={100}
-            height={100}
-            alt="preview"
-            className="rounded-lg"
-          />
-        ))}
-      </div>
-    </div>
+    <FileUploadCard
+      files={files}
+      onFilesChange={handleFilesChange}
+      onFileRemove={handleFileRemove}
+    />
   );
 };

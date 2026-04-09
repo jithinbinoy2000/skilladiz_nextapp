@@ -1,17 +1,19 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useModal } from "../../hooks/useModal";
 import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
 import Image from "next/image";
+import { FileUpload } from "../FileUpload";
 
 
 export default function UserMetaCard() {
   const { isOpen, openModal, closeModal } = useModal();
+  const [avatarUrl, setAvatarUrl] = useState("/images/user/owner.jpg");
+
   const handleSave = () => {
-    // Handle save logic here
     console.log("Saving changes...");
     closeModal();
   };
@@ -24,7 +26,7 @@ export default function UserMetaCard() {
               <Image
                 width={80}
                 height={80}
-                src="/images/user/owner.jpg"
+                src={avatarUrl}
                 alt="user"
               />
             </div>
@@ -148,6 +150,23 @@ export default function UserMetaCard() {
           </div>
           <form className="flex flex-col">
             <div className="custom-scrollbar h-[450px] overflow-y-auto px-2 pb-3">
+              <div className="mb-7">
+                <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
+                  Profile Photo
+                </h5>
+                <div className="flex items-center gap-5 mb-4">
+                  <div className="w-16 h-16 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800 shrink-0">
+                    <Image width={64} height={64} src={avatarUrl} alt="avatar preview" className="object-cover w-full h-full" />
+                  </div>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Upload a new profile photo. JPG or PNG recommended.
+                  </p>
+                </div>
+                <FileUpload
+                  accept="image/*"
+                  onUploadComplete={(asset) => setAvatarUrl(asset.path)}
+                />
+              </div>
               <div>
                 <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
                   Social Links

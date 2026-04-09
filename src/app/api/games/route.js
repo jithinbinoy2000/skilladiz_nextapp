@@ -21,7 +21,7 @@ export async function POST(request) {
     if (response) return response;
 
     const body = await request.json();
-    const { title, description, image_urls, duration_minutes, active_status } = body;
+    const { title, description, image_urls, duration_minutes, active_status, redirect_url } = body;
 
     if (!title || !duration_minutes) {
       return badRequest("title and duration_minutes are required");
@@ -33,6 +33,7 @@ export async function POST(request) {
       image_urls: JSON.stringify(Array.isArray(image_urls) ? image_urls : []),
       duration_minutes: Number(duration_minutes),
       active_status: active_status !== false,
+      redirect_url: redirect_url ? String(redirect_url).trim() : "/home-2",
     });
 
     return created(game);

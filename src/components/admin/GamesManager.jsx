@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Plus, Pencil, Trash2, Clock, ToggleLeft, ToggleRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Plus, Pencil, Trash2, Clock, ToggleLeft, ToggleRight, ExternalLink } from "lucide-react";
 import GameFormModal from "./GameFormModal";
 import TimeSlotsModal from "./TimeSlotsModal";
 
 export default function GamesManager() {
+  const router = useRouter();
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editGame, setEditGame] = useState(null);
@@ -59,7 +61,7 @@ export default function GamesManager() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-100 dark:border-gray-800">
-                {["Game", "Duration", "Slots", "Status", "Actions"].map((h) => (
+                {["Game", "Redirect URL", "Duration", "Slots", "Status", "Actions"].map((h) => (
                   <th key={h} className="px-5 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-400">
                     {h}
                   </th>
@@ -70,7 +72,7 @@ export default function GamesManager() {
               {loading ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <tr key={i}>
-                    {Array.from({ length: 5 }).map((_, j) => (
+                    {Array.from({ length: 6 }).map((_, j) => (
                       <td key={j} className="px-5 py-4">
                         <div className="h-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                       </td>
@@ -79,7 +81,7 @@ export default function GamesManager() {
                 ))
               ) : games.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-5 py-10 text-center text-sm text-gray-400">
+                  <td colSpan={6} className="px-5 py-10 text-center text-sm text-gray-400">
                     No games yet. Add your first game above.
                   </td>
                 </tr>
@@ -89,7 +91,10 @@ export default function GamesManager() {
                   return (
                     <tr key={g.id} className="hover:bg-gray-50 dark:hover:bg-white/[0.02]">
                       <td className="px-5 py-4">
-                        <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => router.push(g.redirect_url || "/home-2")}
+                          className="flex items-center gap-3 text-left group"
+                        >
                           {images[0] ? (
                             <img
                               src={images[0]}
@@ -102,12 +107,26 @@ export default function GamesManager() {
                             </div>
                           )}
                           <div>
-                            <p className="font-medium text-gray-800 dark:text-white/90">{g.title}</p>
+                            <p className="font-medium text-gray-800 group-hover:text-brand-500 dark:text-white/90 dark:group-hover:text-brand-400 transition-colors">
+                              {g.title}
+                            </p>
                             {g.description && (
                               <p className="line-clamp-1 text-xs text-gray-400">{g.description}</p>
                             )}
                           </div>
-                        </div>
+                        </button>
+                      </td>
+                      <td className="px-5 py-4">
+                        <a
+                          href={g.redirect_url || "/home-2"}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center gap-1 text-xs text-brand-500 hover:underline"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <ExternalLink className="h-3 w-3 shrink-0" />
+                          <span className="max-w-[140px] truncate">{g.redirect_url || "/home-2"}</span>
+                        </a>
                       </td>
                       <td className="px-5 py-4 text-gray-600 dark:text-gray-300">
                         {g.duration_minutes} min
