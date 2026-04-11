@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { hoverLift } from "@/lib/animations";
-import { Menu, User, LogOut, ChevronDown } from "lucide-react";
+import { Menu, User, LogOut, ChevronDown, CalendarDays } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 import FillButton from "./ui/FillButton";
 
@@ -61,6 +61,13 @@ function UserDropdown({ user }) {
               onClick={() => setOpen(false)}
             >
               <User className="h-3.5 w-3.5" /> My Profile
+            </a>
+            <a
+              href="/my-bookings"
+              className="flex items-center gap-2.5 px-4 py-2.5 text-xs text-white/70 hover:text-white hover:bg-white/5 transition"
+              onClick={() => setOpen(false)}
+            >
+              <CalendarDays className="h-3.5 w-3.5" /> My Bookings
             </a>
             <button
               onClick={() => signOut({ callbackUrl: "/auth" })}
@@ -175,6 +182,7 @@ export default function Header() {
               {isLoggedIn ? (
                 <>
                   <a href="/profile" className="text-base text-white/80 font-display">My Profile</a>
+                  <a href="/my-bookings" className="text-base text-white/80 font-display">My Bookings</a>
                   <button
                     onClick={() => signOut({ callbackUrl: "/auth" })}
                     className="text-base text-left text-pink-400 font-display"

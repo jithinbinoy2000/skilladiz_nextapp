@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "clean": "npx rimraf .next",
     "knex:migrate": "knex --knexfile knexfile.js migrate:latest",
     "knex:rollback": "knex --knexfile knexfile.js migrate:rollback",
     "knex:seed": "knex --knexfile knexfile.js seed:run",

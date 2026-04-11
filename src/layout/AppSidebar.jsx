@@ -15,6 +15,7 @@ import {
   UserCircleIcon,
   BoxCubeIcon,
 } from "../icons/index";
+import { CreditCard, Trophy, Images } from "lucide-react";
 import SidebarWidget from "./SidebarWidget";
 
 // ── Gaming Platform Navigation ───────────────────────────────────────────────
@@ -44,6 +45,21 @@ const navItems = [
     icon: <UserCircleIcon />,
     name: "Gamers",
     path: "/admin/gamers",
+  },
+  {
+    icon: <CreditCard className="h-5 w-5" />,
+    name: "Memberships",
+    path: "/admin/memberships",
+  },
+  {
+    icon: <Trophy className="h-5 w-5" />,
+    name: "Tournaments",
+    path: "/admin/tournaments",
+  },
+  {
+    icon: <Images className="h-5 w-5" />,
+    name: "Gallery",
+    path: "/admin/gallery",
   },
 ];
 

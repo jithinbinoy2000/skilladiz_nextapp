@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Plus, CalendarDays } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, CalendarDays, Zap, Clock, CheckCircle2, BanIcon } from "lucide-react";
 import DayBookingsPanel from "./DayBookingsPanel";
 import AddBookingModal from "./AddBookingModal";
 
@@ -23,6 +23,10 @@ export default function BookingCalendar() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [gameFilter, setGameFilter] = useState("all");
   const [games, setGames] = useState([]);
+  const [autoApprove, setAutoApprove] = useState(false);
+  const [autoApproveLoading, setAutoApproveLoading] = useState(false);
+  const [pendingApprovals, setPendingApprovals] = useState([]);
+  const [pendingLoading, setPendingLoading] = useState(false);
 
   // Load games for filter tabs
   useEffect(() => {
@@ -30,6 +34,70 @@ export default function BookingCalendar() {
       .then((r) => r.json())
       .then((d) => setGames(d.data || []));
   }, []);
+
+  // Load auto-approve setting
+  useEffect(() => {
+    fetch("/api/admin/settings/bookings")
+      .then((r) => r.json())
+      .then((d) => { if (d.data) setAutoApprove(d.data.auto_approve ?? false); })
+      .catch(() => {});
+  }, []);
+
+  // Load pending approvals (paid bookings awaiting admin approval)
+  const fetchPendingApprovals = useCallback(async () => {
+    setPendingLoading(true);
+    try {
+      const res = await fetch("/api/bookings?status=pending");
+      const data = await res.json();
+      // Only show bookings that have been paid (have payment_intent_id)
+      const paid = (data.data || []).filter((b) => b.payment_intent_id);
+      setPendingApprovals(paid);
+    } catch {
+      // ignore
+    } finally {
+      setPendingLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPendingApprovals();
+  }, [fetchPendingApprovals]);
+
+  const toggleAutoApprove = async () => {
+    const next = !autoApprove;
+    setAutoApproveLoading(true);
+    try {
+      const res = await fetch("/api/admin/settings/bookings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ auto_approve: next }),
+      });
+      const data = await res.json();
+      if (data.data) setAutoApprove(data.data.auto_approve);
+    } finally {
+      setAutoApproveLoading(false);
+    }
+  };
+
+  const approvePendingBooking = async (bookingId) => {
+    await fetch(`/api/bookings/${bookingId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "confirmed" }),
+    });
+    fetchPendingApprovals();
+    if (selectedDate) selectDay(selectedDate);
+  };
+
+  const cancelPendingBooking = async (bookingId) => {
+    await fetch(`/api/bookings/${bookingId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "cancelled" }),
+    });
+    fetchPendingApprovals();
+    if (selectedDate) selectDay(selectedDate);
+  };
 
   const fetchMonthData = useCallback(async (y, m) => {
     const [countsRes, leavesRes] = await Promise.all([
@@ -108,6 +176,7 @@ export default function BookingCalendar() {
       body: JSON.stringify({ status }),
     });
     if (selectedDate) selectDay(selectedDate);
+    fetchPendingApprovals();
   };
 
   // Build the calendar grid
@@ -134,6 +203,96 @@ export default function BookingCalendar() {
 
   return (
     <div className="space-y-5">
+      {/* Auto-approve toggle */}
+      <div className="flex items-center justify-between rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/3">
+        <div>
+          <p className="text-sm font-semibold text-gray-800 dark:text-white/90">
+            Auto-Approve Bookings
+          </p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            {autoApprove
+              ? "Bookings are confirmed immediately after payment."
+              : "Bookings stay pending after payment — you must manually approve each one."}
+          </p>
+        </div>
+        <button
+          onClick={toggleAutoApprove}
+          disabled={autoApproveLoading}
+          className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none disabled:opacity-50 ${
+            autoApprove ? "bg-brand-500" : "bg-gray-200 dark:bg-gray-700"
+          }`}
+          role="switch"
+          aria-checked={autoApprove}
+        >
+          <span
+            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ${
+              autoApprove ? "translate-x-5" : "translate-x-0"
+            }`}
+          />
+        </button>
+      </div>
+
+      {/* Pending Approvals panel */}
+      {!autoApprove && (
+        <div className="rounded-2xl border border-orange-200 bg-orange-50 p-4 dark:border-orange-500/20 dark:bg-orange-500/5">
+          <div className="mb-3 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+              <p className="text-sm font-semibold text-orange-800 dark:text-orange-300">
+                Awaiting Approval
+                {pendingApprovals.length > 0 && (
+                  <span className="ml-2 rounded-full bg-orange-500 px-2 py-0.5 text-xs text-white">
+                    {pendingApprovals.length}
+                  </span>
+                )}
+              </p>
+            </div>
+          </div>
+          {pendingLoading ? (
+            <div className="flex items-center gap-2 py-2 text-xs text-orange-600 dark:text-orange-400">
+              <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-orange-500 border-t-transparent" />
+              Loading…
+            </div>
+          ) : pendingApprovals.length === 0 ? (
+            <p className="text-xs text-orange-600/70 dark:text-orange-400/70">
+              No bookings awaiting approval.
+            </p>
+          ) : (
+            <div className="space-y-2">
+              {pendingApprovals.map((b) => (
+                <div
+                  key={b.id}
+                  className="flex items-center justify-between gap-3 rounded-xl border border-orange-200 bg-white px-3 py-2.5 dark:border-orange-500/20 dark:bg-white/3"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium text-gray-800 dark:text-white/90">
+                      {b.game_title ?? "Booking"}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {b.date_booked} · {b.user_name ?? b.user_email ?? b.user_id}
+                    </p>
+                  </div>
+                  <div className="flex shrink-0 gap-1.5">
+                    <button
+                      onClick={() => approvePendingBooking(b.id)}
+                      className="flex items-center gap-1 rounded-lg bg-green-100 px-2.5 py-1 text-xs font-medium text-green-700 hover:bg-green-200 dark:bg-green-500/10 dark:text-green-400"
+                    >
+                      <CheckCircle2 className="h-3 w-3" /> Approve
+                    </button>
+                    <button
+                      onClick={() => cancelPendingBooking(b.id)}
+                      className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700 hover:bg-red-200 dark:bg-red-500/10 dark:text-red-400"
+                    >
+                      <BanIcon className="h-3 w-3" /> Cancel
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Game filter tabs */}
       <div className="flex flex-wrap gap-2">
         <button
@@ -163,7 +322,7 @@ export default function BookingCalendar() {
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         {/* ── Calendar ── */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:col-span-2">
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/3 lg:col-span-2">
           {/* Calendar header */}
           <div className="mb-5 flex items-center justify-between">
             <h2 className="text-lg font-semibold text-gray-800 dark:text-white/90">
@@ -223,7 +382,7 @@ export default function BookingCalendar() {
                     ${
                       isLeave
                         ? "bg-red-50 dark:bg-red-500/10"
-                        : "hover:bg-gray-50 dark:hover:bg-white/[0.03]"
+                        : "hover:bg-gray-50 dark:hover:bg-white/3"
                     }
                   `}
                 >

@@ -1,6 +1,6 @@
-import { ok, notFound, serverError } from "@/lib/api/response";
+import { ok, notFound, badRequest, serverError } from "@/lib/api/response";
 import { requireAdmin } from "@/lib/api/auth-guard";
-import { getUserTotalPoints, getTransactionsByUser } from "@/lib/db/transactions-repo";
+import { getUserTotalPoints, getTransactionsByUser, createTransaction } from "@/lib/db/transactions-repo";
 import db from "@/lib/db/knex.cjs";
 
 export const runtime = "nodejs";
@@ -79,6 +79,58 @@ export async function GET(_, { params }) {
       transactions,
       membership: membership || null,
     });
+  } catch (err) {
+    return serverError(err);
+  }
+}
+
+/**
+ * PATCH /api/admin/gamers/:id
+ * Handles two operations (mutually exclusive in one call, or combined):
+ *   { personal_discount_rate: number }   — set user-level discount override
+ *   { points_adjustment: number, note: string } — award (+) or deduct (-) credit points manually
+ */
+export async function PATCH(request, { params }) {
+  try {
+    const { response } = await requireAdmin();
+    if (response) return response;
+
+    const { id } = params;
+    const user = await db("users").where({ id }).whereNull("deleted_at").first();
+    if (!user) return notFound("User not found");
+
+    const body = await request.json();
+    const result = {};
+
+    // ── Personal discount update ──────────────────────────────────
+    if (body.personal_discount_rate !== undefined) {
+      const rate = Number(body.personal_discount_rate);
+      if (isNaN(rate) || rate < 0 || rate > 100) {
+        return badRequest("personal_discount_rate must be 0–100");
+      }
+      await db("users").where({ id }).update({ personal_discount_rate: rate });
+      result.personal_discount_rate = rate;
+    }
+
+    // ── Manual points adjustment ──────────────────────────────────
+    if (body.points_adjustment !== undefined) {
+      const pts = Number(body.points_adjustment);
+      if (isNaN(pts) || pts === 0) {
+        return badRequest("points_adjustment must be a non-zero number");
+      }
+      const note = body.note ? String(body.note).trim() : "Manual admin adjustment";
+      await createTransaction({
+        user_id:     id,
+        type:        "points_earned",
+        amount_cents: 0,
+        points:      pts,          // negative = deduction
+        reference_id: null,
+        description: note,
+      });
+      result.points_adjustment = pts;
+    }
+
+    return ok(result);
   } catch (err) {
     return serverError(err);
   }

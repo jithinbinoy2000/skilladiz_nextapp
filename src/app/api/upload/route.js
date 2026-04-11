@@ -21,7 +21,11 @@ export async function POST(request) {
   }
 
   const publicPath = await saveUpload(file);
-  const type = file.type.startsWith("image/") ? "image" : "document";
+  const type = file.type.startsWith("image/")
+    ? "image"
+    : file.type.startsWith("video/")
+    ? "video"
+    : "document";
 
   const asset = await createAsset({
     type,

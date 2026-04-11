@@ -15,6 +15,7 @@ export async function GET() {
         "bookings.id",
         "bookings.date_booked",
         "bookings.status",
+        "bookings.payment_intent_id",
         "bookings.created_at",
         "games.title as game_title",
         "games.image_urls",

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 
 export const FileUploadCard = React.forwardRef(
-  ({ className, files = [], onFilesChange, onFileRemove, onClose, ...props }, ref) => {
+  ({ className, files = [], onFilesChange, onFileRemove, onClose, accept, hint, ...props }, ref) => {
     const [isDragging, setIsDragging] = React.useState(false);
     const fileInputRef = React.useRef(null);
 
@@ -76,6 +76,7 @@ export const FileUploadCard = React.forwardRef(
               ref={fileInputRef}
               type="file"
               multiple
+              accept={accept}
               className="hidden"
               onChange={handleFileSelect}
             />
@@ -89,7 +90,7 @@ export const FileUploadCard = React.forwardRef(
               Drop files here or{" "}
               <span className="text-brand-500">browse</span>
             </p>
-            <p className="mt-1 text-xs text-gray-400">JPEG, PNG, PDF — up to 50 MB</p>
+            <p className="mt-1 text-xs text-gray-400">{hint ?? "JPEG, PNG, PDF — up to 50 MB"}</p>
           </div>
         </div>
 

@@ -21,6 +21,7 @@ import db from "@/lib/db/knex.cjs";
 import { incrementCouponUse } from "@/lib/db/coupons-repo";
 import { recordPurchase, awardPoints } from "@/lib/db/transactions-repo";
 import { sendBookingConfirmation } from "@/lib/email";
+import { getSectionByName } from "@/lib/db/cms-repo";
 
 export const runtime = "nodejs";
 
@@ -54,9 +55,15 @@ export async function POST(request) {
     }
 
     try {
-      // 1. Confirm the booking
+      // 1. Check auto-approve setting
+      const settingsRow = await getSectionByName("booking_settings").catch(() => null);
+      const autoApprove = settingsRow?.content?.auto_approve ?? false;
+
+      // Set status: confirmed immediately if auto-approve on, else pending (awaiting admin approval)
+      const newStatus = autoApprove ? "confirmed" : "pending";
+
       await db("bookings").where({ id: booking_id }).update({
-        status: "confirmed",
+        status: newStatus,
         payment_intent_id: checkoutSession.payment_intent || checkoutSession.id,
       });
 
@@ -88,7 +95,12 @@ export async function POST(request) {
         ).catch(() => {});
       }
 
-      // 4. Send confirmation email
+      // 4. Send confirmation email (only when auto-approved/confirmed)
+      if (!autoApprove) {
+        console.log(`[Stripe Webhook] Booking ${booking_id} paid but awaiting admin approval`);
+        return NextResponse.json({ received: true });
+      }
+
       const booking = await db("bookings")
         .select(
           "bookings.*",

@@ -18,6 +18,7 @@ export async function GET() {
         "users.email",
         "users.phone",
         "users.is_active",
+        "users.personal_discount_rate",
         "users.created_at",
         "roles.name as role"
       )

@@ -4,15 +4,23 @@ import { FileUploadCard } from "./file-upload-card";
 
 export const FileUpload = ({
   accept = "image/*",
+  hint,
   onUploadComplete,
 }) => {
   const [files, setFiles] = useState([]);
 
+  const matchesAccept = (file, accept) => {
+    if (!accept || accept === "*/*") return true;
+    return accept.split(",").some((type) => {
+      const t = type.trim();
+      if (t.endsWith("/*")) return file.type.startsWith(t.slice(0, -1));
+      return file.type === t;
+    });
+  };
+
   const handleFilesChange = useCallback(
     async (newFiles) => {
-      const filtered = accept === "image/*"
-        ? newFiles.filter((f) => f.type.startsWith("image/"))
-        : newFiles;
+      const filtered = newFiles.filter((f) => matchesAccept(f, accept));
 
       const entries = filtered.map((f) => ({
         id: `${f.name}-${Date.now()}-${Math.random()}`,
@@ -51,7 +59,6 @@ export const FileUpload = ({
 
           if (onUploadComplete) onUploadComplete(data.asset);
 
-          // Remove completed entry after a short delay — parent already has the URL
           setTimeout(() => {
             setFiles((prev) => prev.filter((f) => f.id !== entry.id));
           }, 1500);
@@ -72,6 +79,8 @@ export const FileUpload = ({
   return (
     <FileUploadCard
       files={files}
+      accept={accept}
+      hint={hint}
       onFilesChange={handleFilesChange}
       onFileRemove={handleFileRemove}
     />

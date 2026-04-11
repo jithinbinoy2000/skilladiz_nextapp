@@ -1,6 +1,6 @@
 "use client";
 
-import { X, BanIcon, CheckCircle2, Clock } from "lucide-react";
+import { X, BanIcon, CheckCircle2, Clock, CreditCard } from "lucide-react";
 
 const STATUS_CLASSES = {
   confirmed: "bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400",
@@ -8,6 +8,23 @@ const STATUS_CLASSES = {
   pending: "bg-yellow-100 text-yellow-700 dark:bg-yellow-500/10 dark:text-yellow-400",
   cancelled: "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400",
 };
+
+/** pending + has payment_intent_id = paid but awaiting admin approval */
+function isPaidPending(b) {
+  return b.status === "pending" && !!b.payment_intent_id;
+}
+
+function statusLabel(b) {
+  if (isPaidPending(b)) return "Awaiting Approval";
+  if (b.status === "pending") return "On Hold";
+  return b.status.charAt(0).toUpperCase() + b.status.slice(1);
+}
+
+function statusClass(b) {
+  if (isPaidPending(b))
+    return "bg-orange-100 text-orange-700 dark:bg-orange-500/10 dark:text-orange-400";
+  return STATUS_CLASSES[b.status] ?? "";
+}
 
 export default function DayBookingsPanel({
   date,
@@ -28,7 +45,7 @@ export default function DayBookingsPanel({
     : "";
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+    <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/3">
       {/* Header */}
       <div className="mb-4 flex items-start justify-between gap-2">
         <div>
@@ -89,31 +106,38 @@ export default function DayBookingsPanel({
                     {b.user_name}{" "}
                     <span className="text-gray-400">({b.user_email})</span>
                   </p>
+                  {isPaidPending(b) && (
+                    <p className="mt-1 flex items-center gap-1 text-xs text-orange-600 dark:text-orange-400">
+                      <CreditCard className="h-3 w-3" /> Payment received
+                    </p>
+                  )}
                 </div>
                 <span
-                  className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium capitalize ${STATUS_CLASSES[b.status] ?? ""}`}
+                  className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium capitalize ${statusClass(b)}`}
                 >
-                  {b.status}
+                  {statusLabel(b)}
                 </span>
               </div>
 
               {/* Action buttons */}
               {b.status !== "completed" && b.status !== "cancelled" && (
-                <div className="mt-2 flex gap-2">
-                  {b.status !== "confirmed" && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {b.status === "pending" && (
                     <button
                       onClick={() => onUpdateStatus(b.id, "confirmed")}
                       className="flex items-center gap-1 rounded-lg bg-green-100 px-2.5 py-1 text-xs font-medium text-green-700 hover:bg-green-200 dark:bg-green-500/10 dark:text-green-400"
                     >
-                      <CheckCircle2 className="h-3 w-3" /> Confirm
+                      <CheckCircle2 className="h-3 w-3" /> Approve
                     </button>
                   )}
-                  <button
-                    onClick={() => onUpdateStatus(b.id, "completed")}
-                    className="flex items-center gap-1 rounded-lg bg-blue-100 px-2.5 py-1 text-xs font-medium text-blue-700 hover:bg-blue-200 dark:bg-blue-500/10 dark:text-blue-400"
-                  >
-                    <CheckCircle2 className="h-3 w-3" /> Complete
-                  </button>
+                  {b.status === "confirmed" && (
+                    <button
+                      onClick={() => onUpdateStatus(b.id, "completed")}
+                      className="flex items-center gap-1 rounded-lg bg-blue-100 px-2.5 py-1 text-xs font-medium text-blue-700 hover:bg-blue-200 dark:bg-blue-500/10 dark:text-blue-400"
+                    >
+                      <CheckCircle2 className="h-3 w-3" /> Mark Complete
+                    </button>
+                  )}
                   <button
                     onClick={() => onUpdateStatus(b.id, "cancelled")}
                     className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700 hover:bg-red-200 dark:bg-red-500/10 dark:text-red-400"

@@ -18,8 +18,26 @@ export async function getBookingsByDate(dateBooked) {
 }
 
 export async function getAllBookings({ status } = {}) {
-  const q = db(TABLE).orderBy("date_booked", "desc");
-  if (status) q.where({ status });
+  const q = db(TABLE)
+    .select(
+      "bookings.id",
+      "bookings.date_booked",
+      "bookings.status",
+      "bookings.payment_intent_id",
+      "bookings.created_at",
+      "bookings.game_id",
+      "bookings.user_id",
+      "users.name as user_name",
+      "users.email as user_email",
+      "games.title as game_title",
+      "time_slots.start_time",
+      "time_slots.end_time"
+    )
+    .join("users", "users.id", "bookings.user_id")
+    .join("games", "games.id", "bookings.game_id")
+    .join("time_slots", "time_slots.id", "bookings.slot_id")
+    .orderBy("bookings.date_booked", "desc");
+  if (status) q.where("bookings.status", status);
   return q;
 }
 

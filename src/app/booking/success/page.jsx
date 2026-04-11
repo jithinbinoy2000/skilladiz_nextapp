@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { CheckCircle2, CalendarDays, Clock } from "lucide-react";
+import { CheckCircle2, CalendarDays, Clock, Hourglass } from "lucide-react";
 import { Suspense } from "react";
 
 function SuccessContent() {
@@ -13,34 +13,47 @@ function SuccessContent() {
   const [booking, setBooking] = useState(null);
 
   useEffect(() => {
-    // Fetch the gamer's most recent confirmed booking for display
+    // Fetch the gamer's most recent paid booking (confirmed or awaiting approval)
     fetch("/api/bookings/my")
       .then((r) => r.json())
       .then((d) => {
         const list = d.data || [];
-        const confirmed = list.find((b) => b.status === "confirmed");
-        if (confirmed) setBooking(confirmed);
+        // Prefer confirmed, then paid-pending (payment_intent_id present)
+        const recent =
+          list.find((b) => b.status === "confirmed") ||
+          list.find((b) => b.status === "pending" && b.payment_intent_id);
+        if (recent) setBooking(recent);
       });
   }, []);
+
+  const isPending = booking?.status === "pending" && booking?.payment_intent_id;
+  const isConfirmed = booking?.status === "confirmed";
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-black px-4 py-24 text-white">
       <div className="w-full max-w-md text-center">
         <div className="mb-6 flex items-center justify-center">
-          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-green-500/20 ring-4 ring-green-500/30">
-            <CheckCircle2 className="h-10 w-10 text-green-400" />
-          </div>
+          {isPending ? (
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-orange-500/20 ring-4 ring-orange-500/30">
+              <Hourglass className="h-10 w-10 text-orange-400" />
+            </div>
+          ) : (
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-green-500/20 ring-4 ring-green-500/30">
+              <CheckCircle2 className="h-10 w-10 text-green-400" />
+            </div>
+          )}
         </div>
 
         <p className="mb-2 text-xs uppercase tracking-[0.35em] text-white/50">
-          Payment Confirmed
+          Payment Received
         </p>
         <h1 className="mb-4 font-display text-3xl uppercase tracking-[0.15em]">
-          You're All Set!
+          {isPending ? "Awaiting Approval" : "You're All Set!"}
         </h1>
         <p className="mb-8 text-white/60">
-          Your slot is confirmed. A confirmation email has been sent to your
-          inbox. See you at the arena!
+          {isPending
+            ? "Your payment was received successfully. Your booking is pending admin approval — you'll be notified once confirmed."
+            : "Your slot is confirmed. A confirmation email has been sent to your inbox. See you at the arena!"}
         </p>
 
         {booking && (
@@ -72,14 +85,20 @@ function SuccessContent() {
 
         <div className="flex flex-col gap-3">
           <a
-            href="/booking"
+            href="/my-bookings"
             className="rounded-full bg-white px-6 py-3 text-xs uppercase tracking-[0.2em] text-black font-semibold hover:bg-white/90 transition-colors"
+          >
+            View My Bookings
+          </a>
+          <a
+            href="/booking"
+            className="rounded-full border border-white/20 px-6 py-3 text-xs uppercase tracking-[0.2em] text-white hover:bg-white/5 transition-colors"
           >
             Book Another Slot
           </a>
           <a
             href="/"
-            className="rounded-full border border-white/20 px-6 py-3 text-xs uppercase tracking-[0.2em] text-white hover:bg-white/5 transition-colors"
+            className="rounded-full px-6 py-3 text-xs uppercase tracking-[0.2em] text-white/40 hover:text-white/70 transition-colors"
           >
             Return Home
           </a>
