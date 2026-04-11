@@ -176,6 +176,7 @@ function parseGameCards(games) {
         duration: g.duration_minutes,
         image: imgs[0] || "/vear/67e29cdc0ffb11b522861f7f_Shop-1.jpg",
         bookUrl: `/booking/${g.id}`,
+        redirectUrl: g.redirect_url || "/"
       };
     });
 }

@@ -204,7 +204,7 @@ export default function BookingCalendar() {
   return (
     <div className="space-y-5">
       {/* Auto-approve toggle */}
-      <div className="flex items-center justify-between rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/3">
+      <div className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-2xl dark:border-gray-800 dark:bg-white/3">
         <div>
           <p className="text-sm font-semibold text-gray-800 dark:text-white/90">
             Auto-Approve Bookings
@@ -233,11 +233,11 @@ export default function BookingCalendar() {
       </div>
 
       {/* Pending Approvals panel */}
-      {!autoApprove && (
-        <div className="rounded-2xl border border-orange-200 bg-orange-50 p-4 dark:border-orange-500/20 dark:bg-orange-500/5">
-          <div className="mb-3 flex items-center justify-between">
+      {/* {!autoApprove && (
+        <div className="p-4 border border-orange-200 rounded-2xl bg-orange-50 dark:border-orange-500/20 dark:bg-orange-500/5">
+          <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+              <Clock className="w-4 h-4 text-orange-600 dark:text-orange-400" />
               <p className="text-sm font-semibold text-orange-800 dark:text-orange-300">
                 Awaiting Approval
                 {pendingApprovals.length > 0 && (
@@ -264,8 +264,8 @@ export default function BookingCalendar() {
                   key={b.id}
                   className="flex items-center justify-between gap-3 rounded-xl border border-orange-200 bg-white px-3 py-2.5 dark:border-orange-500/20 dark:bg-white/3"
                 >
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-gray-800 dark:text-white/90">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-800 truncate dark:text-white/90">
                       {b.game_title ?? "Booking"}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -277,13 +277,13 @@ export default function BookingCalendar() {
                       onClick={() => approvePendingBooking(b.id)}
                       className="flex items-center gap-1 rounded-lg bg-green-100 px-2.5 py-1 text-xs font-medium text-green-700 hover:bg-green-200 dark:bg-green-500/10 dark:text-green-400"
                     >
-                      <CheckCircle2 className="h-3 w-3" /> Approve
+                      <CheckCircle2 className="w-3 h-3" /> Approve
                     </button>
                     <button
                       onClick={() => cancelPendingBooking(b.id)}
                       className="flex items-center gap-1 rounded-lg bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700 hover:bg-red-200 dark:bg-red-500/10 dark:text-red-400"
                     >
-                      <BanIcon className="h-3 w-3" /> Cancel
+                      <BanIcon className="w-3 h-3" /> Cancel
                     </button>
                   </div>
                 </div>
@@ -291,7 +291,7 @@ export default function BookingCalendar() {
             </div>
           )}
         </div>
-      )}
+      )} */}
 
       {/* Game filter tabs */}
       <div className="flex flex-wrap gap-2">
@@ -322,9 +322,9 @@ export default function BookingCalendar() {
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         {/* ── Calendar ── */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/3 lg:col-span-2">
+        <div className="p-5 bg-white border border-gray-200 rounded-2xl dark:border-gray-800 dark:bg-white/3 lg:col-span-2">
           {/* Calendar header */}
-          <div className="mb-5 flex items-center justify-between">
+          <div className="flex items-center justify-between mb-5">
             <h2 className="text-lg font-semibold text-gray-800 dark:text-white/90">
               {MONTHS[month - 1]} {year}
             </h2>
@@ -333,29 +333,29 @@ export default function BookingCalendar() {
                 onClick={() => { setShowAddModal(true); }}
                 className="flex items-center gap-1.5 rounded-lg bg-brand-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-600"
               >
-                <Plus className="h-4 w-4" /> Add Booking
+                <Plus className="w-4 h-4" /> Add Booking
               </button>
               <button
                 onClick={prevMonth}
                 className="rounded-lg border border-gray-300 p-1.5 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800"
               >
-                <ChevronLeft className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                <ChevronLeft className="w-4 h-4 text-gray-600 dark:text-gray-400" />
               </button>
               <button
                 onClick={nextMonth}
                 className="rounded-lg border border-gray-300 p-1.5 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800"
               >
-                <ChevronRight className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                <ChevronRight className="w-4 h-4 text-gray-600 dark:text-gray-400" />
               </button>
             </div>
           </div>
 
           {/* Day-of-week headers */}
-          <div className="mb-2 grid grid-cols-7">
+          <div className="grid grid-cols-7 mb-2">
             {DAYS.map((d) => (
               <div
                 key={d}
-                className="py-2 text-center text-xs font-medium uppercase text-gray-500 dark:text-gray-400"
+                className="py-2 text-xs font-medium text-center text-gray-500 uppercase dark:text-gray-400"
               >
                 {d}
               </div>
@@ -407,7 +407,7 @@ export default function BookingCalendar() {
           </div>
 
           {/* Legend */}
-          <div className="mt-4 flex flex-wrap gap-4 border-t border-gray-100 pt-4 dark:border-gray-800">
+          <div className="flex flex-wrap gap-4 pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
             {[
               { color: "bg-brand-500", label: "Today" },
               { color: "bg-brand-100 dark:bg-brand-500/20", label: "Has Bookings" },
@@ -433,9 +433,9 @@ export default function BookingCalendar() {
             onClose={() => setSelectedDate(null)}
           />
         ) : (
-          <div className="flex items-center justify-center rounded-2xl border border-dashed border-gray-300 p-8 text-center dark:border-gray-700">
+          <div className="flex items-center justify-center p-8 text-center border border-gray-300 border-dashed rounded-2xl dark:border-gray-700">
             <div>
-              <CalendarDays className="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-gray-600" />
+              <CalendarDays className="w-10 h-10 mx-auto mb-3 text-gray-300 dark:text-gray-600" />
               <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                 Click any date to view bookings
               </p>
