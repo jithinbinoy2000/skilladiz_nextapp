@@ -67,13 +67,12 @@ export default function AboutPage() {
             <div className="absolute inset-0 bg-black/70" />
           </div>
           <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-28 text-center">
-            <p className="text-xs uppercase tracking-[0.35em] text-white/70">About Vear</p>
+            <p className="text-xs uppercase tracking-[0.35em] text-white/70">About Our Gaming Hub</p>
             <h1 className="font-display text-5xl uppercase tracking-[0.18em] sm:text-6xl">
-              We Build the Future of Immersion
+              Premier Gaming Destination
             </h1>
             <p className="mx-auto max-w-3xl text-lg text-white/70">
-              Vear fuses storytelling, technology, and emotion to create VR experiences that transcend
-              screens and reshape how humans connect.
+              We combine classic billiards, cutting-edge VR technology, and next-generation PS5 gaming to create the ultimate entertainment experience where players of all levels come together to compete, connect, and level up.
             </p>
           </div>
         </section>
@@ -84,24 +83,23 @@ export default function AboutPage() {
               <div className="space-y-6">
                 <p className="text-xs uppercase tracking-[0.35em] text-white/60">Our Mission</p>
                 <h2 className="text-3xl font-display uppercase tracking-[0.12em] sm:text-4xl">
-                  Explore, connect, and experience reality beyond limits.
+                  Three Gaming Disciplines, One Premium Destination
                 </h2>
                 <p className="text-sm text-white/70">
-                  From breathtaking virtual landscapes to hyper-realistic simulations, we design every
-                  interaction to feel effortless and unforgettable.
+                  We bring together pool gaming, VR experiences, and PS5 esports in one world-class facility. Our mission is to provide professional-grade equipment, expert community support, and competitive opportunities that elevate every player's experience.
                 </p>
                 <div className="grid gap-4 sm:grid-cols-3">
                   <div className="rounded-2xl border border-white/10 bg-white/5 p-5 text-center">
-                    <div className="text-2xl font-display uppercase tracking-[0.12em]">12</div>
-                    <p className="mt-2 text-xs uppercase tracking-[0.25em] text-white/60">Studios</p>
+                    <div className="text-2xl font-display uppercase tracking-[0.12em]">3</div>
+                    <p className="mt-2 text-xs uppercase tracking-[0.25em] text-white/60">Gaming Types</p>
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-white/5 p-5 text-center">
-                    <div className="text-2xl font-display uppercase tracking-[0.12em]">98%</div>
-                    <p className="mt-2 text-xs uppercase tracking-[0.25em] text-white/60">Client Love</p>
+                    <div className="text-2xl font-display uppercase tracking-[0.12em]">30K+</div>
+                    <p className="mt-2 text-xs uppercase tracking-[0.25em] text-white/60">Active Players</p>
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-white/5 p-5 text-center">
-                    <div className="text-2xl font-display uppercase tracking-[0.12em]">24/7</div>
-                    <p className="mt-2 text-xs uppercase tracking-[0.25em] text-white/60">Support</p>
+                    <div className="text-2xl font-display uppercase tracking-[0.12em]">Weekly</div>
+                    <p className="mt-2 text-xs uppercase tracking-[0.25em] text-white/60">Tournaments</p>
                   </div>
                 </div>
               </div>
@@ -122,32 +120,52 @@ export default function AboutPage() {
           <div className="mx-auto w-full max-w-6xl px-6">
             <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
               <div className="space-y-6">
-                <p className="text-xs uppercase tracking-[0.35em] text-white/60">Experience Flow</p>
+                <p className="text-xs uppercase tracking-[0.35em] text-white/60">Gaming Offerings</p>
                 <h2 className="text-3xl font-display uppercase tracking-[0.12em] sm:text-4xl">
-                  Designed for motion, built for wonder.
+                  Where Every Gamer Belongs
                 </h2>
                 <p className="text-sm text-white/70">
-                  We choreograph every interaction to feel fluid and cinematic. Scroll-driven moments
-                  create depth, while layered imagery reinforces the sense of scale.
+                  Explore our three dedicated gaming zones, each crafted with professional standards and passionate communities. From strategic pool play to immersive virtual worlds and intense console battles.
                 </p>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="rounded-2xl border border-white/10 bg-white/5 p-5" data-reveal>
                     <p className="text-xs uppercase tracking-[0.25em] text-white/60">01</p>
                     <h3 className="mt-3 text-lg font-display uppercase tracking-[0.12em]">
-                      Spatial Storytelling
+                      <a href="/home-1" className="text-pink hover:underline">Pool Gaming</a>
                     </h3>
                     <p className="mt-2 text-sm text-white/70">
-                      Layered environments guide users through immersive narratives.
+                      Tournament-grade 8-ball and 9-ball tables with professional equipment.
                     </p>
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-white/5 p-5" data-reveal>
                     <p className="text-xs uppercase tracking-[0.25em] text-white/60">02</p>
                     <h3 className="mt-3 text-lg font-display uppercase tracking-[0.12em]">
-                      Cinematic Motion
+                      <a href="/home-2" className="text-pink hover:underline">VR Gaming</a>
                     </h3>
                     <p className="mt-2 text-sm text-white/70">
-                      Parallax and depth cues make every scroll feel alive.
+                      Immersive full-body VR experiences with motion tracking and multiplayer missions.
                     </p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5" data-reveal>
+                    <p className="text-xs uppercase tracking-[0.25em] text-white/60">03</p>
+                    <h3 className="mt-3 text-lg font-display uppercase tracking-[0.12em]">
+                      <a href="/home-3" className="text-pink hover:underline">PS5 Gaming</a>
+                    </h3>
+                    <p className="mt-2 text-sm text-white/70">
+                      Next-gen console gaming with competitive tournaments and esports leagues.
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5" data-reveal>
+                    <p className="text-xs uppercase tracking-[0.25em] text-white/60">04</p>
+                    <h3 className="mt-3 text-lg font-display uppercase tracking-[0.12em]">
+                      <a href="/home-4" className="text-pink hover:underline">Full Hub</a>
+                    </h3>
+                    <p className="mt-2 text-sm text-white/70">
+                      Complete gaming destination with all three disciplines under one roof.
+                    </p>
+                  </div>
+                </div>
+              </div>
                   </div>
                 </div>
               </div>

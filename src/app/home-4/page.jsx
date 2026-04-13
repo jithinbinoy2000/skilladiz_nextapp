@@ -1,445 +1,433 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { fadeUpVariant, staggerContainer, initScrollAnimations } from "@/lib/animations";
 
-const heroStats = [
-  { label: "Immersive Worlds", value: "120+" },
-  { label: "Global Partners", value: "48" },
-  { label: "VR Experiences", value: "300" },
+// Gallery items - can accept images, videos, and embedded URLs
+const galleryItems = [
+  {
+    id: 1,
+    title: "8-Ball Pool Arena",
+    category: "Pool Gaming",
+    type: "image",
+    url: "/vear/67e29cdc0ffb11b522861f7f_Shop-1.jpg",
+    thumbnail: "/vear/67e29cdc0ffb11b522861f7f_Shop-1.jpg",
+  },
+  {
+    id: 2,
+    title: "Professional Pool Tables",
+    category: "Pool Gaming",
+    type: "image",
+    url: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bd5d89b248471ed7355_2.webp",
+    thumbnail: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bd5d89b248471ed7355_2.webp",
+  },
+  {
+    id: 3,
+    title: "Tournament Pool Championship",
+    category: "Pool Gaming",
+    type: "image",
+    url: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bd845bd43980da09622_3.webp",
+    thumbnail: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bd845bd43980da09622_3.webp",
+  },
+  {
+    id: 4,
+    title: "10-Ball Tournament",
+    category: "Pool Gaming",
+    type: "image",
+    url: "https://images.unsplash.com/photo-1557804506-669714d2e9d8?w=800",
+    thumbnail: "https://images.unsplash.com/photo-1557804506-669714d2e9d8?w=400",
+  },
+  {
+    id: 5,
+    title: "VR Gaming Zone",
+    category: "Virtual Reality",
+    type: "image",
+    url: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac52f/67d41adf70e6281fac07dc19_4",
+    thumbnail: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac52f/67d41adf70e6281fac07dc19_4",
+  },
+  {
+    id: 6,
+    title: "VR Gaming Experience",
+    category: "Virtual Reality",
+    type: "image",
+    url: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bec00e6b7904f2fe546_9.webp",
+    thumbnail: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bec00e6b7904f2fe546_9.webp",
+  },
+  {
+    id: 7,
+    title: "Motion Tracking VR",
+    category: "Virtual Reality",
+    type: "image",
+    url: "https://images.unsplash.com/photo-1587721471160-169b7d08ba91?w=800",
+    thumbnail: "https://images.unsplash.com/photo-1587721471160-169b7d08ba91?w=400",
+  },
+  {
+    id: 8,
+    title: "Co-op VR Adventure",
+    category: "Virtual Reality",
+    type: "image",
+    url: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=800",
+    thumbnail: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=400",
+  },
+  {
+    id: 9,
+    title: "PS5 Gaming Setup",
+    category: "Console Gaming",
+    type: "image",
+    url: "/vear/67e29d2441cc3c17285f6f34_Shop-2.jpg",
+    thumbnail: "/vear/67e29d2441cc3c17285f6f34_Shop-2.jpg",
+  },
+  {
+    id: 10,
+    title: "PS5 Gaming Arena",
+    category: "Console Gaming",
+    type: "image",
+    url: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bbfba94846ccbb1bf89_10.webp",
+    thumbnail: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bbfba94846ccbb1bf89_10.webp",
+  },
+  {
+    id: 11,
+    title: "Esports Tournament Setup",
+    category: "Console Gaming",
+    type: "image",
+    url: "https://images.unsplash.com/photo-1538481143081-267f06cce340?w=800",
+    thumbnail: "https://images.unsplash.com/photo-1538481143081-267f06cce340?w=400",
+  },
+  {
+    id: 12,
+    title: "4K Gaming Console",
+    category: "Console Gaming",
+    type: "image",
+    url: "https://images.unsplash.com/photo-1605901287605-552f3b544738?w=800",
+    thumbnail: "https://images.unsplash.com/photo-1605901287605-552f3b544738?w=400",
+  },
+  {
+    id: 13,
+    title: "Gaming Community",
+    category: "Events",
+    type: "image",
+    url: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bdf2e4a11e6d9a282f2_11.webp",
+    thumbnail: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bdf2e4a11e6d9a282f2_11.webp",
+  },
+  {
+    id: 14,
+    title: "Weekly Tournament Night",
+    category: "Events",
+    type: "image",
+    url: "https://images.unsplash.com/photo-1511882642117-4b7cf48b4136?w=800",
+    thumbnail: "https://images.unsplash.com/photo-1511882642117-4b7cf48b4136?w=400",
+  },
+  {
+    id: 15,
+    title: "Community Gaming Event",
+    category: "Events",
+    type: "image",
+    url: "https://images.unsplash.com/photo-1516557595007-09a9674d11ad?w=800",
+    thumbnail: "https://images.unsplash.com/photo-1516557595007-09a9674d11ad?w=400",
+  },
+  {
+    id: 16,
+    title: "League Championship Finals",
+    category: "Events",
+    type: "image",
+    url: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=800",
+    thumbnail: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=400",
+  },
+  {
+    id: 17,
+    title: "Gaming Lounge",
+    category: "Facilities",
+    type: "image",
+    url: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bdc5f950c0d1d312713_6.webp",
+    thumbnail: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bdc5f950c0d1d312713_6.webp",
+  },
+  {
+    id: 18,
+    title: "Premium Gaming Lounge",
+    category: "Facilities",
+    type: "image",
+    url: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800",
+    thumbnail: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=400",
+  },
+  {
+    id: 19,
+    title: "Gaming Bar & Lounge",
+    category: "Facilities",
+    type: "image",
+    url: "https://images.unsplash.com/photo-1598898657149-7e6c73ce1b5e?w=800",
+    thumbnail: "https://images.unsplash.com/photo-1598898657149-7e6c73ce1b5e?w=400",
+  },
+  {
+    id: 20,
+    title: "Indoor Gaming Space",
+    category: "Facilities",
+    type: "image",
+    url: "https://images.unsplash.com/photo-1611339555312-e607c04352fa?w=800",
+    thumbnail: "https://images.unsplash.com/photo-1611339555312-e607c04352fa?w=400",
+  },
 ];
 
-const featuredServices = [
-  {
-    title: "Immersive VR Experiences",
-    category: "Innovation",
-    image: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac52f/67d41848629d00d518f6ff31_1",
-  },
-  {
-    title: "Virtual 360deg Environments",
-    category: "Business",
-    image: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac52f/67d41adf70e6281fac07dc19_4",
-  },
-  {
-    title: "VR Training & Simulations",
-    category: "Experiences",
-    image: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac52f/67d41aef5a2c5039c962accc_5",
-  },
-];
-
-const serviceRows = [
-  {
-    order: "001",
-    title: "Immersive VR Experiences",
-    category: "Innovation",
-    price: "from $130",
-    image: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac52f/67d41848629d00d518f6ff31_1",
-  },
-  {
-    order: "002",
-    title: "Virtual 360deg Environments",
-    category: "Business",
-    price: "from $85",
-    image: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac52f/67d41adf70e6281fac07dc19_4",
-  },
-  {
-    order: "003",
-    title: "VR Training & Simulations",
-    category: "Experiences",
-    price: "from $155",
-    image: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac52f/67d41aef5a2c5039c962accc_5",
-  },
-  {
-    order: "004",
-    title: "Next-Gen Virtual Tourism",
-    category: "Technology",
-    price: "from $98",
-    image: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac52f/67d41b02c7c9e886d6fdec74_6",
-  },
-  {
-    order: "005",
-    title: "Virtual Events & Meetings",
-    category: "Business",
-    price: "from $144",
-    image: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac52f/67d41b1170e6281fac083a2f_7",
-  },
-  {
-    order: "006",
-    title: "Interactive VR Showcases",
-    category: "Experiences",
-    price: "from $55",
-    image: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac52f/67d41b2081a078cb7da1c157_11",
-  },
-];
-
-const showcases = [
-  "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bd5d89b248471ed7355_2.webp",
-  "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bd845bd43980da09622_3.webp",
-  "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bbfba94846ccbb1bf89_10.webp",
-  "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bdc5f950c0d1d312713_6.webp",
-];
-
-const testimonials = [
-  {
-    quote:
-      "Vear is setting a new standard in VR. The attention to detail and performance make it one of the best platforms I've used!",
-    name: "Maya Mitchell",
-    role: "CEO at TechNova",
-  },
-  {
-    quote:
-      "The realism and excitement of stepping into new worlds is a must for any VR fan!",
-    name: "Olivia Johnson",
-    role: "Founder at InnX",
-  },
-  {
-    quote:
-      "Vear isn't just another VR platform - it's the future of digital interaction.",
-    name: "Harper Anderson",
-    role: "Director at BrightAds",
-  },
-];
-
-const pricingTeaser = [
-  {
-    name: "Starter Plan",
-    price: "$19.99",
-    icon: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d99909cf62606f1317287f_1.webp",
-  },
-  {
-    name: "Professional Plan",
-    price: "$49.99",
-    icon: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67e269e54300766f3a68794d_3.svg",
-  },
-  {
-    name: "Enterprise Plan",
-    price: "$79.99",
-    icon: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67e269e5d3426bb4b80bb1c2_2.svg",
-  },
+// Gallery categories for filtering
+const categories = [
+  { id: "all", label: "All" },
+  { id: "Pool Gaming", label: "Pool Gaming" },
+  { id: "Virtual Reality", label: "Virtual Reality" },
+  { id: "Console Gaming", label: "Console Gaming" },
+  { id: "Events", label: "Events" },
+  { id: "Facilities", label: "Facilities" },
 ];
 
 export default function Home4Page() {
   const rootRef = useRef(null);
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const cleanup = initScrollAnimations(rootRef.current);
     return () => cleanup();
   }, []);
 
+  // Filter gallery items by category
+  const filteredItems = activeCategory === "all" 
+    ? galleryItems 
+    : galleryItems.filter(item => item.category === activeCategory);
+
   return (
-    <div ref={rootRef} className="main-wrapper bg-black text-white">
+    <div ref={rootRef} className="text-white bg-black main-wrapper">
       <Header />
       <main>
-        <section className="relative overflow-hidden">
-          <div className="absolute inset-0">
-            <img
-              data-parallax
-              src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42b9377921d8b4a813cbe_4.webp"
-              alt="Home 4"
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-black/70" />
+        {/* Hero Section */}
+        <section className="relative pt-20 pb-16 overflow-hidden">
+          <div className="w-full px-6 mx-auto text-center max-w-7xl">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              animate="visible"
+              className="space-y-6"
+            >
+              <motion.p
+                variants={fadeUpVariant}
+                className="text-xs uppercase tracking-[0.35em] text-white/60"
+              >
+                Facility Gallery
+              </motion.p>
+              <motion.h1
+                variants={fadeUpVariant}
+                className="font-display text-5xl uppercase tracking-[0.18em] sm:text-6xl"
+              >
+                Our Gaming Spaces
+              </motion.h1>
+              <motion.p
+                variants={fadeUpVariant}
+                className="max-w-2xl mx-auto text-lg text-white/70"
+              >
+                Explore our world-class gaming facility with state-of-the-art equipment, premium ambiance, and professional gaming environments across all disciplines.
+              </motion.p>
+            </motion.div>
           </div>
-          <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-28">
-            <div className="max-w-3xl space-y-6">
-              <p className="text-xs uppercase tracking-[0.35em] text-white/70">Home 4</p>
-              <h1 className="font-display text-5xl uppercase tracking-[0.18em] sm:text-6xl">
-                The Ultimate Vear Experience
-              </h1>
-              <p className="text-lg text-white/70">
-                A compiled journey across Home 1, Home 2, and Home 3 to showcase the full spectrum of
-                Vear's immersive vision.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <a
-                  href="/services"
-                  className="rounded-full bg-white px-6 py-3 text-xs uppercase tracking-[0.25em] text-black"
+        </section>
+
+        {/* Category Filter */}
+        <section className="py-8 border-y border-white/10">
+          <div className="w-full px-6 mx-auto max-w-7xl">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="flex flex-wrap items-center justify-center gap-3"
+            >
+              {categories.map((category) => (
+                <motion.button
+                  key={category.id}
+                  onClick={() => setActiveCategory(category.id)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`rounded-full px-6 py-2 text-xs uppercase tracking-[0.2em] transition-all duration-300 border ${
+                    activeCategory === category.id
+                      ? "bg-white text-black border-white"
+                      : "border-white/20 text-white hover:border-pink"
+                  }`}
                 >
-                  Explore Services
+                  {category.label}
+                </motion.button>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Gallery Grid */}
+        <section className="py-20">
+          <div className="w-full px-6 mx-auto max-w-7xl">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.1 }}
+              className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            >
+              {filteredItems.map((item) => (
+                <motion.div
+                  key={item.id}
+                  variants={fadeUpVariant}
+                  onClick={() => setSelectedImage(item)}
+                  className="relative overflow-hidden border cursor-pointer group rounded-2xl border-white/10 bg-white/5 aspect-square"
+                >
+                  {/* Image Display */}
+                  <img
+                    src={item.thumbnail}
+                    alt={item.title}
+                    className="object-cover w-full h-full transition duration-500 group-hover:scale-110"
+                  />
+                  
+                  {/* Overlay on Hover */}
+                  <div className="absolute inset-0 flex flex-col justify-end p-4 transition duration-300 opacity-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:opacity-100">
+                    <h3 className="text-sm font-display uppercase tracking-[0.1em] text-white">
+                      {item.title}
+                    </h3>
+                    <p className="mt-1 text-xs text-white/70">{item.category}</p>
+                  </div>
+
+                  {/* Play Icon for Videos */}
+                  {item.type === "video" && (
+                    <div className="absolute inset-0 flex items-center justify-center transition duration-300 opacity-0 group-hover:opacity-100">
+                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm">
+                        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* No Results Message */}
+            {filteredItems.length === 0 && (
+              <div className="py-20 text-center">
+                <p className="text-white/70">No images found in this category.</p>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Statistics Section */}
+        <section className="py-16 border-t border-white/10">
+          <div className="w-full px-6 mx-auto max-w-7xl">
+            <div className="grid gap-8 sm:grid-cols-3">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="space-y-3 text-center"
+              >
+                <div className="text-4xl font-display uppercase tracking-[0.12em]">40+</div>
+                <p className="text-xs uppercase tracking-[0.2em] text-white/60">Gaming Stations</p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="space-y-3 text-center"
+              >
+                <div className="text-4xl font-display uppercase tracking-[0.12em]">3</div>
+                <p className="text-xs uppercase tracking-[0.2em] text-white/60">Gaming Disciplines</p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="space-y-3 text-center"
+              >
+                <div className="text-4xl font-display uppercase tracking-[0.12em]">24/7</div>
+                <p className="text-xs uppercase tracking-[0.2em] text-white/60">Open Access</p>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-16">
+          <div className="w-full px-6 mx-auto max-w-7xl">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="p-12 space-y-6 text-center border rounded-3xl border-white/10 bg-white/5"
+            >
+              <h2 className="text-3xl font-display uppercase tracking-[0.12em] sm:text-4xl">
+                Ready to Experience Our Facility?
+              </h2>
+              <p className="max-w-2xl mx-auto text-white/70">
+                Book a gaming session, join our community, or explore what makes our gaming hub the ultimate destination for all players.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4">
+                <a
+                  href="/booking"
+                  className="rounded-full bg-white px-8 py-3 text-xs uppercase tracking-[0.25em] text-black font-semibold hover:bg-white/90 transition"
+                >
+                  Book Now
                 </a>
                 <a
                   href="/contact"
-                  className="rounded-full border border-white/20 px-6 py-3 text-xs uppercase tracking-[0.25em] text-white"
+                  className="rounded-full border border-white/20 px-8 py-3 text-xs uppercase tracking-[0.25em] text-white hover:border-pink transition"
                 >
-                  Start a Project
+                  Get in Touch
                 </a>
               </div>
-            </div>
-            <div className="grid gap-6 sm:grid-cols-3">
-              {heroStats.map((stat) => (
-                <div key={stat.label} className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                  <div className="text-3xl font-display uppercase tracking-[0.12em]">{stat.value}</div>
-                  <p className="mt-2 text-xs uppercase tracking-[0.25em] text-white/60">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-16 sm:py-20">
-          <div className="mx-auto w-full max-w-6xl px-6">
-            <div className="mb-10 flex items-center gap-3">
-              <p className="text-xs uppercase tracking-[0.35em] text-white/60">Featured Services</p>
-              <img
-                src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d9606476c7cb7cb2c4489c_sonna-arrow-down-right%201.svg"
-                alt=""
-                className="h-4 w-4"
-              />
-            </div>
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              className="grid gap-6 md:grid-cols-3"
-            >
-              {featuredServices.map((service) => (
-                <motion.article
-                  key={service.title}
-                  variants={fadeUpVariant}
-                  className="overflow-hidden rounded-3xl border border-white/10 bg-white/5"
-                >
-                  <div className="relative h-56 overflow-hidden">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="h-full w-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                  </div>
-                  <div className="space-y-3 p-6">
-                    <p className="text-xs uppercase tracking-[0.25em] text-white/60">{service.category}</p>
-                    <h3 className="text-xl font-display uppercase tracking-[0.12em]">
-                      {service.title}
-                    </h3>
-                    <p className="text-sm text-white/70">
-                      At Vear, we redefine immersive storytelling with hyper-realistic digital environments.
-                    </p>
-                  </div>
-                </motion.article>
-              ))}
             </motion.div>
-          </div>
-        </section>
-
-        <section className="border-y border-white/10 py-10">
-          <div className="mx-auto w-full max-w-6xl px-6">
-            <div className="overflow-hidden">
-              <div className="marquee-track">
-                {Array.from({ length: 6 }).map((_, idx) => (
-                  <div key={idx} className="flex items-center gap-16">
-                    {Array.from({ length: 4 }).map((_, wordIdx) => (
-                      <span
-                        key={`${idx}-${wordIdx}`}
-                        className="text-3xl font-display uppercase tracking-[0.2em] text-white/60 sm:text-4xl"
-                      >
-                        Virtual Reality
-                      </span>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="py-16">
-          <div className="mx-auto w-full max-w-6xl px-6">
-            <div className="mb-10 flex items-center gap-3">
-              <p className="text-xs uppercase tracking-[0.35em] text-white/60">Service List</p>
-              <img
-                src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d9606476c7cb7cb2c4489c_sonna-arrow-down-right%201.svg"
-                alt=""
-                className="h-4 w-4"
-              />
-            </div>
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              className="divide-y divide-white/10 border-y border-white/10"
-            >
-              {serviceRows.map((service) => (
-                <motion.article
-                  key={service.title}
-                  variants={fadeUpVariant}
-                  data-reveal
-                  className="group grid items-center gap-6 py-10 lg:grid-cols-[220px_1fr_160px]"
-                >
-                  <div className="relative h-44 w-full overflow-hidden rounded-2xl border border-white/10">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-white/50">
-                      <span>{service.order}</span>
-                      <span className="h-px w-10 bg-white/20" />
-                      <span>{service.category}</span>
-                    </div>
-                    <h3 className="text-2xl font-display uppercase tracking-[0.12em]">
-                      {service.title}
-                    </h3>
-                    <p className="max-w-2xl text-sm text-white/70">
-                      At Vear, we redefine immersive storytelling with hyper-realistic digital environments.
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between gap-4 lg:flex-col lg:items-end">
-                    <div className="rounded-full border border-white/20 px-4 py-2 text-xs uppercase tracking-[0.25em]">
-                      {service.price}
-                    </div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20">
-                      <img
-                        src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d3d739571201bc625f4937_Vector%20101.svg"
-                        alt=""
-                        className="h-4 w-4"
-                      />
-                    </div>
-                  </div>
-                </motion.article>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        <section className="pb-20">
-          <div className="mx-auto w-full max-w-6xl px-6">
-            <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-              <div className="space-y-6">
-                <p className="text-xs uppercase tracking-[0.35em] text-white/60">Immersion Layers</p>
-                <h2 className="text-3xl font-display uppercase tracking-[0.12em] sm:text-4xl">
-                  Elevate every touchpoint with experiential VR.
-                </h2>
-                <p className="text-sm text-white/70">
-                  Blend training, events, and digital worlds into a single high-impact journey. This
-                  section compiles the storytelling from Home 2 and the visual depth of Home 3.
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  {showcases.map((image) => (
-                    <div
-                      key={image}
-                      className="h-16 w-16 overflow-hidden rounded-xl border border-white/10"
-                    >
-                      <img src={image} alt="Showcase" className="h-full w-full object-cover" />
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="relative overflow-hidden rounded-3xl border border-white/10">
-                <img
-                  data-parallax
-                  src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bb7a6d11cdeba3f637c_7.webp"
-                  alt="Immersion"
-                  className="h-full w-full object-cover"
-                />
-                <div className="absolute inset-0 bg-black/40" />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="py-16">
-          <div className="mx-auto w-full max-w-6xl px-6">
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-10">
-              <p className="text-xs uppercase tracking-[0.35em] text-white/60">Client Voices</p>
-              <div className="mt-8 grid gap-8 lg:grid-cols-3">
-                {testimonials.map((testimonial) => (
-                  <div key={testimonial.name} className="space-y-4">
-                    <p className="text-lg text-white/90">"{testimonial.quote}"</p>
-                    <div className="text-xs uppercase tracking-[0.25em] text-white/60">
-                      {testimonial.name} * {testimonial.role}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="py-16">
-          <div className="mx-auto w-full max-w-6xl px-6">
-            <div className="mb-10 flex items-center gap-3">
-              <p className="text-xs uppercase tracking-[0.35em] text-white/60">Pricing Preview</p>
-              <img
-                src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d9606476c7cb7cb2c4489c_sonna-arrow-down-right%201.svg"
-                alt=""
-                className="h-4 w-4"
-              />
-            </div>
-            <div className="grid gap-6 md:grid-cols-3">
-              {pricingTeaser.map((plan) => (
-                <div key={plan.name} className="rounded-3xl border border-white/10 bg-white/5 p-6">
-                  <div className="flex items-center gap-3">
-                    <img src={plan.icon} alt="" className="h-10 w-10" />
-                    <div>
-                      <h3 className="text-lg font-display uppercase tracking-[0.12em]">
-                        {plan.name}
-                      </h3>
-                      <p className="text-sm text-white/70">{plan.price}/month</p>
-                    </div>
-                  </div>
-                  <a
-                    href="/pricing"
-                    className="mt-6 inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-white"
-                  >
-                    View Plans
-                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/20">
-                      <img
-                        src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d3d739571201bc625f4937_Vector%20101.svg"
-                        alt=""
-                        className="h-3 w-3"
-                      />
-                    </span>
-                  </a>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="pb-20">
-          <div className="mx-auto w-full max-w-6xl px-6">
-            <div className="relative overflow-hidden rounded-3xl border border-white/10">
-              <img
-                data-parallax
-                src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67e27eaed8ecdca4a1a67252_6.webp"
-                alt="CTA"
-                className="h-full w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-black/70" />
-              <div className="relative flex flex-col gap-6 p-10 sm:p-14">
-                <p className="text-xs uppercase tracking-[0.35em] text-white/60">Join the Future</p>
-                <h2 className="text-3xl font-display uppercase tracking-[0.12em] sm:text-4xl">
-                  Ready to design your next virtual adventure?
-                </h2>
-                <div className="flex flex-wrap gap-4">
-                  <a
-                    href="/contact"
-                    className="rounded-full bg-white px-6 py-3 text-xs uppercase tracking-[0.25em] text-black"
-                  >
-                    Contact Us
-                  </a>
-                  <a
-                    href="/services"
-                    className="rounded-full border border-white/20 px-6 py-3 text-xs uppercase tracking-[0.25em] text-white"
-                  >
-                    Explore More
-                  </a>
-                </div>
-              </div>
-            </div>
           </div>
         </section>
       </main>
+
+      {/* Lightbox Modal */}
+      {selectedImage && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setSelectedImage(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95"
+        >
+          <motion.div
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0.9 }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-4xl"
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute right-0 z-10 p-2 text-white transition border rounded-full -top-12 border-white/20 hover:border-pink"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Image */}
+            <img
+              src={selectedImage.url}
+              alt={selectedImage.title}
+              className="w-full border rounded-2xl border-white/10"
+            />
+
+            {/* Image Info */}
+            <div className="mt-6 space-y-2 text-center">
+              <h3 className="text-2xl font-display uppercase tracking-[0.12em]">
+                {selectedImage.title}
+              </h3>
+              <p className="text-white/70">{selectedImage.category}</p>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
       <Footer />
     </div>
   );
