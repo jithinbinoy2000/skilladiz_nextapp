@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Suspense } from "react";
 import GameBookingClient from "./GameBookingClient";
+import { Cursor } from "../../../components/ui/cursor";
 
 export async function generateMetadata({ params }) {
   const resolvedParams = await params;
@@ -40,6 +41,7 @@ export default async function GameBookingPage({ params }) {
   const resolvedParams = await params;
   return (
     <div className="text-white bg-black main-wrapper">
+      <Cursor/>
       <Header />
       <main>
         <Suspense fallback={<LoadingScreen />}>

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { fadeUpVariant, staggerContainer, initScrollAnimations } from "@/lib/animations";
+import { Cursor } from "../../components/ui/cursor";
 
 const plans = [
   {
@@ -44,6 +45,7 @@ export default function PricingPage() {
 
   return (
     <div ref={rootRef} className="text-white bg-black main-wrapper">
+      <Cursor/>
       <Header />
       <main>
         <section className="relative overflow-hidden">

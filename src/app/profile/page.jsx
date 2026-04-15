@@ -9,6 +9,7 @@ import ProfileEditor from "@/components/profile/ProfileEditor";
 import PurchaseHistory from "@/components/profile/PurchaseHistory";
 import AccountSettings from "@/components/profile/AccountSettings";
 import { User, ShoppingBag, Settings } from "lucide-react";
+import { Cursor } from "../../components/ui/cursor";
 
 const TABS = [
   { key: "profile", label: "Profile", icon: User },
@@ -45,10 +46,11 @@ export default function ProfilePage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="min-h-screen bg-black text-white">
+      <div className="min-h-screen text-white bg-black">
+        <Cursor/>
         <Header />
         <div className="flex min-h-[60vh] items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-pink-500" />
+          <div className="w-8 h-8 border-2 rounded-full animate-spin border-white/20 border-t-pink-500" />
         </div>
         <Footer />
       </div>
@@ -60,13 +62,13 @@ export default function ProfilePage() {
   const initial = profile?.name?.charAt(0)?.toUpperCase() ?? session.user?.name?.charAt(0)?.toUpperCase() ?? "U";
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen text-white bg-black">
       <Header />
-      <main className="mx-auto w-full max-w-5xl px-6 py-16">
+      <main className="w-full max-w-5xl px-6 py-16 mx-auto">
 
         {/* User hero */}
-        <div className="mb-10 flex items-center gap-5">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-pink-600 text-2xl font-bold text-white">
+        <div className="flex items-center gap-5 mb-10">
+          <div className="flex items-center justify-center w-16 h-16 text-2xl font-bold text-white bg-pink-600 rounded-full">
             {initial}
           </div>
           <div>
@@ -75,7 +77,7 @@ export default function ProfilePage() {
             </h1>
             <p className="text-sm text-white/50">{profile?.email ?? session.user?.email}</p>
             {profile?.tag_name && (
-              <p className="mt-1 text-xs text-pink-400 tracking-wider">#{profile.tag_name}</p>
+              <p className="mt-1 text-xs tracking-wider text-pink-400">#{profile.tag_name}</p>
             )}
           </div>
         </div>

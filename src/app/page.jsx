@@ -16,6 +16,7 @@ import MarqueeSection from "@/components/index/MarqueeSection";
 import MembershipPlansSection from "@/components/index/MembershipPlansSection";
 import PhilosophySection from "@/components/index/PhilosophySection";
 import TournamentsSection from "@/components/index/TournamentsSection";
+import { Cursor } from "../components/ui/cursor";
 
 // Static fallback shown before DB data loads
 const DEFAULT_FEATURED_SERVICES = [
@@ -244,6 +245,7 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <Cursor/>
       <Header />
       <main>
         <Hero />

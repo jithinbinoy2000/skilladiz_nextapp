@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Check, Zap, Tag, Clock } from "lucide-react";
+import { Cursor } from "../../components/ui/cursor";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 32 },
@@ -29,18 +30,18 @@ function PlanCard({ plan, index }) {
   return (
     <motion.article
       variants={fadeUp}
-      className="relative flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-8 group hover:border-white/20 transition-colors duration-300"
+      className="relative flex flex-col p-8 overflow-hidden transition-colors duration-300 border rounded-3xl border-white/10 bg-white/5 group hover:border-white/20"
     >
       {/* Glow effect */}
-      <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-        <div className="absolute -left-10 top-0 h-40 w-40 rounded-full bg-pink/20 blur-3xl" />
-        <div className="absolute -right-10 bottom-0 h-40 w-40 rounded-full bg-brand-500/20 blur-3xl" />
+      <div className="absolute inset-0 transition-opacity duration-500 opacity-0 pointer-events-none group-hover:opacity-100">
+        <div className="absolute top-0 w-40 h-40 rounded-full -left-10 bg-pink/20 blur-3xl" />
+        <div className="absolute bottom-0 w-40 h-40 rounded-full -right-10 bg-brand-500/20 blur-3xl" />
       </div>
 
       {/* Discount badge */}
       {plan.is_discount_enabled && Number(plan.discount_rate) > 0 && (
-        <div className="absolute right-6 top-6 flex items-center gap-1 rounded-full bg-orange-500/20 px-3 py-1 text-xs font-medium text-orange-300">
-          <Tag className="h-3 w-3" />
+        <div className="absolute flex items-center gap-1 px-3 py-1 text-xs font-medium text-orange-300 rounded-full right-6 top-6 bg-orange-500/20">
+          <Tag className="w-3 h-3" />
           {plan.discount_rate}% OFF
         </div>
       )}
@@ -62,13 +63,13 @@ function PlanCard({ plan, index }) {
         <div className="flex items-baseline gap-3">
           {discountedPrice ? (
             <>
-              <span className="font-display text-4xl tracking-tight">
+              <span className="text-4xl tracking-tight font-display">
                 ₹{discountedPrice.toFixed(0)}
               </span>
-              <span className="text-lg text-white/40 line-through">₹{Number(plan.price).toFixed(0)}</span>
+              <span className="text-lg line-through text-white/40">₹{Number(plan.price).toFixed(0)}</span>
             </>
           ) : (
-            <span className="font-display text-4xl tracking-tight">
+            <span className="text-4xl tracking-tight font-display">
               ₹{Number(plan.price).toFixed(0)}
             </span>
           )}
@@ -76,8 +77,8 @@ function PlanCard({ plan, index }) {
 
         {/* Credits */}
         {Number(plan.credit_points_per_hour) > 0 && (
-          <div className="flex items-center gap-2 rounded-xl border border-yellow-500/20 bg-yellow-500/10 px-3 py-2">
-            <Zap className="h-4 w-4 text-yellow-400" />
+          <div className="flex items-center gap-2 px-3 py-2 border rounded-xl border-yellow-500/20 bg-yellow-500/10">
+            <Zap className="w-4 h-4 text-yellow-400" />
             <span className="text-sm text-yellow-300">
               {plan.credit_points_per_hour} credit points per hour
             </span>
@@ -123,6 +124,7 @@ export default function MembershipsPage() {
 
   return (
     <div className="text-white bg-black main-wrapper">
+      <Cursor/>
       <Header />
       <main>
         {/* Hero */}
@@ -136,7 +138,7 @@ export default function MembershipsPage() {
             <h1 className="mt-6 font-display text-5xl uppercase tracking-[0.18em] sm:text-6xl">
               Join the Club
             </h1>
-            <p className="mt-4 max-w-xl text-white/60">
+            <p className="max-w-xl mt-4 text-white/60">
               Choose a plan that fits your gaming style. Unlock exclusive perks, earn credit points, and play more for less.
             </p>
           </div>
@@ -148,7 +150,7 @@ export default function MembershipsPage() {
             {loading ? (
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="h-72 animate-pulse rounded-3xl border border-white/10 bg-white/5" />
+                  <div key={i} className="border h-72 animate-pulse rounded-3xl border-white/10 bg-white/5" />
                 ))}
               </div>
             ) : plans.length === 0 ? (
@@ -178,14 +180,14 @@ export default function MembershipsPage() {
         {/* CTA banner */}
         <section className="pb-20">
           <div className="w-full max-w-6xl px-6 mx-auto">
-            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-10 lg:p-14 text-center">
+            <div className="relative p-10 overflow-hidden text-center border rounded-3xl border-white/10 bg-white/5 lg:p-14">
               <div className="absolute inset-0 bg-gradient-to-r from-brand-500/10 to-pink/10" />
               <div className="relative">
                 <p className="text-xs uppercase tracking-[0.35em] text-white/50">Ready to play more?</p>
                 <h2 className="mt-4 font-display text-3xl uppercase tracking-[0.12em] sm:text-4xl">
                   Start Your Membership Today
                 </h2>
-                <p className="mt-3 text-white/60 max-w-lg mx-auto">
+                <p className="max-w-lg mx-auto mt-3 text-white/60">
                   Join hundreds of gamers who save on every session and enjoy exclusive member benefits.
                 </p>
                 <a

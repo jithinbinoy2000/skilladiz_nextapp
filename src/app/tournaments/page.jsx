@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Trophy, Calendar, Users, DollarSign, ChevronDown, Medal } from "lucide-react";
+import { Cursor } from "../../components/ui/cursor";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 32 },
@@ -52,19 +53,19 @@ function TournamentCard({ t }) {
   return (
     <motion.article
       variants={fadeUp}
-      className="overflow-hidden rounded-3xl border border-white/10 bg-white/5"
+      className="overflow-hidden border rounded-3xl border-white/10 bg-white/5"
     >
       {/* Banner */}
       {t.banner_url ? (
-        <div className="relative h-44 overflow-hidden">
-          <img src={t.banner_url} alt={t.name} className="h-full w-full object-cover" />
+        <div className="relative overflow-hidden h-44">
+          <img src={t.banner_url} alt={t.name} className="object-cover w-full h-full" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
           <span className={`absolute right-4 top-4 rounded-full border px-3 py-1 text-xs font-medium ${status.className}`}>
             {status.label}
           </span>
         </div>
       ) : (
-        <div className="relative flex h-44 items-center justify-center bg-gradient-to-br from-brand-500/20 to-pink/20">
+        <div className="relative flex items-center justify-center h-44 bg-gradient-to-br from-brand-500/20 to-pink/20">
           <Trophy className="h-14 w-14 text-white/20" />
           <span className={`absolute right-4 top-4 rounded-full border px-3 py-1 text-xs font-medium ${status.className}`}>
             {status.label}
@@ -84,19 +85,19 @@ function TournamentCard({ t }) {
         {/* Info grid */}
         <div className="grid grid-cols-2 gap-3 text-sm text-white/60">
           <div className="flex items-center gap-1.5">
-            <Calendar className="h-4 w-4 text-white/30" />
+            <Calendar className="w-4 h-4 text-white/30" />
             <span>{t.date} · {t.time}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <Users className="h-4 w-4 text-white/30" />
+            <Users className="w-4 h-4 text-white/30" />
             <span>{t.current_registrations ?? 0}/{t.max_participants} players</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <DollarSign className="h-4 w-4 text-white/30" />
+            <DollarSign className="w-4 h-4 text-white/30" />
             <span>Entry: ₹{Number(t.entry_fee).toFixed(0)}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <Trophy className="h-4 w-4 text-yellow-400/60" />
+            <Trophy className="w-4 h-4 text-yellow-400/60" />
             <span className="text-yellow-300/80">Prize: ₹{Number(t.prize_pool).toFixed(0)}</span>
           </div>
         </div>
@@ -104,13 +105,13 @@ function TournamentCard({ t }) {
         {/* Registration fill bar */}
         {t.max_participants && t.status !== "completed" && (
           <div>
-            <div className="mb-1 flex justify-between text-xs text-white/40">
+            <div className="flex justify-between mb-1 text-xs text-white/40">
               <span>Registration</span>
               <span>{t.current_registrations ?? 0}/{t.max_participants}</span>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
               <div
-                className="h-full rounded-full bg-brand-500 transition-all"
+                className="h-full transition-all rounded-full bg-brand-500"
                 style={{ width: `${fillPct}%` }}
               />
             </div>
@@ -119,11 +120,11 @@ function TournamentCard({ t }) {
 
         {/* Winner (completed) */}
         {isCompleted && t.winner_name && (
-          <div className="flex items-center gap-3 rounded-xl border border-yellow-500/20 bg-yellow-500/10 px-4 py-3">
+          <div className="flex items-center gap-3 px-4 py-3 border rounded-xl border-yellow-500/20 bg-yellow-500/10">
             {t.winner_image_url ? (
-              <img src={t.winner_image_url} alt={t.winner_name} className="h-10 w-10 rounded-full object-cover" />
+              <img src={t.winner_image_url} alt={t.winner_name} className="object-cover w-10 h-10 rounded-full" />
             ) : (
-              <Medal className="h-6 w-6 text-yellow-400 shrink-0" />
+              <Medal className="w-6 h-6 text-yellow-400 shrink-0" />
             )}
             <div>
               <p className="text-xs text-yellow-400/60">Winner</p>
@@ -146,20 +147,20 @@ function TournamentCard({ t }) {
             {expanded && (
               <div className="mt-3 space-y-3">
                 {t.description && (
-                  <p className="text-sm text-white/60 whitespace-pre-line">{t.description}</p>
+                  <p className="text-sm whitespace-pre-line text-white/60">{t.description}</p>
                 )}
                 {t.rules_policies && (
                   <div>
                     <p className="mb-1.5 text-xs uppercase tracking-wider text-white/40">Rules & Policies</p>
-                    <p className="text-sm text-white/60 whitespace-pre-line">{t.rules_policies}</p>
+                    <p className="text-sm whitespace-pre-line text-white/60">{t.rules_policies}</p>
                   </div>
                 )}
                 {resultImages.length > 0 && (
                   <div>
-                    <p className="mb-2 text-xs uppercase tracking-wider text-white/40">Highlights</p>
+                    <p className="mb-2 text-xs tracking-wider uppercase text-white/40">Highlights</p>
                     <div className="grid grid-cols-3 gap-2">
                       {resultImages.map((url, i) => (
-                        <img key={i} src={url} alt="" className="aspect-square rounded-xl object-cover" />
+                        <img key={i} src={url} alt="" className="object-cover aspect-square rounded-xl" />
                       ))}
                     </div>
                   </div>
@@ -202,6 +203,7 @@ export default function TournamentsPage() {
 
   return (
     <div className="text-white bg-black main-wrapper">
+      <Cursor/>
       <Header />
       <main>
         {/* Hero */}
@@ -213,15 +215,15 @@ export default function TournamentsPage() {
             <h1 className="mt-6 font-display text-5xl uppercase tracking-[0.18em] sm:text-6xl">
               Tournaments
             </h1>
-            <p className="mt-4 max-w-xl text-white/60">
+            <p className="max-w-xl mt-4 text-white/60">
               Join competitive tournaments, showcase your skills, and claim your place on the leaderboard.
             </p>
           </div>
         </section>
 
         {/* Filter bar */}
-        <section className="sticky top-16 z-20 border-b border-white/10 bg-black/90 backdrop-blur-md">
-          <div className="flex w-full max-w-6xl items-center gap-2 overflow-x-auto px-6 py-3 mx-auto no-scrollbar">
+        <section className="sticky z-20 border-b top-16 border-white/10 bg-black/90 backdrop-blur-md">
+          <div className="flex items-center w-full max-w-6xl gap-2 px-6 py-3 mx-auto overflow-x-auto no-scrollbar">
             {FILTERS.map((f) => (
               <button
                 key={f.key}
@@ -244,12 +246,12 @@ export default function TournamentsPage() {
             {loading ? (
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="h-80 animate-pulse rounded-3xl border border-white/10 bg-white/5" />
+                  <div key={i} className="border h-80 animate-pulse rounded-3xl border-white/10 bg-white/5" />
                 ))}
               </div>
             ) : tournaments.length === 0 ? (
               <div className="py-20 text-center text-white/40">
-                <Trophy className="mx-auto mb-3 h-10 w-10 text-white/20" />
+                <Trophy className="w-10 h-10 mx-auto mb-3 text-white/20" />
                 No tournaments found.
               </div>
             ) : (
@@ -280,12 +282,12 @@ export default function TournamentsPage() {
                 {completed
                   .filter((t) => t.winner_name)
                   .map((t) => (
-                    <div key={t.id} className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <div key={t.id} className="flex items-center gap-4 p-4 border rounded-2xl border-white/10 bg-white/5">
                       {t.winner_image_url ? (
-                        <img src={t.winner_image_url} alt={t.winner_name} className="h-14 w-14 rounded-full object-cover" />
+                        <img src={t.winner_image_url} alt={t.winner_name} className="object-cover rounded-full h-14 w-14" />
                       ) : (
-                        <div className="flex h-14 w-14 items-center justify-center rounded-full border border-yellow-500/20 bg-yellow-500/10">
-                          <Medal className="h-6 w-6 text-yellow-400" />
+                        <div className="flex items-center justify-center border rounded-full h-14 w-14 border-yellow-500/20 bg-yellow-500/10">
+                          <Medal className="w-6 h-6 text-yellow-400" />
                         </div>
                       )}
                       <div>

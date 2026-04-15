@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { initScrollAnimations } from "@/lib/animations";
+import { Cursor } from "../../components/ui/cursor";
 
 const sections = [
   {
@@ -42,7 +43,8 @@ export default function TermsPage() {
   }, []);
 
   return (
-    <div ref={rootRef} className="main-wrapper bg-black text-white">
+    <div ref={rootRef} className="text-white bg-black main-wrapper">
+      <Cursor/>
       <Header />
       <main>
         <section className="relative overflow-hidden">
@@ -51,26 +53,26 @@ export default function TermsPage() {
               data-parallax
               src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bb7a6d11cdeba3f637c_7.webp"
               alt="Terms"
-              className="h-full w-full object-cover"
+              className="object-cover w-full h-full"
             />
             <div className="absolute inset-0 bg-black/75" />
           </div>
-          <div className="relative mx-auto flex w-full max-w-5xl flex-col gap-4 px-6 py-24 text-center">
+          <div className="relative flex flex-col w-full max-w-5xl gap-4 px-6 py-24 mx-auto text-center">
             <p className="text-xs uppercase tracking-[0.35em] text-white/70">Legal</p>
             <h1 className="font-display text-4xl uppercase tracking-[0.18em] sm:text-5xl">
               Terms & Conditions
             </h1>
-            <p className="mx-auto max-w-2xl text-sm text-white/70">
+            <p className="max-w-2xl mx-auto text-sm text-white/70">
               Please read these terms carefully before using Vear's experiences and services.
             </p>
           </div>
         </section>
 
         <section className="py-16">
-          <div className="mx-auto w-full max-w-5xl px-6">
+          <div className="w-full max-w-5xl px-6 mx-auto">
             <div className="space-y-8">
               {sections.map((section) => (
-                <div key={section.title} className="rounded-3xl border border-white/10 bg-white/5 p-8">
+                <div key={section.title} className="p-8 border rounded-3xl border-white/10 bg-white/5">
                   <h2 className="text-xl font-display uppercase tracking-[0.12em]">
                     {section.title}
                   </h2>

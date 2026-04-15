@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { fadeUpVariant, staggerContainer, initScrollAnimations } from "@/lib/animations";
 import LoginForm from "@/components/auth/LoginForm";
 import RegisterForm from "@/components/auth/RegisterForm";
+import { Cursor } from "../../components/ui/cursor";
 
 export default function AuthPage() {
   const rootRef = useRef(null);
@@ -17,7 +18,8 @@ export default function AuthPage() {
   }, []);
 
   return (
-    <div ref={rootRef} className="main-wrapper bg-black text-white">
+    <div ref={rootRef} className="text-white bg-black main-wrapper">
+      <Cursor/>
       <Header />
       <main>
         <section className="relative overflow-hidden">
@@ -26,11 +28,11 @@ export default function AuthPage() {
               data-parallax
               src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bb7a6d11cdeba3f637c_7.webp"
               alt="Account"
-              className="h-full w-full object-cover"
+              className="object-cover w-full h-full"
             />
             <div className="absolute inset-0 bg-black/70" />
           </div>
-          <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center px-6 py-28 text-center">
+          <div className="relative flex flex-col items-center w-full max-w-6xl px-6 mx-auto text-center py-28">
             <p className="text-xs uppercase tracking-[0.35em] text-white/70">Account</p>
             <h1 className="mt-6 font-display text-5xl uppercase tracking-[0.18em] sm:text-6xl">
               Login or Register
@@ -39,7 +41,7 @@ export default function AuthPage() {
         </section>
 
         <section className="py-16 sm:py-20">
-          <div className="mx-auto w-full max-w-5xl px-6">
+          <div className="w-full max-w-5xl px-6 mx-auto">
             <motion.div
               variants={staggerContainer}
               initial="hidden"

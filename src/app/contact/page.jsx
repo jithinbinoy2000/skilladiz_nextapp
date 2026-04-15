@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { fadeUpVariant, staggerContainer, initScrollAnimations } from "@/lib/animations";
+import { Cursor } from "../../components/ui/cursor";
 
 const faqs = [
   {
@@ -61,7 +62,8 @@ export default function ContactPage() {
   }, []);
 
   return (
-    <div ref={rootRef} className="main-wrapper bg-black text-white">
+    <div ref={rootRef} className="text-white bg-black main-wrapper">
+      <Cursor/>
       <Header />
       <main>
         <section className="relative overflow-hidden">
@@ -70,11 +72,11 @@ export default function ContactPage() {
               data-parallax
               src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bdc5f950c0d1d312713_6.webp"
               alt="Contact Us"
-              className="h-full w-full object-cover"
+              className="object-cover w-full h-full"
             />
             <div className="absolute inset-0 bg-black/70" />
           </div>
-          <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center px-6 py-28 text-center">
+          <div className="relative flex flex-col items-center w-full max-w-6xl px-6 mx-auto text-center py-28">
             <p className="text-xs uppercase tracking-[0.35em] text-white/70">Contact</p>
             <h1 className="mt-6 font-display text-5xl uppercase tracking-[0.18em] sm:text-6xl">
               Contact Us
@@ -83,7 +85,7 @@ export default function ContactPage() {
         </section>
 
         <section className="py-16 sm:py-20">
-          <div className="mx-auto w-full max-w-6xl px-6">
+          <div className="w-full max-w-6xl px-6 mx-auto">
             <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr]">
               <motion.div
                 variants={fadeUpVariant}
@@ -125,34 +127,34 @@ export default function ContactPage() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.2 }}
-                className="space-y-5 rounded-3xl border border-white/10 bg-white/5 p-8"
+                className="p-8 space-y-5 border rounded-3xl border-white/10 bg-white/5"
               >
                 <div className="grid gap-4 sm:grid-cols-2">
                   <input
                     type="text"
                     placeholder="First name"
-                    className="w-full rounded-full border border-white/20 bg-transparent px-4 py-3 text-sm text-white placeholder:text-white/40"
+                    className="w-full px-4 py-3 text-sm text-white bg-transparent border rounded-full border-white/20 placeholder:text-white/40"
                   />
                   <input
                     type="text"
                     placeholder="Last name"
-                    className="w-full rounded-full border border-white/20 bg-transparent px-4 py-3 text-sm text-white placeholder:text-white/40"
+                    className="w-full px-4 py-3 text-sm text-white bg-transparent border rounded-full border-white/20 placeholder:text-white/40"
                   />
                 </div>
                 <input
                   type="email"
                   placeholder="Your email"
-                  className="w-full rounded-full border border-white/20 bg-transparent px-4 py-3 text-sm text-white placeholder:text-white/40"
+                  className="w-full px-4 py-3 text-sm text-white bg-transparent border rounded-full border-white/20 placeholder:text-white/40"
                 />
                 <input
                   type="tel"
                   placeholder="9778241440"
-                  className="w-full rounded-full border border-white/20 bg-transparent px-4 py-3 text-sm text-white placeholder:text-white/40"
+                  className="w-full px-4 py-3 text-sm text-white bg-transparent border rounded-full border-white/20 placeholder:text-white/40"
                 />
                 <textarea
                   rows={5}
                   placeholder="Your message"
-                  className="w-full rounded-3xl border border-white/20 bg-transparent px-4 py-3 text-sm text-white placeholder:text-white/40"
+                  className="w-full px-4 py-3 text-sm text-white bg-transparent border rounded-3xl border-white/20 placeholder:text-white/40"
                 />
                 <button
                   type="submit"
@@ -166,25 +168,25 @@ export default function ContactPage() {
         </section>
 
         <section className="py-16">
-          <div className="mx-auto w-full max-w-5xl px-6">
-            <div className="mb-8 flex items-center gap-3">
+          <div className="w-full max-w-5xl px-6 mx-auto">
+            <div className="flex items-center gap-3 mb-8">
               <p className="text-xs uppercase tracking-[0.35em] text-white/60">Frequent Questions</p>
               <img
                 src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d9606476c7cb7cb2c4489c_sonna-arrow-down-right%201.svg"
                 alt=""
-                className="h-4 w-4"
+                className="w-4 h-4"
               />
             </div>
             <div className="space-y-4">
               {faqs.map((faq, idx) => (
                 <div
                   key={faq.question}
-                  className="rounded-2xl border border-white/10 bg-white/5"
+                  className="border rounded-2xl border-white/10 bg-white/5"
                 >
                   <button
                     type="button"
                     onClick={() => setOpenIndex(idx === openIndex ? -1 : idx)}
-                    className="flex w-full items-center justify-between gap-6 px-6 py-5 text-left"
+                    className="flex items-center justify-between w-full gap-6 px-6 py-5 text-left"
                   >
                     <div>
                       <p className="text-xs uppercase tracking-[0.25em] text-white/50">{faq.title}</p>
@@ -202,13 +204,13 @@ export default function ContactPage() {
         </section>
 
         <section className="pb-20">
-          <div className="mx-auto w-full max-w-6xl px-6">
-            <div className="relative overflow-hidden rounded-3xl border border-white/10">
+          <div className="w-full max-w-6xl px-6 mx-auto">
+            <div className="relative overflow-hidden border rounded-3xl border-white/10">
               <img
                 data-parallax
                 src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67e27eaed8ecdca4a1a67252_6.webp"
                 alt="Reviews"
-                className="h-full w-full object-cover"
+                className="object-cover w-full h-full"
               />
               <div className="absolute inset-0 bg-black/60" />
               <div className="relative grid gap-8 p-10 lg:grid-cols-3">

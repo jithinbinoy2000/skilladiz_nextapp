@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { CheckCircle2, CalendarDays, Clock, Hourglass } from "lucide-react";
 import { Suspense } from "react";
+import { Cursor } from "../../../components/ui/cursor";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -30,16 +31,16 @@ function SuccessContent() {
   const isConfirmed = booking?.status === "confirmed";
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-black px-4 py-24 text-white">
+    <div className="flex flex-col items-center justify-center min-h-screen px-4 py-24 text-white bg-black">
       <div className="w-full max-w-md text-center">
-        <div className="mb-6 flex items-center justify-center">
+        <div className="flex items-center justify-center mb-6">
           {isPending ? (
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-orange-500/20 ring-4 ring-orange-500/30">
-              <Hourglass className="h-10 w-10 text-orange-400" />
+            <div className="flex items-center justify-center w-20 h-20 rounded-full bg-orange-500/20 ring-4 ring-orange-500/30">
+              <Hourglass className="w-10 h-10 text-orange-400" />
             </div>
           ) : (
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-green-500/20 ring-4 ring-green-500/30">
-              <CheckCircle2 className="h-10 w-10 text-green-400" />
+            <div className="flex items-center justify-center w-20 h-20 rounded-full bg-green-500/20 ring-4 ring-green-500/30">
+              <CheckCircle2 className="w-10 h-10 text-green-400" />
             </div>
           )}
         </div>
@@ -57,7 +58,7 @@ function SuccessContent() {
         </p>
 
         {booking && (
-          <div className="mb-8 divide-y divide-white/10 rounded-2xl border border-white/10 text-left">
+          <div className="mb-8 text-left border divide-y divide-white/10 rounded-2xl border-white/10">
             <div className="flex items-center justify-between px-5 py-3">
               <span className="text-xs uppercase tracking-[0.15em] text-white/50">
                 Game
@@ -110,7 +111,8 @@ function SuccessContent() {
 
 export default function BookingSuccessPage() {
   return (
-    <div className="main-wrapper bg-black">
+    <div className="bg-black main-wrapper">
+      <Cursor/>
       <Header />
       <main>
         <Suspense fallback={<div className="min-h-screen" />}>

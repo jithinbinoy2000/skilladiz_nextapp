@@ -14,6 +14,7 @@ import {
   Trophy,
   CreditCard,
 } from "lucide-react";
+import { Cursor } from "../../components/ui/cursor";
 
 const STATUS_CONFIG = {
   pending: {
@@ -102,17 +103,17 @@ function BookingCard({ booking }) {
           <img
             src={thumb}
             alt={booking.game_title}
-            className="h-20 w-24 shrink-0 rounded-xl object-cover sm:h-24 sm:w-28"
+            className="object-cover w-24 h-20 shrink-0 rounded-xl sm:h-24 sm:w-28"
           />
         ) : (
-          <div className="flex h-20 w-24 shrink-0 items-center justify-center rounded-xl bg-white/5 text-3xl sm:h-24 sm:w-28">
+          <div className="flex items-center justify-center w-24 h-20 text-3xl shrink-0 rounded-xl bg-white/5 sm:h-24 sm:w-28">
             🎮
           </div>
         )}
 
         {/* Info */}
-        <div className="min-w-0 flex-1">
-          <div className="mb-2 flex flex-wrap items-start justify-between gap-2">
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
             <h3 className="text-base font-semibold text-white">
               {booking.game_title}
             </h3>
@@ -191,19 +192,20 @@ export default function MyBookingsPage() {
 
   if (authStatus === "loading") {
     return (
-      <div className="main-wrapper bg-black">
+      <div className="bg-black main-wrapper">
         <Header />
-        <main className="flex min-h-screen items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-white border-t-transparent" />
+        <main className="flex items-center justify-center min-h-screen">
+          <div className="w-8 h-8 border-2 border-white rounded-full animate-spin border-t-transparent" />
         </main>
       </div>
     );
   }
 
   return (
-    <div className="main-wrapper bg-black">
+    <div className="bg-black main-wrapper">
+      <Cursor/>
       <Header />
-      <main className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+      <main className="max-w-3xl px-4 py-16 mx-auto sm:px-6">
         <div className="mb-8">
           <p className="mb-1 text-[10px] uppercase tracking-[0.4em] text-white/35">
             Your Account
@@ -214,7 +216,7 @@ export default function MyBookingsPage() {
         </div>
 
         {/* Filter tabs */}
-        <div className="mb-6 flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 mb-6">
           {FILTER_TABS.map((tab) => (
             <button
               key={tab.key}
@@ -233,11 +235,11 @@ export default function MyBookingsPage() {
         {/* Content */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-white border-t-transparent" />
+            <div className="w-8 h-8 border-2 border-white rounded-full animate-spin border-t-transparent" />
           </div>
         ) : visibleBookings.length === 0 ? (
           <div className="flex flex-col items-center py-20 text-center">
-            <CalendarDays className="mb-4 h-12 w-12 text-white/15" />
+            <CalendarDays className="w-12 h-12 mb-4 text-white/15" />
             <p className="text-sm font-medium text-white/40">
               {activeFilter === "all"
                 ? "You have no bookings yet."

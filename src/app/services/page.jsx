@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { fadeUpVariant, staggerContainer, initScrollAnimations } from "@/lib/animations";
+import { Cursor } from "../../components/ui/cursor";
 
 const services = [
   {
@@ -85,7 +86,8 @@ export default function ServicesPage() {
   }, []);
 
   return (
-    <div ref={rootRef} className="main-wrapper bg-black text-white">
+    <div ref={rootRef} className="text-white bg-black main-wrapper">
+      <Cursor/>
       <Header />
       <main>
         <section className="relative overflow-hidden">
@@ -94,11 +96,11 @@ export default function ServicesPage() {
               data-parallax
               src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42b9377921d8b4a813cbe_4.webp"
               alt="VR Services"
-              className="h-full w-full object-cover"
+              className="object-cover w-full h-full"
             />
             <div className="absolute inset-0 bg-black/65" />
           </div>
-          <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center px-6 py-28 text-center">
+          <div className="relative flex flex-col items-center w-full max-w-6xl px-6 mx-auto text-center py-28">
             <p className="text-xs uppercase tracking-[0.35em] text-white/70">Immersive Worlds</p>
             <h1 className="mt-6 font-display text-5xl uppercase tracking-[0.18em] sm:text-6xl">
               VR Services
@@ -107,24 +109,24 @@ export default function ServicesPage() {
         </section>
 
         <section className="py-16 sm:py-20">
-          <div className="mx-auto w-full max-w-6xl px-6">
+          <div className="w-full max-w-6xl px-6 mx-auto">
             <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
-              <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 lg:sticky lg:top-28 lg:self-start">
+              <div className="relative overflow-hidden border rounded-3xl border-white/10 bg-white/5 lg:sticky lg:top-28 lg:self-start">
                 <div className="relative h-full min-h-[320px] overflow-hidden rounded-3xl">
                   <img
                     data-parallax
                     src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac52f/67d41848629d00d518f6ff31_1"
                     alt="Immersive VR"
-                    className="h-full w-full object-cover"
+                    className="object-cover w-full h-full"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                 </div>
-                <div className="absolute inset-x-0 bottom-0 space-y-4 p-6">
+                <div className="absolute inset-x-0 bottom-0 p-6 space-y-4">
                   <div className="flex flex-wrap gap-2 text-xs uppercase tracking-[0.25em] text-white/70">
                     {services.slice(0, 4).map((service) => (
                       <span
                         key={service.title}
-                        className="rounded-full border border-white/20 px-3 py-1"
+                        className="px-3 py-1 border rounded-full border-white/20"
                       >
                         {service.category}
                       </span>
@@ -139,11 +141,11 @@ export default function ServicesPage() {
                     className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-white"
                   >
                     Touch the Future
-                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20">
+                    <span className="inline-flex items-center justify-center w-10 h-10 border rounded-full border-white/20">
                       <img
                         src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d3d739571201bc625f4937_Vector%20101.svg"
                         alt=""
-                        className="h-4 w-4"
+                        className="w-4 h-4"
                       />
                     </span>
                   </a>
@@ -159,12 +161,12 @@ export default function ServicesPage() {
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.2 }}
                     data-reveal
-                    className="flex items-center justify-between gap-6 rounded-3xl border border-white/10 bg-white/5 p-6"
+                    className="flex items-center justify-between gap-6 p-6 border rounded-3xl border-white/10 bg-white/5"
                   >
                     <div>
                       <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-white/50">
                         <span>{service.order}</span>
-                        <span className="h-px w-10 bg-white/20" />
+                        <span className="w-10 h-px bg-white/20" />
                         <span>{service.category}</span>
                       </div>
                       <h3 className="mt-3 text-xl font-display uppercase tracking-[0.12em]">
@@ -182,13 +184,13 @@ export default function ServicesPage() {
         </section>
 
         <section id="vr-services" className="py-8 sm:py-12">
-          <div className="mx-auto w-full max-w-6xl px-6">
-            <div className="mb-10 flex items-center gap-3">
+          <div className="w-full max-w-6xl px-6 mx-auto">
+            <div className="flex items-center gap-3 mb-10">
               <p className="text-xs uppercase tracking-[0.35em] text-white/60">Immersive Worlds</p>
               <img
                 src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d9606476c7cb7cb2c4489c_sonna-arrow-down-right%201.svg"
                 alt=""
-                className="h-4 w-4"
+                className="w-4 h-4"
               />
             </div>
 
@@ -206,11 +208,11 @@ export default function ServicesPage() {
                   data-reveal
                   className="group grid items-center gap-6 py-10 lg:grid-cols-[220px_1fr_160px]"
                 >
-                  <div className="relative h-44 w-full overflow-hidden rounded-2xl border border-white/10">
+                  <div className="relative w-full overflow-hidden border h-44 rounded-2xl border-white/10">
                     <img
                       src={service.image}
                       alt={service.title}
-                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                      className="object-cover w-full h-full transition duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                   </div>
@@ -218,7 +220,7 @@ export default function ServicesPage() {
                   <div className="space-y-4">
                     <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-white/50">
                       <span>{service.order}</span>
-                      <span className="h-px w-10 bg-white/20" />
+                      <span className="w-10 h-px bg-white/20" />
                       <span>{service.category}</span>
                     </div>
                     <h3 className="text-2xl font-display uppercase tracking-[0.12em]">
@@ -231,11 +233,11 @@ export default function ServicesPage() {
                     <div className="rounded-full border border-white/20 px-4 py-2 text-xs uppercase tracking-[0.25em]">
                       {service.price}
                     </div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20">
+                    <div className="flex items-center justify-center w-12 h-12 border rounded-full border-white/20">
                       <img
                         src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d3d739571201bc625f4937_Vector%20101.svg"
                         alt=""
-                        className="h-4 w-4"
+                        className="w-4 h-4"
                       />
                     </div>
                   </div>
@@ -245,8 +247,8 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        <section className="border-y border-white/10 py-10">
-          <div className="mx-auto w-full max-w-6xl px-6">
+        <section className="py-10 border-y border-white/10">
+          <div className="w-full max-w-6xl px-6 mx-auto">
             <div className="overflow-hidden">
               <div className="marquee-track">
                 {Array.from({ length: 6 }).map((_, idx) => (
@@ -267,7 +269,7 @@ export default function ServicesPage() {
         </section>
 
         <section className="py-16">
-          <div className="mx-auto w-full max-w-6xl px-6">
+          <div className="w-full max-w-6xl px-6 mx-auto">
             <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
               <div className="space-y-6">
                 <h2 className="text-3xl font-display uppercase tracking-[0.12em] sm:text-4xl">
@@ -282,30 +284,30 @@ export default function ServicesPage() {
                   className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-white"
                 >
                   Try to Virtual Worlds
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20">
+                  <span className="inline-flex items-center justify-center w-10 h-10 border rounded-full border-white/20">
                     <img
                       src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d3d739571201bc625f4937_Vector%20101.svg"
                       alt=""
-                      className="h-4 w-4"
+                      className="w-4 h-4"
                     />
                   </span>
                 </a>
               </div>
               <div className="flex justify-center">
-                <div className="relative h-64 w-64 sm:h-72 sm:w-72">
+                <div className="relative w-64 h-64 sm:h-72 sm:w-72">
                   <div className="absolute inset-0 animate-[spin_20s_linear_infinite] rounded-full border border-white/20" />
-                  <div className="absolute inset-5 overflow-hidden rounded-full">
+                  <div className="absolute overflow-hidden rounded-full inset-5">
                     <img
                       src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bd5d89b248471ed7355_2.webp"
                       alt="Immersion"
-                      className="h-full w-full object-cover"
+                      className="object-cover w-full h-full"
                     />
                   </div>
-                  <div className="absolute inset-16 overflow-hidden rounded-full">
+                  <div className="absolute overflow-hidden rounded-full inset-16">
                     <img
                       src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bdf2e4a11e6d9a282f2_11.webp"
                       alt="Immersion"
-                      className="h-full w-full object-cover"
+                      className="object-cover w-full h-full"
                     />
                   </div>
                   <div className="absolute -bottom-6 right-0 rounded-full border border-white/20 bg-black/70 px-4 py-2 text-xs uppercase tracking-[0.25em]">
@@ -318,34 +320,34 @@ export default function ServicesPage() {
         </section>
 
         <section className="pb-20">
-          <div className="mx-auto w-full max-w-6xl px-6">
+          <div className="w-full max-w-6xl px-6 mx-auto">
             <div className="grid gap-6 lg:grid-cols-2">
-              <div className="relative overflow-hidden rounded-3xl border border-white/10">
+              <div className="relative overflow-hidden border rounded-3xl border-white/10">
                 <img
                   data-parallax
                   src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42b9377921d8b4a813cbe_4.webp"
                   alt="Gallery"
-                  className="h-full w-full object-cover"
+                  className="object-cover w-full h-full"
                 />
                 <div className="absolute inset-0 bg-black/35" />
               </div>
 
-              <div className="relative overflow-hidden rounded-3xl border border-white/10">
+              <div className="relative overflow-hidden border rounded-3xl border-white/10">
                 <img
                   data-parallax
                   src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d42bb7a6d11cdeba3f637c_7.webp"
                   alt="Gallery"
-                  className="h-full w-full object-cover"
+                  className="object-cover w-full h-full"
                 />
                 <div className="absolute inset-0 bg-black/35" />
-                <div className="absolute bottom-6 right-6 max-w-xs rounded-2xl border border-white/20 bg-black/70 p-5">
+                <div className="absolute max-w-xs p-5 border bottom-6 right-6 rounded-2xl border-white/20 bg-black/70">
                   <div className="flex items-center gap-2">
                     {Array.from({ length: 5 }).map((_, idx) => (
                       <img
                         key={idx}
                         src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67dd232308abbf8bd8fd3328_Star.webp"
                         alt=""
-                        className="h-4 w-4"
+                        className="w-4 h-4"
                       />
                     ))}
                   </div>
