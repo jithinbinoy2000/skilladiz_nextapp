@@ -4,8 +4,16 @@
 
 :root {
   --background: #000000;
-  --foreground: #ffffff;
+  --foreground:#ffffff ;
 }
+html {
+  --cursor-color: rgb(255, 255, 255,90)
+}
+
+html.dark-mode {
+  --cursor-color: #ffffff
+}
+
 
 @theme inline {
   --color-background: var(--background);
