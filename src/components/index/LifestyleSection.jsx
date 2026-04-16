@@ -16,9 +16,9 @@ function LifestyleSection({ showcases }) {
 
       <div className="absolute inset-0 z-10 pointer-events-none bg-black/20 backdrop-blur-sm" />
 
-      <div className="relative z-20 w-full px-4 py-1 mx-auto pointer-events-none sm:py-40 sm:px-6 max-w-7xl">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="space-y-6">
+      <div className="relative z-20 w-full px-4 py-1 mx-auto pointer-events-none sm:py-40 sm:px-6 max-w-[90vw]">
+        <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
+          <div className="space-y-16">
             <p className="text-xs uppercase tracking-[0.35em] text-white/60">
               Elevate Your Game
             </p>
