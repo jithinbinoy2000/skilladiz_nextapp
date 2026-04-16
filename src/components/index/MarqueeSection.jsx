@@ -1,6 +1,6 @@
 ﻿function MarqueeSection() {
   return (
-    <section className="py-10 mx-auto border-y border-white/10 max-w-7xl">
+    <section className="py-10 mx-auto border-y border-white/20 max-w-7xl">
       <div className="w-full px-6">
         <div className="overflow-hidden">
           <div className="marquee-track">

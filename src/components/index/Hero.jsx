@@ -54,7 +54,7 @@ function Hero() {
             </a>
             <a
               href="/about"
-              className="rounded-full border border-white/20 px-6 py-3 text-xs uppercase tracking-[0.12em] text-white"
+              className="rounded-full border border-white/40 px-6 py-3 text-xs uppercase tracking-[0.12em] text-white"
             >
               Inside Skilladiz
             </a>

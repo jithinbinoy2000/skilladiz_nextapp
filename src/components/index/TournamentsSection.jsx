@@ -21,7 +21,7 @@ function TournamentsSection({ serviceRows }) {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          className="divide-y divide-white/10 border-y border-white/10"
+          className="divide-y divide-white/10 border-y border-white/20"
         >
           {serviceRows.map((service) => (
             <motion.article
@@ -36,7 +36,7 @@ function TournamentsSection({ serviceRows }) {
                   alt={service.title}
                   className="object-cover w-full h-full transition duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
               </div>
 
               <div className="space-y-4">
@@ -55,12 +55,12 @@ function TournamentsSection({ serviceRows }) {
               </div>
 
               <div className="flex items-center justify-between gap-4 lg:flex-col lg:items-end">
-                <div className="rounded-full border border-white/20 px-4 py-2 text-xs uppercase tracking-[0.25em] text-nowrap">
+                <div className="rounded-full border border-white/40 px-4 py-2 text-xs uppercase tracking-[0.25em] text-nowrap">
                   {service.price}
                 </div>
                 <a
                   href="/booking"
-                  className="flex items-center justify-center w-12 h-12 transition-colors border rounded-full border-white/20 hover:bg-white/10"
+                  className="flex items-center justify-center w-12 h-12 transition-colors border rounded-full border-white/40 hover:bg-white/10"
                 >
                   <img
                     src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d3d739571201bc625f4937_Vector%20101.svg"

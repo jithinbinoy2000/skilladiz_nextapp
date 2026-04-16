@@ -41,11 +41,11 @@ function PhilosophySection() {
             className="w-4 h-4"
           />
         </div>
-        <div className="grid grid-cols-1 gap-2 py-10 sm:grid-cols-2 lg:grid-cols-4 border-y border-white/10">
+        <div className="grid grid-cols-1 gap-2 py-10 sm:grid-cols-2 lg:grid-cols-4 border-y border-white/20">
           {philosophyItems.map((item, idx) => (
             <div
               key={idx}
-              className="grid grid-rows-[auto_auto_1fr_auto] gap-4 border-l ps-6 first:ps-0 first:border-l-0 border-white/10"
+              className="grid grid-rows-[auto_auto_1fr_auto] gap-4 border-l ps-6 first:ps-0 first:border-l-0 border-white/25"
             >
               <h2 className="text-2xl font-display uppercase tracking-[0.12em]">
                 {item.title}
@@ -59,7 +59,7 @@ function PhilosophySection() {
                 href="/contact"
                 className="flex items-center gap-2 mt-2 text-xs uppercase tracking-[0.25em] text-white"
               >
-                <div className="flex items-center justify-center w-10 h-10 border rounded-full border-white/20">
+                <div className="flex items-center justify-center w-10 h-10 border rounded-full border-white/40">
                   <img
                     src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d3d739571201bc625f4937_Vector%20101.svg"
                     alt=""

@@ -16,7 +16,7 @@ function HeroStatsSection({ heroStats }) {
             <motion.div
               key={stat.label}
               variants={fadeUpVariant}
-              className="flex flex-col gap-2 p-6 border rounded-2xl border-white/10 bg-white/5"
+              className="flex flex-col gap-2 p-6 border rounded-2xl border-white/20 bg-white/5"
             >
               <div className="text-5xl font-display uppercase tracking-[0.08em]">
                 {stat.value}

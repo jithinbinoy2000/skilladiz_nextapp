@@ -5,7 +5,7 @@ import { fadeUpVariant } from "@/lib/animations";
 function GamingZonesCarousel({ services }) {
   const trackRef = useRef(null);
   return (
-    <section className="relative py-16 sm:py-20">
+    <section className="relative pb-16 sm:pb-20">
       <div className="w-full px-6 mx-auto max-w-7xl">
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-3">
@@ -76,7 +76,7 @@ function GamingZonesCarousel({ services }) {
                 <div className="flex items-center justify-between gap-3 pt-2 mt-auto">
                   <a
                     href={service.redirectUrl || "/about"}
-                    className="rounded-full border border-white/20 px-4 py-2 text-xs uppercase tracking-[0.2em] text-white/70 hover:text-white hover:border-white/40 transition-colors"
+                    className="rounded-full border border-white/40 px-4 py-2 text-xs uppercase tracking-[0.2em] text-white/70 hover:text-white hover:border-white/40 transition-colors"
                   >
                     Info
                   </a>

@@ -23,13 +23,13 @@ function MembershipPlansSection({ plans }) {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          className="grid grid-cols-1 gap-2 py-10 sm:grid-cols-2 lg:grid-cols-3 border-y border-white/10"
+          className="grid grid-cols-1 gap-2 py-10 sm:grid-cols-2 lg:grid-cols-3 border-y border-white/20"
         >
           {plans.map((plan) => (
             <motion.div
               key={plan.name}
               variants={fadeUpVariant}
-              className="grid grid-rows-[auto_auto_1fr_auto] gap-4 border-l ps-6 first:ps-0 first:border-l-0 border-white/10 relative group aspect-[2/2.5]"
+              className="grid grid-rows-[auto_auto_1fr_auto] gap-4 border-l ps-6 first:ps-0 first:border-l-0 border-white/25 relative group aspect-[2/2.5]"
             >
               <h2 className="text-2xl font-display uppercase tracking-[0.12em]">
                 {plan.name}
@@ -59,7 +59,7 @@ function MembershipPlansSection({ plans }) {
                 href="/membership"
                 className="flex items-center gap-2 mt-2 text-xs uppercase tracking-[0.25em] text-white"
               >
-                <div className="flex items-center justify-center w-10 h-10 border rounded-full border-white/20 shrink-0">
+                <div className="flex items-center justify-center w-10 h-10 border rounded-full border-white/40 shrink-0">
                   <img
                     src="https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67d3d739571201bc625f4937_Vector%20101.svg"
                     alt=""
