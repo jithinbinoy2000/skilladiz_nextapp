@@ -30,6 +30,10 @@ export async function POST(request) {
   const rawBody = await request.text();
   const signature = request.headers.get("stripe-signature");
 
+  console.log("[Stripe Webhook] 🔔 Received webhook request");
+  console.log("[Stripe Webhook] Signature present:", !!signature);
+  console.log("[Stripe Webhook] Secret configured:", !!process.env.STRIPE_WEBHOOK_SECRET);
+
   let event;
   try {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -40,17 +44,26 @@ export async function POST(request) {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
     );
+    console.log("[Stripe Webhook] ✅ Signature verified successfully");
   } catch (err) {
-    console.error("[Stripe Webhook] Signature verification failed:", err.message);
+    console.error("[Stripe Webhook] ❌ Signature verification failed:", err.message);
     return NextResponse.json({ error: "Webhook signature invalid" }, { status: 400 });
   }
 
   if (event.type === "checkout.session.completed") {
+    console.log("[Stripe Webhook] 📦 Processing checkout.session.completed event");
     const checkoutSession = event.data.object;
     const { booking_id, applied_coupon_id } = checkoutSession.metadata || {};
 
+    console.log("[Stripe Webhook] Event metadata:", {
+      booking_id,
+      applied_coupon_id,
+      session_id: checkoutSession.id,
+      amount_total: checkoutSession.amount_total,
+    });
+
     if (!booking_id) {
-      console.warn("[Stripe Webhook] No booking_id in metadata");
+      console.warn("[Stripe Webhook] ⚠️ No booking_id in metadata - ignoring webhook");
       return NextResponse.json({ received: true });
     }
 
@@ -58,7 +71,8 @@ export async function POST(request) {
       // 1. Check auto-approve setting
       const settingsRow = await getSectionByName("booking_settings").catch(() => null);
       const autoApprove = settingsRow?.content?.auto_approve ?? false;
-
+      console.log("[Stripe Webhook] Auto-approve setting:", autoApprove);
+      console.log("[Stripe Webhook] Settings row:", settingsRow);
       // Set status: confirmed immediately if auto-approve on, else pending (awaiting admin approval)
       const newStatus = autoApprove ? "confirmed" : "pending";
 
@@ -66,10 +80,12 @@ export async function POST(request) {
         status: newStatus,
         payment_intent_id: checkoutSession.payment_intent || checkoutSession.id,
       });
+      console.log("[Stripe Webhook] ✅ Booking updated - Status:", newStatus, "- Booking ID:", booking_id);
 
       // 2. Increment coupon use count
       if (applied_coupon_id) {
         await incrementCouponUse(applied_coupon_id).catch(() => {});
+        console.log("[Stripe Webhook] ✅ Coupon usage incremented:", applied_coupon_id);
       }
 
       // 3. Record purchase transaction + award points
@@ -87,17 +103,23 @@ export async function POST(request) {
           booking_id,
           `Booking: ${bookingRow.game_title}`
         ).catch(() => {});
+        console.log("[Stripe Webhook] ✅ Transaction recorded:", {
+          user_id: bookingRow.user_id,
+          amount: amountCents,
+          booking_id,
+        });
 
         await awardPoints(
           bookingRow.user_id,
           booking_id,
           `Points for booking: ${bookingRow.game_title}`
         ).catch(() => {});
+        console.log("[Stripe Webhook] ✅ Points awarded:", bookingRow.user_id);
       }
 
       // 4. Send confirmation email (only when auto-approved/confirmed)
       if (!autoApprove) {
-        console.log(`[Stripe Webhook] Booking ${booking_id} paid but awaiting admin approval`);
+        console.log(`[Stripe Webhook] ℹ️ Booking ${booking_id} paid but awaiting admin approval`);
         return NextResponse.json({ received: true });
       }
 
@@ -128,14 +150,21 @@ export async function POST(request) {
           amountPaid: checkoutSession.amount_total,
         }).catch((emailErr) => {
           // Never let email failure crash the webhook response
-          console.error("[Stripe Webhook] Email failed:", emailErr.message);
+          console.error("[Stripe Webhook] ❌ Email failed:", emailErr.message);
         });
+        console.log("[Stripe Webhook] ✅ Confirmation email sent to:", booking.user_email);
       }
+      
+      console.log("[Stripe Webhook] ✅ WEBHOOK PROCESSING COMPLETE - Booking:", booking_id);
     } catch (err) {
-      console.error("[Stripe Webhook] Processing error:", err);
+      console.error("[Stripe Webhook] ❌ Processing error:", err);
+      console.error("[Stripe Webhook] ❌ Error stack:", err.stack);
       // Return 200 so Stripe doesn't retry on our internal error
     }
+  } else {
+    console.log("[Stripe Webhook] ℹ️ Ignoring event type:", event.type);
   }
 
+  console.log("[Stripe Webhook] 📤 Returning response");
   return NextResponse.json({ received: true });
 }

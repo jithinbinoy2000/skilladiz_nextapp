@@ -12,23 +12,85 @@ function SuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
   const [booking, setBooking] = useState(null);
+  const [verifying, setVerifying] = useState(true);
 
   useEffect(() => {
-    // Fetch the gamer's most recent paid booking (confirmed or awaiting approval)
-    fetch("/api/bookings/my")
-      .then((r) => r.json())
-      .then((d) => {
-        const list = d.data || [];
-        // Prefer confirmed, then paid-pending (payment_intent_id present)
-        const recent =
-          list.find((b) => b.status === "confirmed") ||
-          list.find((b) => b.status === "pending" && b.payment_intent_id);
-        if (recent) setBooking(recent);
-      });
-  }, []);
+    const verifyAndFetchBooking = async () => {
+      try {
+        setVerifying(true);
+
+        // Step 1: Verify payment with Stripe and update booking status
+        if (sessionId) {
+          console.log("[Success Page] 🔍 Verifying payment for session:", sessionId);
+          const verifyRes = await fetch("/api/stripe/verify-payment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ session_id: sessionId }),
+          });
+
+          if (verifyRes.ok) {
+            const verifyData = await verifyRes.json();
+            console.log("[Success Page] ✅ Payment verified, booking updated:", verifyData.data);
+            setBooking(verifyData.data);
+            setVerifying(false);
+            return;
+          } else {
+            console.warn("[Success Page] ⚠️ Verification failed:", await verifyRes.text());
+          }
+        }
+
+        // Step 2: Fallback - Fetch the gamer's most recent paid booking (confirmed or awaiting approval)
+        console.log("[Success Page] ℹ️ Fetching bookings from /api/bookings/my");
+        const bookingRes = await fetch("/api/bookings/my");
+        const bookingData = await bookingRes.json();
+
+        if (bookingRes.ok) {
+          const list = bookingData.data || [];
+          // Prefer confirmed, then paid-pending (payment_intent_id present)
+          const recent =
+            list.find((b) => b.status === "confirmed") ||
+            list.find((b) => b.status === "pending" && b.payment_intent_id);
+          if (recent) {
+            console.log("[Success Page] ✅ Booking found:", recent);
+            setBooking(recent);
+          }
+        }
+      } catch (err) {
+        console.error("[Success Page] ❌ Error:", err.message);
+      } finally {
+        setVerifying(false);
+      }
+    };
+
+    verifyAndFetchBooking();
+  }, [sessionId]);
 
   const isPending = booking?.status === "pending" && booking?.payment_intent_id;
   const isConfirmed = booking?.status === "confirmed";
+
+  // Show loading state while verifying payment
+  if (verifying && !booking) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen px-4 py-24 text-white bg-black">
+        <div className="w-full max-w-md text-center">
+          <div className="flex items-center justify-center mb-6">
+            <div className="flex items-center justify-center w-20 h-20 rounded-full bg-blue-500/20 ring-4 ring-blue-500/30">
+              <div className="w-8 h-8 border-4 border-blue-500/30 border-t-blue-400 rounded-full animate-spin"></div>
+            </div>
+          </div>
+          <p className="mb-2 text-xs uppercase tracking-[0.35em] text-white/50">
+            Processing
+          </p>
+          <h1 className="mb-4 font-display text-3xl uppercase tracking-[0.15em]">
+            Verifying Payment...
+          </h1>
+          <p className="text-white/60">
+            Please wait while we confirm your payment and update your booking.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 py-24 text-white bg-black">
