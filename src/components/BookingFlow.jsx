@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   CalendarDays, Clock, Tag, ChevronRight, ChevronLeft,
   Lock, AlertTriangle, CheckCircle2, Gamepad2, Zap, Timer,
@@ -14,7 +13,6 @@ import {
 function toYMD(d) { return d.toISOString().slice(0, 10); }
 function tomorrow() { const d = new Date(); d.setDate(d.getDate() + 1); return toYMD(d); }
 
-const STEPS = ["Date & Game", "Pick a Time", "Review & Pay"];
 const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
@@ -29,35 +27,7 @@ function buildDateRange(count = 14) {
   });
 }
 
-// ── Step indicator ────────────────────────────────────────────────────────────
-
-function StepIndicator({ current }) {
-  return (
-    <div className="mb-10 flex items-center">
-      {STEPS.map((label, i) => (
-        <div key={label} className="flex flex-1 items-center">
-          <div className="flex flex-col items-center">
-            <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all ${
-              i < current  ? "bg-white text-black"
-              : i === current ? "border-2 border-white text-white"
-              : "border border-white/20 text-white/30"
-            }`}>
-              {i < current ? <CheckCircle2 className="h-4 w-4" /> : i + 1}
-            </div>
-            <span className={`mt-1.5 text-center text-[10px] uppercase tracking-[0.12em] ${
-              i === current ? "text-white" : "text-white/30"
-            }`}>{label}</span>
-          </div>
-          {i < STEPS.length - 1 && (
-            <div className={`mb-5 h-px flex-1 transition-colors ${i < current ? "bg-white/50" : "bg-white/10"}`} />
-          )}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// ── Date carousel ─────────────────────────────────────────────────────────────
+// ── Date carousel ─────────────────────────────────────────────────────────
 
 function DateCarousel({ selectedDate, onSelect }) {
   const scrollRef = useRef(null);
@@ -118,7 +88,7 @@ function DateCarousel({ selectedDate, onSelect }) {
   );
 }
 
-// ── Time slot carousel ────────────────────────────────────────────────────────
+// ── Time slot carousel ────────────────────────────────────────────────────
 
 function TimeCarousel({ slots, selectedSlot, onSelect, holding }) {
   const scrollRef = useRef(null);
@@ -188,7 +158,7 @@ function TimeCarousel({ slots, selectedSlot, onSelect, holding }) {
   );
 }
 
-// ── Game card ─────────────────────────────────────────────────────────────────
+// ── Game card ─────────────────────────────────────────────────────────────
 
 function GameCard({ game, selected, onSelect }) {
   const imgs = (() => {
@@ -232,28 +202,20 @@ export default function BookingFlow() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [step, setStep] = useState(0);
-
-  // Step 0
+  // Booking state
   const [games, setGames] = useState([]);
   const [selectedGame, setSelectedGame] = useState(null);
   const [selectedDate, setSelectedDate] = useState(tomorrow());
-
-  // Step 1
   const [availability, setAvailability] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [holding, setHolding] = useState(false);
   const [holdBookingId, setHoldBookingId] = useState(null);
   const [holdExpiresAt, setHoldExpiresAt] = useState(null);
   const [holdError, setHoldError] = useState("");
-
-  // Step 2
   const [couponCode, setCouponCode] = useState("");
   const [couponMsg, setCouponMsg] = useState({ text: "", ok: false });
   const [checkingOut, setCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState("");
-
-  // Countdown
   const [holdCountdown, setHoldCountdown] = useState(null);
 
   useEffect(() => {
@@ -279,27 +241,22 @@ export default function BookingFlow() {
   }, []);
 
   useEffect(() => {
-    if (step === 1 && selectedGame && selectedDate) {
+    if (selectedGame && selectedDate) {
       fetchAvailability(selectedGame.id, selectedDate);
     }
-  }, [step, selectedGame, selectedDate, fetchAvailability]);
+  }, [selectedGame, selectedDate, fetchAvailability]);
 
   useEffect(() => {
     if (!holdExpiresAt) { setHoldCountdown(null); return; }
     const tick = () => {
       const remaining = Math.max(0, Math.round((new Date(holdExpiresAt) - Date.now()) / 1000));
       setHoldCountdown(remaining);
-      if (remaining === 0) { setHoldBookingId(null); setHoldExpiresAt(null); setSelectedSlot(null); setStep(1); }
+      if (remaining === 0) { setHoldBookingId(null); setHoldExpiresAt(null); setSelectedSlot(null); }
     };
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, [holdExpiresAt]);
-
-  const handleStep0Next = () => {
-    if (!selectedGame || !selectedDate) return;
-    setStep(1);
-  };
 
   const handleSlotSelect = async (slot) => {
     if (authStatus === "unauthenticated") {
@@ -319,7 +276,6 @@ export default function BookingFlow() {
       if (!res.ok) { setHoldError(data.error || "Could not hold this slot"); setSelectedSlot(null); return; }
       setHoldBookingId(data.data.booking_id);
       setHoldExpiresAt(data.data.expires_at);
-      setStep(2);
     } finally {
       setHolding(false);
     }
@@ -351,13 +307,13 @@ export default function BookingFlow() {
     }
   };
 
-  // ── Render ────────────────────────────────────────────────────────────────
+  // ── Render ────────────────────────────────────────────────────────────
 
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Page header */}
       <div className="relative overflow-hidden border-b border-white/5 bg-[radial-gradient(ellipse_at_top,_rgba(248,51,225,0.08),_transparent_60%)]">
-        <div className="mx-auto max-w-3xl px-4 py-14 text-center sm:px-6">
+        <div className="mx-auto max-w-4xl px-4 py-14 text-center sm:px-6">
           <p className="mb-2 text-xs uppercase tracking-[0.4em] text-white/40">Skilladiz Gaming Arena</p>
           <h1 className="font-display text-4xl uppercase tracking-[0.12em] sm:text-5xl">
             Reserve Your Slot
@@ -368,273 +324,217 @@ export default function BookingFlow() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-        <StepIndicator current={step} />
+      <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+        {/* Single column, all sections visible */}
+        <div className="space-y-8">
+          {/* Date selector */}
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+            <label className="mb-5 flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/50">
+              <CalendarDays className="h-4 w-4" /> Select Date
+            </label>
+            <DateCarousel selectedDate={selectedDate} onSelect={setSelectedDate} />
+            <p className="mt-3 text-center text-xs text-white/30">
+              {(() => {
+                const d = new Date(selectedDate + "T00:00:00");
+                return `${DAY_NAMES[d.getDay()]}, ${d.getDate()} ${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()}`;
+              })()}
+            </p>
+          </div>
 
-        <AnimatePresence mode="wait">
+          {/* Game selector */}
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+            <label className="mb-5 flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/50">
+              <Gamepad2 className="h-4 w-4" /> Select Game
+            </label>
+            {games.length === 0 ? (
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="h-28 animate-pulse rounded-2xl border border-white/10 bg-white/5" />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {games.filter((g) => g.active_status !== false).map((game) => (
+                  <GameCard
+                    key={game.id}
+                    game={game}
+                    selected={selectedGame?.id === game.id}
+                    onSelect={() => setSelectedGame(game)}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
 
-          {/* ── STEP 0 ─────────────────────────────────────────────────── */}
-          {step === 0 && (
-            <motion.div
-              key="step0"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-8"
-            >
-              {/* Date carousel */}
-              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
-                <label className="mb-5 flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/50">
-                  <CalendarDays className="h-4 w-4" /> Select Date
-                </label>
-                <DateCarousel selectedDate={selectedDate} onSelect={setSelectedDate} />
-                <p className="mt-3 text-center text-xs text-white/30">
+          {/* Time slots */}
+          {selectedGame && selectedDate && (
+            <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+              <div className="mb-7">
+                <p className="text-xs uppercase tracking-[0.3em] text-white/40">Available Slots</p>
+                <h2 className="mt-1 font-display text-xl uppercase tracking-[0.1em]">
+                  {selectedGame?.title}
+                </h2>
+                <p className="mt-0.5 flex items-center gap-1.5 text-xs text-white/40">
+                  <CalendarDays className="h-3.5 w-3.5" />
                   {(() => {
                     const d = new Date(selectedDate + "T00:00:00");
-                    return `${DAY_NAMES[d.getDay()]}, ${d.getDate()} ${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()}`;
+                    return `${DAY_NAMES[d.getDay()]}, ${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`;
                   })()}
                 </p>
               </div>
 
-              {/* Game selector */}
-              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
-                <label className="mb-5 flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/50">
-                  <Gamepad2 className="h-4 w-4" /> Select Game
-                </label>
-                {games.length === 0 ? (
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                    {Array.from({ length: 3 }).map((_, i) => (
-                      <div key={i} className="h-28 animate-pulse rounded-2xl border border-white/10 bg-white/5" />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                    {games.filter((g) => g.active_status !== false).map((game) => (
-                      <GameCard
-                        key={game.id}
-                        game={game}
-                        selected={selectedGame?.id === game.id}
-                        onSelect={() => setSelectedGame(game)}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <button
-                onClick={handleStep0Next}
-                disabled={!selectedGame || !selectedDate}
-                className="flex w-full items-center justify-center gap-3 rounded-full bg-white px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-black transition-all hover:bg-white/90 disabled:opacity-25"
-              >
-                Check Availability <ChevronRight className="h-4 w-4" />
-              </button>
-            </motion.div>
-          )}
-
-          {/* ── STEP 1 ─────────────────────────────────────────────────── */}
-          {step === 1 && (
-            <motion.div
-              key="step1"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
-                {/* Header */}
-                <div className="mb-7 flex items-start justify-between">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.3em] text-white/40">Available Slots</p>
-                    <h2 className="mt-1 font-display text-xl uppercase tracking-[0.1em]">
-                      {selectedGame?.title}
-                    </h2>
-                    <p className="mt-0.5 flex items-center gap-1.5 text-xs text-white/40">
-                      <CalendarDays className="h-3.5 w-3.5" />
-                      {(() => {
-                        const d = new Date(selectedDate + "T00:00:00");
-                        return `${DAY_NAMES[d.getDay()]}, ${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`;
-                      })()}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => { setStep(0); setAvailability(null); }}
-                    className="flex items-center gap-1 text-xs uppercase tracking-[0.15em] text-white/40 hover:text-white/80 transition-colors"
-                  >
-                    <ChevronLeft className="h-3.5 w-3.5" /> Change
-                  </button>
+              {!availability ? (
+                <div className="flex flex-col items-center py-12 text-center">
+                  <div className="h-7 w-7 animate-spin rounded-full border-4 border-white border-t-transparent" />
+                  <p className="mt-3 text-sm text-white/40">Checking availability…</p>
                 </div>
-
-                {/* Slot content */}
-                {!availability ? (
-                  <div className="flex flex-col items-center py-12 text-center">
-                    <div className="h-7 w-7 animate-spin rounded-full border-4 border-white border-t-transparent" />
-                    <p className="mt-3 text-sm text-white/40">Checking availability…</p>
-                  </div>
-                ) : availability.is_leave_day ? (
-                  <div className="flex flex-col items-center py-12 text-center">
-                    <AlertTriangle className="mb-3 h-10 w-10 text-red-400/80" />
-                    <h3 className="text-sm font-semibold uppercase tracking-[0.1em] text-red-300">Shop Closed</h3>
-                    <p className="mt-1 text-xs text-white/40">{availability.leave_reason}</p>
-                    <button onClick={() => setStep(0)} className="mt-5 text-xs uppercase tracking-[0.2em] text-white/40 hover:text-white transition-colors">
-                      ← Choose another date
-                    </button>
-                  </div>
-                ) : availability.slots.length === 0 ? (
-                  <p className="py-12 text-center text-sm text-white/40">No slots configured for this game yet.</p>
-                ) : (
-                  <div className="space-y-5">
-                    <p className="text-xs uppercase tracking-[0.2em] text-white/30">
-                      Swipe or click a time to reserve
-                    </p>
-                    {holdError && (
-                      <div className="flex items-center gap-2 rounded-xl bg-red-500/10 px-4 py-3 text-xs text-red-400">
-                        <AlertTriangle className="h-4 w-4 shrink-0" /> {holdError}
-                      </div>
-                    )}
-
-                    <TimeCarousel
-                      slots={availability.slots}
-                      selectedSlot={selectedSlot}
-                      onSelect={handleSlotSelect}
-                      holding={holding}
-                    />
-
-                    {holding && (
-                      <div className="flex items-center gap-2 text-xs text-white/40">
-                        <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                        Reserving your slot…
-                      </div>
-                    )}
-
-                    <div className="flex flex-wrap gap-4 pt-1 text-[11px] text-white/25">
-                      <span className="flex items-center gap-1.5">
-                        <span className="h-3 w-3 rounded border border-white/20 bg-white/5" />
-                        Available
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <span className="h-3 w-3 rounded border border-white/10 bg-white/5 opacity-40" />
-                        Taken / Held
-                      </span>
+              ) : availability.is_leave_day ? (
+                <div className="flex flex-col items-center py-12 text-center">
+                  <AlertTriangle className="mb-3 h-10 w-10 text-red-400/80" />
+                  <h3 className="text-sm font-semibold uppercase tracking-[0.1em] text-red-300">Shop Closed</h3>
+                  <p className="mt-1 text-xs text-white/40">{availability.leave_reason}</p>
+                </div>
+              ) : availability.slots.length === 0 ? (
+                <p className="py-12 text-center text-sm text-white/40">No slots configured for this game yet.</p>
+              ) : (
+                <div className="space-y-5">
+                  <p className="text-xs uppercase tracking-[0.2em] text-white/30">
+                    Swipe or click a time to reserve
+                  </p>
+                  {holdError && (
+                    <div className="flex items-center gap-2 rounded-xl bg-red-500/10 px-4 py-3 text-xs text-red-400">
+                      <AlertTriangle className="h-4 w-4 shrink-0" /> {holdError}
                     </div>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          )}
-
-          {/* ── STEP 2 ─────────────────────────────────────────────────── */}
-          {step === 2 && selectedSlot && (
-            <motion.div
-              key="step2"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8 space-y-6">
-
-                {/* Hold timer */}
-                {holdCountdown !== null && (
-                  <div className={`flex items-center gap-2 rounded-xl px-4 py-3 text-xs uppercase tracking-[0.12em] ${
-                    holdCountdown > 60 ? "bg-green-500/10 text-green-400" : "bg-red-500/10 text-red-400"
-                  }`}>
-                    <Timer className="h-3.5 w-3.5 shrink-0" />
-                    Slot held for{" "}
-                    <span className="font-mono font-bold">
-                      {Math.floor(holdCountdown / 60)}:{String(holdCountdown % 60).padStart(2, "0")}
-                    </span>
-                    <span className="ml-1 normal-case text-current/70">— complete payment before it expires</span>
-                  </div>
-                )}
-
-                {/* Summary */}
-                <div>
-                  <p className="mb-3 text-xs uppercase tracking-[0.3em] text-white/40">Booking Summary</p>
-                  <div className="overflow-hidden rounded-2xl border border-white/10 divide-y divide-white/10">
-                    {[
-                      ["Game", selectedGame?.title],
-                      ["Date", (() => { const d = new Date(selectedDate + "T00:00:00"); return `${DAY_NAMES[d.getDay()]}, ${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`; })()],
-                      ["Time", `${selectedSlot.start_time} – ${selectedSlot.end_time}`],
-                      ["Duration", `${selectedGame?.duration_minutes} min`],
-                    ].map(([label, value]) => (
-                      <div key={label} className="flex items-center justify-between px-5 py-3.5">
-                        <span className="text-xs uppercase tracking-[0.15em] text-white/40">{label}</span>
-                        <span className="text-sm font-medium text-white">{value}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Coupon */}
-                <div>
-                  <label className="mb-2 flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-white/50">
-                    <Tag className="h-4 w-4" /> Coupon Code
-                    <span className="normal-case tracking-normal text-white/30">(optional)</span>
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={couponCode}
-                      onChange={(e) => { setCouponCode(e.target.value.toUpperCase()); setCouponMsg({ text: "", ok: false }); }}
-                      placeholder="ENTER CODE"
-                      className="h-11 flex-1 rounded-xl border border-white/20 bg-transparent px-4 font-mono text-sm uppercase text-white placeholder:text-white/25 focus:border-white/50 focus:outline-none"
-                    />
-                    <button
-                      onClick={validateCoupon}
-                      disabled={!couponCode.trim()}
-                      className="rounded-xl border border-white/20 px-5 text-xs uppercase tracking-[0.15em] text-white hover:bg-white/5 disabled:opacity-30 transition-colors"
-                    >
-                      Apply
-                    </button>
-                  </div>
-                  {couponMsg.text && (
-                    <p className={`mt-1.5 text-xs ${couponMsg.ok ? "text-green-400" : "text-red-400"}`}>{couponMsg.text}</p>
                   )}
-                </div>
-
-                {/* Auth gate */}
-                {authStatus === "unauthenticated" && (
-                  <div className="rounded-xl bg-yellow-500/10 px-4 py-3 text-sm text-yellow-400">
-                    Please <a href="/auth" className="font-semibold underline">sign in</a> to complete your booking.
+                  <TimeCarousel
+                    slots={availability.slots}
+                    selectedSlot={selectedSlot}
+                    onSelect={handleSlotSelect}
+                    holding={holding}
+                  />
+                  {holding && (
+                    <div className="flex items-center gap-2 text-xs text-white/40">
+                      <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                      Reserving your slot…
+                    </div>
+                  )}
+                  <div className="flex flex-wrap gap-4 pt-1 text-[11px] text-white/25">
+                    <span className="flex items-center gap-1.5">
+                      <span className="h-3 w-3 rounded border border-white/20 bg-white/5" />
+                      Available
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="h-3 w-3 rounded border border-white/10 bg-white/5 opacity-40" />
+                      Taken / Held
+                    </span>
                   </div>
-                )}
-
-                {checkoutError && (
-                  <div className="flex items-center gap-2 rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-400">
-                    <AlertTriangle className="h-4 w-4 shrink-0" /> {checkoutError}
-                  </div>
-                )}
-
-                {/* Actions */}
-                <div className="flex flex-col gap-3 sm:flex-row">
-                  <button
-                    onClick={() => { setStep(1); setHoldBookingId(null); setHoldExpiresAt(null); }}
-                    className="flex-1 rounded-full border border-white/15 py-3.5 text-xs uppercase tracking-[0.2em] text-white/60 hover:border-white/30 hover:text-white/90 transition-colors"
-                  >
-                    ← Change Slot
-                  </button>
-                  <button
-                    onClick={handleCheckout}
-                    disabled={checkingOut || authStatus !== "authenticated"}
-                    className="flex flex-1 items-center justify-center gap-3 rounded-full bg-white py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-black hover:bg-white/90 disabled:opacity-30 transition-all"
-                  >
-                    {checkingOut ? (
-                      <><div className="h-4 w-4 animate-spin rounded-full border-2 border-black border-t-transparent" /> Redirecting…</>
-                    ) : (
-                      <><Zap className="h-4 w-4" /> Proceed to Checkout</>
-                    )}
-                  </button>
                 </div>
-
-                <p className="text-center text-xs text-white/25">
-                  Secured by Stripe · Apple Pay & Google Pay accepted
-                </p>
-              </div>
-            </motion.div>
+              )}
+            </div>
           )}
 
-        </AnimatePresence>
+          {/* Checkout summary */}
+          {holdBookingId && selectedSlot && (
+            <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8 space-y-6">
+              {/* Hold timer */}
+              {holdCountdown !== null && (
+                <div className={`flex items-center gap-2 rounded-xl px-4 py-3 text-xs uppercase tracking-[0.12em] ${
+                  holdCountdown > 60 ? "bg-green-500/10 text-green-400" : "bg-red-500/10 text-red-400"
+                }`}>
+                  <Timer className="h-3.5 w-3.5 shrink-0" />
+                  Slot held for{" "}
+                  <span className="font-mono font-bold">
+                    {Math.floor(holdCountdown / 60)}:{String(holdCountdown % 60).padStart(2, "0")}
+                  </span>
+                  <span className="ml-1 normal-case text-current/70">— complete payment before it expires</span>
+                </div>
+              )}
+
+              {/* Summary */}
+              <div>
+                <p className="mb-3 text-xs uppercase tracking-[0.3em] text-white/40">Booking Summary</p>
+                <div className="overflow-hidden rounded-2xl border border-white/10 divide-y divide-white/10">
+                  {[
+                    ["Game", selectedGame?.title],
+                    ["Date", (() => { const d = new Date(selectedDate + "T00:00:00"); return `${DAY_NAMES[d.getDay()]}, ${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`; })()],
+                    ["Time", `${selectedSlot.start_time} – ${selectedSlot.end_time}`],
+                    ["Duration", `${selectedGame?.duration_minutes} min`],
+                  ].map(([label, value]) => (
+                    <div key={label} className="flex items-center justify-between px-5 py-3.5">
+                      <span className="text-xs uppercase tracking-[0.15em] text-white/40">{label}</span>
+                      <span className="text-sm font-medium text-white">{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Coupon */}
+              <div>
+                <label className="mb-2 flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-white/50">
+                  <Tag className="h-4 w-4" /> Coupon Code
+                  <span className="normal-case tracking-normal text-white/30">(optional)</span>
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={couponCode}
+                    onChange={(e) => { setCouponCode(e.target.value.toUpperCase()); setCouponMsg({ text: "", ok: false }); }}
+                    placeholder="ENTER CODE"
+                    className="h-11 flex-1 rounded-xl border border-white/20 bg-transparent px-4 font-mono text-sm uppercase text-white placeholder:text-white/25 focus:border-white/50 focus:outline-none"
+                  />
+                  <button
+                    onClick={validateCoupon}
+                    disabled={!couponCode.trim()}
+                    className="rounded-xl border border-white/20 px-5 text-xs uppercase tracking-[0.15em] text-white hover:bg-white/5 disabled:opacity-30 transition-colors"
+                  >
+                    Apply
+                  </button>
+                </div>
+                {couponMsg.text && (
+                  <p className={`mt-1.5 text-xs ${couponMsg.ok ? "text-green-400" : "text-red-400"}`}>{couponMsg.text}</p>
+                )}
+              </div>
+
+              {/* Auth gate */}
+              {authStatus === "unauthenticated" && (
+                <div className="rounded-xl bg-yellow-500/10 px-4 py-3 text-sm text-yellow-400">
+                  Please <a href="/auth" className="font-semibold underline">sign in</a> to complete your booking.
+                </div>
+              )}
+
+              {checkoutError && (
+                <div className="flex items-center gap-2 rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                  <AlertTriangle className="h-4 w-4 shrink-0" /> {checkoutError}
+                </div>
+              )}
+
+              {/* Actions */}
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <button
+                  onClick={() => { setHoldBookingId(null); setHoldExpiresAt(null); setSelectedSlot(null); }}
+                  className="flex-1 rounded-full border border-white/15 py-3.5 text-xs uppercase tracking-[0.2em] text-white/60 hover:border-white/30 hover:text-white/90 transition-colors"
+                >
+                  ← Change Slot
+                </button>
+                <button
+                  onClick={handleCheckout}
+                  disabled={checkingOut || authStatus !== "authenticated"}
+                  className="flex flex-1 items-center justify-center gap-3 rounded-full bg-white py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-black hover:bg-white/90 disabled:opacity-30 transition-all"
+                >
+                  {checkingOut ? (
+                    <><div className="h-4 w-4 animate-spin rounded-full border-2 border-black border-t-transparent" /> Redirecting…</>
+                  ) : (
+                    <><Zap className="h-4 w-4" /> Proceed to Checkout</>
+                  )}
+                </button>
+              </div>
+
+              <p className="text-center text-xs text-white/25">
+                Secured by Stripe · Apple Pay & Google Pay accepted
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

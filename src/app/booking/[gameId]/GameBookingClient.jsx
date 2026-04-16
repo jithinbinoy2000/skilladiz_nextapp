@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   Clock,
   Gamepad2,
@@ -210,7 +209,7 @@ function BookingPanel({
   const showSummary = holdBookingId && selectedSlot;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Heading */}
       <div>
         <p className="text-[10px] uppercase tracking-[0.4em] text-white/35">
@@ -224,112 +223,92 @@ function BookingPanel({
       {/* Calendar */}
       <BookingCalendar selectedDate={selectedDate} onSelect={onDateSelect} />
 
-      {/* Slots — slides in after date is chosen */}
-      <AnimatePresence>
-        {selectedDate && (
-          <motion.div
-            key="slots-panel"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.25 }}
-            className="rounded-2xl border border-white/10 bg-white/[0.02] p-5"
-          >
-            <p className="mb-4 text-[10px] uppercase tracking-[0.28em] text-white/40">
-              Time Slots
+      {/* Slots section */}
+      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+        <p className="mb-4 text-[10px] uppercase tracking-[0.28em] text-white/40">
+          Time Slots
+        </p>
+
+        {slotsLoading ? (
+          <div className="flex items-center gap-3 py-4 text-xs text-white/40">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+            Checking availability…
+          </div>
+        ) : !availability ? null : availability.is_leave_day ? (
+          <div className="flex flex-col items-center py-6 text-center">
+            <AlertTriangle className="mb-3 h-8 w-8 text-red-400/70" />
+            <p className="text-sm font-semibold uppercase tracking-[0.08em] text-red-300">
+              Shop Closed
             </p>
-
-            {slotsLoading ? (
-              <div className="flex items-center gap-3 py-4 text-xs text-white/40">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                Checking availability…
-              </div>
-            ) : !availability ? null : availability.is_leave_day ? (
-              <div className="flex flex-col items-center py-6 text-center">
-                <AlertTriangle className="mb-3 h-8 w-8 text-red-400/70" />
-                <p className="text-sm font-semibold uppercase tracking-[0.08em] text-red-300">
-                  Shop Closed
-                </p>
-                <p className="mt-1 text-xs text-white/40">
-                  {availability.leave_reason}
-                </p>
-              </div>
-            ) : enrichedSlots.length === 0 ? (
-              <p className="py-6 text-center text-sm text-white/40">
-                No time slots configured yet.
-              </p>
-            ) : (
-              <div className="space-y-3">
-                {holdError && (
-                  <div className="flex items-center gap-2 rounded-xl bg-red-500/10 px-4 py-3 text-xs text-red-400">
-                    <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
-                    {holdError}
-                  </div>
-                )}
-                <TimeSlotCarousel
-                  slots={enrichedSlots}
-                  selectedSlot={selectedSlot}
-                  onSelect={onSlotSelect}
-                  holding={holding}
-                />
+            <p className="mt-1 text-xs text-white/40">
+              {availability.leave_reason}
+            </p>
+          </div>
+        ) : enrichedSlots.length === 0 ? (
+          <p className="py-6 text-center text-sm text-white/40">
+            No time slots configured yet.
+          </p>
+        ) : (
+          <div className="space-y-3">
+            {holdError && (
+              <div className="flex items-center gap-2 rounded-xl bg-red-500/10 px-4 py-3 text-xs text-red-400">
+                <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
+                {holdError}
               </div>
             )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Summary + payment — slides in after slot is held */}
-      <AnimatePresence>
-        {showSummary && (
-          <motion.div
-            key="summary-panel"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.3 }}
-            className="space-y-3"
-          >
-            <HoldTimer countdown={holdCountdown} />
-
-            <BookingSummaryCard
-              game={game}
-              selectedDate={selectedDate}
+            <TimeSlotCarousel
+              slots={enrichedSlots}
               selectedSlot={selectedSlot}
-              couponCode={couponCode}
-              couponMsg={couponMsg}
-              onCouponChange={onCouponChange}
-              onCouponApply={onCouponApply}
+              onSelect={onSlotSelect}
+              holding={holding}
             />
-
-            {authStatus === "unauthenticated" && (
-              <div className="rounded-xl bg-amber-500/10 px-4 py-3 text-sm text-amber-400">
-                Please{" "}
-                <a href="/auth" className="font-semibold underline">
-                  sign in
-                </a>{" "}
-                to complete your booking.
-              </div>
-            )}
-
-            {/* CTA */}
-            <button
-              onClick={onOpenPayment}
-              disabled={authStatus !== "authenticated"}
-              className="flex w-full items-center justify-center gap-3 rounded-full bg-white px-8 py-4 text-xs font-bold uppercase tracking-[0.22em] text-black transition-all hover:bg-white/90 active:scale-[0.98] disabled:opacity-30"
-            >
-              <Zap className="h-4 w-4" />
-              Continue to Payment
-            </button>
-
-            <button
-              onClick={onResetSlot}
-              className="w-full rounded-full border border-white/12 py-3 text-xs uppercase tracking-[0.2em] text-white/40 transition-all hover:border-white/25 hover:text-white/70"
-            >
-              ← Choose a Different Slot
-            </button>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      </div>
+
+      {/* Summary + payment section */}
+      {showSummary && (
+        <div className="space-y-3">
+          <HoldTimer countdown={holdCountdown} />
+
+          <BookingSummaryCard
+            game={game}
+            selectedDate={selectedDate}
+            selectedSlot={selectedSlot}
+            couponCode={couponCode}
+            couponMsg={couponMsg}
+            onCouponChange={onCouponChange}
+            onCouponApply={onCouponApply}
+          />
+
+          {authStatus === "unauthenticated" && (
+            <div className="rounded-xl bg-amber-500/10 px-4 py-3 text-sm text-amber-400">
+              Please{" "}
+              <a href="/auth" className="font-semibold underline">
+                sign in
+              </a>{" "}
+              to complete your booking.
+            </div>
+          )}
+
+          {/* CTA */}
+          <button
+            onClick={onOpenPayment}
+            disabled={authStatus !== "authenticated"}
+            className="flex w-full items-center justify-center gap-3 rounded-full bg-white px-8 py-4 text-xs font-bold uppercase tracking-[0.22em] text-black transition-all hover:bg-white/90 active:scale-[0.98] disabled:opacity-30"
+          >
+            <Zap className="h-4 w-4" />
+            Continue to Payment
+          </button>
+
+          <button
+            onClick={onResetSlot}
+            className="w-full rounded-full border border-white/12 py-3 text-xs uppercase tracking-[0.2em] text-white/40 transition-all hover:border-white/25 hover:text-white/70"
+          >
+            ← Choose a Different Slot
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -626,8 +605,8 @@ export default function GameBookingClient({ gameId }) {
 
       {/* Body */}
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:py-14">
-        <div className="grid gap-10 lg:grid-cols-[5fr_7fr] lg:gap-14">
-          {/* Left — game info */}
+        <div className="grid gap-10 lg:grid-cols-1">
+          {/* Game info */}
           <GameDetails
             game={game}
             images={images}
@@ -635,8 +614,8 @@ export default function GameBookingClient({ gameId }) {
             onImgChange={setActiveImg}
           />
 
-          {/* Right — booking widget */}
-          <div className="lg:sticky lg:top-24 lg:self-start">
+          {/* Booking sections in simple layout */}
+          <div className="space-y-8">
             <BookingPanel
               game={game}
               selectedDate={selectedDate}
