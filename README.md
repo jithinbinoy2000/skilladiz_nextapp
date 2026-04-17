@@ -405,7 +405,22 @@ Please ensure your code follows the project's style guidelines and includes appr
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+### MIT License
+
+This project is licensed under the **MIT License** - a permissive open-source license.
+
+**You are free to:**
+- Use the software for personal or commercial purposes
+- Modify and distribute the software
+- Include the software in proprietary applications
+
+**Conditions:**
+- Include a copy of the license and copyright notice in any distribution
+- The software is provided "as-is" without warranty
+
+For complete license details, see the [LICENSE](./LICENSE) file in the project root.
+
+**Copyright © 2026 Skilladiz - Gaming Arena Booking Platform**
 
 ---
 
