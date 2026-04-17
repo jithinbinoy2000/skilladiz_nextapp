@@ -23,9 +23,22 @@ Skilladiz is a comprehensive gaming arena and entertainment booking platform bui
 - **Shop Management:** Product and inventory management system
 - **Mobile Responsive:** Fully responsive design optimized for all devices
 
+## Preview
+
+### Home Page
+Homepage showcasing featured gaming services and quick access to booking system.
+
+![Skilladiz Home Page](public/readme/home.png)
+
+### Booking Page
+Interactive booking interface with real-time availability and time-slot selection.
+
+![Skilladiz Booking Page](public/readme/booking.png)
+
 ## Table of Contents
 
 - [Installation Prerequisites](#installation-prerequisites)
+- [Preview](#preview)
 - [Environment Variables](#environment-variables)
 - [Quick Start](#quick-start)
 - [Project Architecture](#project-architecture)
