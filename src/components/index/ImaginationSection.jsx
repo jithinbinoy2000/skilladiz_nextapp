@@ -1,6 +1,6 @@
 ﻿function ImaginationSection() {
   return (
-    <section className="relative py-24 mb-20 overflow-hidden bg-black">
+    <section className="relative py-16 mb-10 sm:py-24 sm:mb-20 overflow-hidden bg-black">
       <div className="absolute inset-0 z-0 opacity-70">
         <div className="absolute top-[-200px] right-[-200px] w-[700px] h-[700px] rounded-full bg-purple-600/20 blur-[140px]" />
         <div className="absolute bottom-[-200px] left-[-200px] w-[700px] h-[700px] rounded-full bg-pink-600/20 blur-[140px]" />
@@ -12,13 +12,13 @@
       </div>
       <div className="absolute inset-0 z-10 pointer-events-none bg-black/10 backdrop-blur-xs" />
 
-      <div className="relative z-10 w-full px-6 mx-auto my-auto max-w-7xl flex justify-center items-center min-h-[calc(100vh-300px)]">
-        <div className="grid gap-16 lg:grid-cols-2">
+      <div className="relative z-10 w-full px-4 mx-auto my-auto max-w-7xl sm:px-6 flex justify-center items-center sm:min-h-[calc(100vh-300px)]">
+        <div className="grid gap-10 sm:gap-16 lg:grid-cols-2">
           <div className="max-w-xl space-y-6">
             <p className="text-xs uppercase tracking-[0.25em] text-white/60">
               Where Imagination Lives
             </p>
-            <h2 className="text-3xl leading-tight font-display sm:text-3xl lg:text-3xl">
+            <h2 className="text-3xl leading-tight font-display sm:text-4xl lg:text-5xl">
               Skilladiz is a gateway to a limitless gaming universe where
               <span className="text-white/90"> immersive experiences </span>
               blur the line between play and reality.
@@ -29,7 +29,7 @@
             <div className="text-6xl font-display tracking-[0.12em] sm:text-7xl lg:text-8xl">
               30K+
             </div>
-            <p className="max-w-sm font-sans text-base text-white/60 lg:text-right">
+            <p className="max-w-sm font-sans text-sm leading-relaxed text-white/60 sm:text-base lg:text-right">
               Gamers have already stepped into the Skilladiz world, experiencing
               competitive play, immersive VR adventures, and next-level gaming
               moments.

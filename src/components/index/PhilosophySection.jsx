@@ -27,9 +27,9 @@
 
 function PhilosophySection() {
   return (
-    <section className="relative py-20 overflow-hidden bg-black">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,_rgba(248,51,225,0.10),_transparent_55%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,_rgba(248,51,225,0.10),_transparent_55%)]" />
+    <section className="relative py-14 sm:py-20 overflow-hidden bg-black">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(248,51,225,0.10),transparent_55%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(248,51,225,0.10),transparent_55%)]" />
       <div className="w-full px-4 mx-auto max-w-7xl sm:px-6">
         <div className="flex items-center gap-3 mb-10">
           <p className="text-xs uppercase tracking-[0.35em] text-white/60">
@@ -41,20 +41,20 @@ function PhilosophySection() {
             className="w-4 h-4"
           />
         </div>
-        <div className="grid grid-cols-1 gap-2 py-10 sm:grid-cols-2 lg:grid-cols-4 border-y border-white/20">
+        <div className="grid grid-cols-1 gap-px py-8 sm:py-10 sm:grid-cols-2 lg:grid-cols-4 border-y border-white/20">
           {philosophyItems.map((item, idx) => (
             <div
               key={idx}
-              className="grid grid-rows-[auto_auto_1fr_auto] gap-4 border-l ps-6 first:ps-0 first:border-l-0 border-white/25"
+              className="grid grid-rows-[auto_auto_1fr_auto] gap-4 px-6 py-8 sm:py-6 lg:py-0 border-t border-white/15 first:border-t-0 sm:border-t-0 sm:border-l sm:first:border-l-0 sm:px-6 sm:first:px-0"
             >
-              <h2 className="text-2xl font-display uppercase tracking-[0.12em]">
+              <h2 className="text-xl font-display uppercase tracking-[0.12em] sm:text-2xl">
                 {item.title}
               </h2>
-              <p className="text-xs uppercase text-white/90">{item.step}</p>
-              <p className="text-base tracking-[.05em] text-white/70 font-sans">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-white/30">{item.step}</p>
+              <p className="text-sm leading-relaxed text-white/65 font-sans">
                 {item.desc}
               </p>
-              <div className="w-full h-auto aspect-[16/8]" />
+              <div className="w-full h-auto aspect-16/8" />
               <a
                 href="/contact"
                 className="flex items-center gap-2 mt-2 text-xs uppercase tracking-[0.25em] text-white"

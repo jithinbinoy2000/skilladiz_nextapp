@@ -81,22 +81,34 @@ const featuredGames = [
   {
     title: "8 Ball Pool",
     category: "Classic Gaming",
+    description:
+      "Tournament-grade tables, pro cues, and crisp lighting. Step up to the felt and sink the perfect shot.",
     image: "/vear/67e29cdc0ffb11b522861f7f_Shop-1.jpg",
+    bookUrl: "/booking",
   },
   {
     title: "PS5 Arena",
     category: "Console Gaming",
+    description:
+      "Next-gen battles on immersive screens with competitive audio and zero latency. Dominate every match.",
     image: "/vear/67e29d2441cc3c17285f6f34_Shop-2.jpg",
+    bookUrl: "/booking",
   },
   {
     title: "VR Zone",
     category: "Virtual Reality",
+    description:
+      "Room-scale adventures and co-op missions with premium headsets. Reality is just the starting point.",
     image: "/vear/67e29d2749e445657d16e43a_Shop-3.jpg",
+    bookUrl: "/booking",
   },
   {
     title: "Tournaments",
     category: "Esports",
+    description:
+      "Compete for glory in weekly esports showdowns. Prize pools, rankings, and the thrill of the crowd.",
     image: "https://cdn.prod.website-files.com/67d2aef700b3d9b727bac522/67e27eaed8ecdca4a1a67252_6.webp",
+    bookUrl: "/booking",
   },
 ];
 

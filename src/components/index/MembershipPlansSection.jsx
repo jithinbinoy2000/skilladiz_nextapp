@@ -3,10 +3,10 @@ import { fadeUpVariant, staggerContainer } from "@/lib/animations";
 
 function MembershipPlansSection({ plans }) {
   return (
-    <section className="relative py-20 overflow-hidden bg-black">
+    <section className="relative py-14 sm:py-20 overflow-hidden bg-black">
       <div className="w-full px-6 mx-auto max-w-7xl">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,_rgba(248,51,225,0.10),_transparent_55%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,_rgba(248,51,225,0.10),_transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(248,51,225,0.10),transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(248,51,225,0.10),transparent_55%)]" />
         <div className="flex items-center gap-3 mb-10">
           <p className="text-xs uppercase tracking-[0.35em] text-white/60">
             Membership Plans
@@ -23,13 +23,13 @@ function MembershipPlansSection({ plans }) {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          className="grid grid-cols-1 gap-2 py-10 sm:grid-cols-2 lg:grid-cols-3 border-y border-white/20"
+          className="grid grid-cols-1 gap-px py-8 sm:py-10 sm:grid-cols-2 lg:grid-cols-3 border-y border-white/20"
         >
           {plans.map((plan) => (
             <motion.div
               key={plan.name}
               variants={fadeUpVariant}
-              className="grid grid-rows-[auto_auto_1fr_auto] gap-4 border-l ps-6 first:ps-0 first:border-l-0 border-white/25 relative group aspect-[2/2.5]"
+              className="grid grid-rows-[auto_auto_1fr_auto] gap-4 px-6 py-8 sm:py-6 lg:py-0 border-t border-white/15 first:border-t-0 sm:border-t-0 sm:border-l sm:first:border-l-0 sm:px-6 sm:first:px-0 relative group"
             >
               <h2 className="text-2xl font-display uppercase tracking-[0.12em]">
                 {plan.name}
@@ -42,13 +42,13 @@ function MembershipPlansSection({ plans }) {
                 </p>
               </div>
 
-              <p className="text-base tracking-[.05em] text-white z-50">
+              <p className="text-sm leading-relaxed text-white/65 z-50">
                 {plan.planDescription}
               </p>
 
               <ul className="grid gap-3 mb-2 text-white/70">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-4">
+                  <li key={feature} className="flex items-center gap-4 text-sm leading-snug font-sans">
                     <span className="h-1.5 w-1.5 rounded-full bg-white/70 shrink-0 font-sans text-sm" />
                     {feature}
                   </li>

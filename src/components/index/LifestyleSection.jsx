@@ -16,16 +16,16 @@ function LifestyleSection({ showcases }) {
 
       <div className="absolute inset-0 z-10 pointer-events-none bg-black/20 backdrop-blur-sm" />
 
-      <div className="relative z-20 w-full px-4 py-1 mx-auto pointer-events-none sm:py-40 sm:px-6 max-w-[90vw]">
+      <div className="relative z-20 w-full px-4 py-16 mx-auto sm:py-40 sm:px-6 max-w-[90vw]">
         <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-          <div className="space-y-16">
+          <div className="space-y-8 sm:space-y-12">
             <p className="text-xs uppercase tracking-[0.35em] text-white/60">
               Elevate Your Game
             </p>
             <h2 className="text-3xl font-display uppercase tracking-[0.12em] sm:text-4xl">
               Step Into the Ultimate Gaming Lifestyle.
             </h2>
-            <p className="max-w-xl font-sans text-xl text-white/70">
+            <p className="max-w-xl font-sans text-sm leading-relaxed text-white/65 sm:text-base">
               Skilladiz was designed for those who demand more than just a gaming
               session. With a futuristic interior, premium equipment at every
               station, and a community-driven atmosphere that welcomes everyone —

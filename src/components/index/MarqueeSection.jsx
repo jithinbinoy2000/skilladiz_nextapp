@@ -5,7 +5,7 @@
         <div className="overflow-hidden">
           <div className="marquee-track">
             <div className="flex items-center gap-16">
-              <span className="text-xs font-display uppercase sm:tracking-[0.2em] text-white/60 sm:text-4xl">
+              <span className="text-lg font-display uppercase tracking-[0.15em] text-white/60 sm:text-3xl sm:tracking-[0.2em] lg:text-4xl">
                 Game Hard. Chill Harder. Play Smart. Win Together. — Skilladiz Gaming Club
               </span>
             </div>

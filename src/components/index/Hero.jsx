@@ -6,7 +6,7 @@ function Hero() {
   return (
     <section className="relative overflow-hidden bg-black">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(248,51,225,0.15),_transparent_55%)]" />
-      <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-8 sm:px-6 lg:py-32 lg:grid-cols-[1.1fr_0.9fr]">
+      <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:py-32 lg:grid-cols-[1.1fr_0.9fr]">
         <motion.div
           className="space-y-6 sm:space-y-8"
           variants={staggerContainer}
@@ -14,13 +14,13 @@ function Hero() {
           animate="visible"
         >
           <motion.p
-            className="text-xs uppercase font-display tracking-[0.4em] text-white/60"
+            className="text-[10px] uppercase tracking-[0.45em] text-white/50 font-sans"
             variants={fadeUpVariant}
           >
             Skilladiz Gaming
           </motion.p>
           <motion.h1
-            className="font-display text-3xl uppercase tracking-[0.05em] leading-12 sm:leading-20 text-white sm:text-6xl lg:text-6xl"
+            className="font-display text-4xl uppercase tracking-[0.05em] leading-tight text-white sm:text-5xl lg:text-7xl"
             variants={fadeUpVariant}
           >
             Experience the Future of Gaming
@@ -34,7 +34,7 @@ function Hero() {
             />
           </div>
           <motion.p
-            className="max-w-2xl font-sans text-lg leading-[10ev] text-white/70"
+            className="max-w-2xl font-sans text-sm leading-relaxed text-white/65 sm:text-base"
             variants={fadeUpVariant}
           >
             Ultimate gaming destination â€” a premium, high-energy space where

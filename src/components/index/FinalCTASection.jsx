@@ -12,11 +12,11 @@ function FinalCTASection() {
             className="object-cover w-full h-full"
           />
           <div className="absolute inset-0 bg-black/70" />
-          <div className="relative flex flex-col gap-6 p-10 sm:p-14">
+          <div className="relative flex flex-col gap-6 p-6 sm:p-10 lg:p-14">
             <p className="text-xs uppercase tracking-[0.35em] text-white/60">
               Join the Future
             </p>
-            <h2 className="text-3xl font-display uppercase tracking-[0.12em] sm:text-4xl">
+            <h2 className="text-3xl font-display uppercase tracking-[0.08em] leading-tight sm:text-4xl lg:text-5xl">
               Ready to design your next virtual adventure?
             </h2>
             <div className="flex flex-wrap gap-4">

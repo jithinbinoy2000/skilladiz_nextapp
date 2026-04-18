@@ -3,7 +3,7 @@ import { fadeUpVariant, staggerContainer } from "@/lib/animations";
 
 function HeroStatsSection({ heroStats }) {
   return (
-    <section className="py-10 bg-black">
+    <section className="py-12 sm:py-14 bg-black">
       <div className="w-full px-4 mx-auto max-w-7xl sm:px-6">
         <motion.div
           variants={staggerContainer}

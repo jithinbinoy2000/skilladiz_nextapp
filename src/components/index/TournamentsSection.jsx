@@ -3,8 +3,8 @@ import { fadeUpVariant, staggerContainer } from "@/lib/animations";
 
 function TournamentsSection({ serviceRows }) {
   return (
-    <section className="relative py-16 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top-right,_rgba(120,80,255,0.10),_transparent_55%)]" />
+    <section className="relative py-12 sm:py-16 overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top-right,rgba(120,80,255,0.10),transparent_55%)]" />
       <div className="w-full px-6 mx-auto max-w-7xl">
         <div className="flex items-center gap-3 mb-10">
           <p className="text-xs uppercase tracking-[0.35em] text-white/60">
@@ -28,7 +28,7 @@ function TournamentsSection({ serviceRows }) {
               key={service.title}
               variants={fadeUpVariant}
               data-reveal
-              className="group grid items-center gap-6 py-10 lg:grid-cols-[220px_1fr_160px]"
+              className="group grid items-center gap-5 py-7 sm:py-10 lg:grid-cols-[220px_1fr_160px]"
             >
               <div className="relative w-full overflow-hidden border h-44 rounded-2xl border-white/10">
                 <img
@@ -36,7 +36,7 @@ function TournamentsSection({ serviceRows }) {
                   alt={service.title}
                   className="object-cover w-full h-full transition duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
               </div>
 
               <div className="space-y-4">
@@ -45,10 +45,10 @@ function TournamentsSection({ serviceRows }) {
                   <span className="w-10 h-px bg-white/20" />
                   <span>{service.category}</span>
                 </div>
-                <h3 className="text-2xl font-display uppercase tracking-[0.12em]">
+                <h3 className="text-2xl font-display uppercase tracking-widest sm:text-3xl">
                   {service.title}
                 </h3>
-                <p className="max-w-2xl font-sans text-base text-white/70">
+                <p className="max-w-2xl font-sans text-sm sm:text-base text-white/70">
                   {service.description ||
                     "Join the action. Compete for glory at Skilladiz Gaming Arena."}
                 </p>
